@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, follow">
+    <meta name="keywords" content="#">
+    <meta name="author" content="Gabriel Ribeiro">
+    <meta name="description" content="#">
+    
+    <meta property="og:title" content="#">
+    <meta property="og:description" content="#">
+    <meta property="og:url" content="#">
+    <meta property="og:image" content="#">
+    <meta property="og:image:secure_url" content="#"> 
+    <meta property="og:image:type" content="image/png"> 
+    <meta property="og:image:width" content="400"> 
+    <meta property="og:image:height" content="300"> 
+    
+    <meta name="twitter:title" content="#">
+  -->
+  
+  <!-- 
+    <meta http-equiv="Content-Security-Policy" 
+    content="default-src 'self' 'unsafe-inline'; 
+    style-src 'self' 'unsafe-inline'; 
+    style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' 'unsafe-inline' data:; 
+    font-src 'self' 'unsafe-inline' https://fonts.gstatic.com https://cdn.jsdelivr.net/; 
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/ https://code.jquery.com/ https://cdnjs.cloudflare.com/; 
+    frame-src 'self' 'unsafe-inline';
+    connect-src 'self' 'unsafe-inline';">   
+  -->
+  
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/frameworks/highlights-A11Y-dark.css">
+  
+  <link rel="shortcut icon" href="./assets/img/#" type="image/x-icon">
+  
+  <title>Document</title>
+  
+  <script src="./assets/js/frameworks/jquery.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/bootstrap.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/pooper.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/simple-mask-money.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/highlights.js" crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/sweet-alert.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/jquery-mask.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/moment.js" crossorigin="anonymous"></script>
+  <script type="module" src="./assets/js/script.js" defer crossorigin="anonymous"></script>
+</head>
+<body>
+  
+  <noscript>
+    <div class="box-no-script">         
+      <div class="texto-pagina-centralizado-alt">
+        <h2 class="titulo-texto-pagina-centralizado">
+          Este site não funciona com o 
+          <span class="destaque-pagina-centralizado">Javascript desabilitado</span>
+        </h2>
+        <br>
+        <p class="label-texto-pagina-centralizado">Muitos dos recursos usados funcionam através do Javascript e sem ele a navegabilidade e o próprio funcionamento do site são comprometidos.</p>
+        <p class="label-texto-pagina-centralizado">Portanto, habilite o Javascript e navegue pelo site.</p><br>
+        <button data-recarrega-pagina class="btn-principal-no-script" id="btn-redirecionar-inicio" name="btn-redirecionar-inicio">Recarregar</button>
+      </div>
+    </div>
+  </noscript>
+  
+  <div class="overlay-2">
+    <div class="lds-ring-2"><div></div><div></div><div></div><div></div></div>
+  </div>
+  
+  <style>
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      font-size: 14pt;
+    }
+    
+    main{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .principal{
+      width: 21cm;
+      max-width: 21cm;
+      height: 26.5cm;
+      max-height: 26.5cm;
+      /* border: 1px solid #000; */
+      /* padding: 1rem; */
+      display: grid;
+      grid-template-columns: 200px auto;
+      grid-gap: 1rem;
+    }
+    
+    .container-esquerda img{
+      width: 100%;
+    }
+    
+    .container-direita{
+      margin-top: calc(50px + 1rem);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .grupo-footer{
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .grupo-footer img{
+      margin-top: 1rem;
+      width: 200px;
+      display: block;
+      /* position: absolute; */
+      right: 0;
+    }
+    
+    .grupo{
+      border-left: 1px solid #000;
+      border-bottom: 1px solid #000;
+      padding-left: 1rem;
+      padding-bottom: 1rem;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+    
+    .grupo b:not(:first-child){
+      margin-top: 0.25rem;
+    }
+    
+    .grupo b span{
+      margin-right: 0.25rem;
+    }
+    
+    .grupo b span::after{
+      content: ":";
+    }
+    
+    .grupo:not(:first-child){
+      margin-top: 1rem;
+    }
+    
+    table, tbody{
+      display: block;
+    }
+    
+    table th{
+      text-align: left;
+    }
+    
+    table tbody tr{
+      display: block;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    footer{
+      text-align: center;
+    }
+  </style>
+  
+  <main>
+    <div class="principal container">
+      <section class="container-esquerda">
+        <img src="./assets/img/logo-caixa.png" alt="">
+      </section>
+      <section class="container-direita">
+        <div class="grupo">
+          <b><span>Título</span>José da Silva</b><br>
+          <b><span>CPF</span>123.456.789-09</b><br><br>
+          
+          <b><span>Nome</span>José da Silva</b><br>
+          <b><span>CPF</span>123.456.789-09</b><br><br>
+          
+          <span>CCSPBE</span>
+        </div>
+        <div class="grupo">
+          <b><span>Nº Contrato</span></b>12345678909-9<br><br>
+          <b><span>Imóvel</span></b>Rua C de Casa, N.º 4 - Bairro Planalto, CEP 123456-789, Condomínio Reserva dos Ipês, Belo Horizonte - MG<br><br>
+          <b><span>Empreendimento</span></b>Reserva dos Ipês<br><br>
+          
+          <b><span>Valor de compra e venda</span></b>R$ 500.000,00<br>
+          <b><span>Valor de financiamento</span></b>R$ 250.000,00<br>
+          <b><span>Recursos próprios</span></b>R$ 250.000,00<br>
+          <b><span>FGTS</span></b>R$ 0,00<br>
+          <b><span>Subsídio</span></b>R$ 0,00<br><br>
+          
+          <table>
+            <thead>
+              <tr>
+                <th colspan="3"><b><span>Conta do comprador</span></b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b><span>Conta</span></b>00000-0</td>
+                <td><b><span>Operação</span></b>000</td>
+                <td><b><span>Agência</span></b>0000</td>
+              </tr>
+            </tbody>
+          </table><br>
+          
+          <table>
+            <thead>
+              <tr>
+                <th colspan="3"><b><span>Conta do vendedor</span></b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b><span>Conta</span></b>00000-0</td>
+                <td><b><span>Operação</span></b>000</td>
+                <td><b><span>Agência</span></b>0000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grupo-footer">
+          <span></span>
+          <img src="./assets/img/logo-teste.png" alt="">
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <footer class="container"><br><br>
+    <button class="btn btn-primary">aa</button>
+  </footer>
+  
+  <script src="./assets/html5shivs.js"></script>
+  <script src="./assets/jquery.js"></script>
+</body>
+</html>
