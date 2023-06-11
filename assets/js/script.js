@@ -1,5 +1,7 @@
 "use strict";
 
+import { tooltips } from './modulos/utilitarios.js';
+
 (() => {
   // hljs.highlightAll();
   
@@ -22,6 +24,10 @@
         link.href = 'https://github.com/gabrieszin/[nome-repositorio]';
         break;
 
+        case 'link-outros-projetos':
+        link.href = 'https://github.com/gabrieszin?tab=repositories';
+        break;
+
         default:
           throw new Error('Ação não implementada para o link informado.');
         break;
@@ -34,8 +40,11 @@
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
-      switch(acao.dataset.acao.toLowerCase().trim()){
-        case '':
+      switch(acao.dataset.action.toLowerCase().trim()){
+        case 'editar-informacoes':
+        break;
+
+        case 'imprimir-capa':
         break;
 
         default:
@@ -49,5 +58,7 @@
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
     atribuirLinks();
+    atribuirAcoes();
+    tooltips();
   });
 })();

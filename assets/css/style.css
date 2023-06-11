@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @import url(./frameworks/bootstrap.css);
 @import url(./frameworks/bootstrap-icons.css);
 
@@ -9,12 +11,16 @@
 @import url(./componentes/no-script.css);
 @import url(./componentes/loader.css);
 
+:root{
+  --bs-font-sans-serif: 'Inter', sans-serif;
+}
+
 html{
   scroll-behavior: smooth;
 }
 
 body{
-  font-family: '', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .none{
