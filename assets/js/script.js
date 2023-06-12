@@ -2,9 +2,7 @@
 
 import { tooltips } from './modulos/utilitarios.js';
 
-(() => {
-  // hljs.highlightAll();
-  
+(() => {  
   document.querySelectorAll('[data-recarrega-pagina]').forEach(botao => {
     botao.addEventListener('click', () => {
       window.location.reload();
@@ -34,6 +32,25 @@ import { tooltips } from './modulos/utilitarios.js';
       }
 
       link.setAttribute('rel', 'noopener noreferrer');
+      link.setAttribute('target', '_blank');
+    })
+  }
+
+  function atribuirMascaras(){
+    document.querySelectorAll('[data-mask]').forEach(input => {
+      switch(input.dataset.mask.trim().toLowerCase()){
+        case 'CPF':
+          $(input).mask('000.000.000-00');
+        break;
+        
+        case 'data':
+          $(input).mask('00/00/0000');
+        break;
+
+        default:
+          throw new Error('Ação não implementada para o link informado.');
+        break;
+      }
     })
   }
   
