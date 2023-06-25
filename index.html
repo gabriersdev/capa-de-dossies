@@ -47,6 +47,7 @@
   <script src="./assets/js/frameworks/simple-mask-money.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/sweet-alert.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/jquery-mask.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
   <script type="module" src="./assets/js/script.js" defer crossorigin="anonymous"></script>
 </head>
 <body>
@@ -76,27 +77,55 @@
         <img src="./assets/img/logo-caixa.png" alt="">
       </section>
       <section class="container-direita">
-        <div class="grupo">
+        <div class="grupo" id="identificacao-processo">
           <b><span>Título</span>José da Silva</b><br>
           <b><span>CPF</span>123.456.789-09</b><br><br>
-          
-          <b><span>Nome</span>José da Silva</b><br>
+          <b>José da Silva</b><br>
           <b><span>CPF</span>123.456.789-09</b><br><br>
-          
           <span>CCSPBE</span>
         </div>
         <div class="grupo">
-          <b><span>Nº Contrato</span></b>12345678909-9<br><br>
-          <b><span>Imóvel</span></b>Rua C de Casa, N.º 4 - Bairro Planalto, CEP 123456-789, Condomínio Reserva dos Ipês, Belo Horizonte - MG<br><br>
-          <b><span>Empreendimento</span></b>Reserva dos Ipês<br><br>
+          <div id="identificacao-imovel">
+            <b><span>Assunto/Referência</span></b>12345678909-9<br><br>
+            <b><span>Imóvel</span></b>Rua C de Casa, N.º 4 - Bairro Planalto, CEP 123456-789, Condomínio Reserva dos Ipês, Belo Horizonte - MG<br><br>
+            <b><span>Empreendimento</span></b>Reserva dos Ipês<br><br>
+          </div>
           
-          <b><span>Valor de compra e venda</span></b>R$ 500.000,00<br>
-          <b><span>Valor de financiamento</span></b>R$ 250.000,00<br>
-          <b><span>Recursos próprios</span></b>R$ 250.000,00<br>
-          <b><span>FGTS</span></b>R$ 0,00<br>
-          <b><span>Subsídio</span></b>R$ 0,00<br><br>
+          <div id="valores-imovel">
+            <b><span>Valor de Compra e Venda</span></b>R$ 500.000,00<br>
+            <b><span>Valor de Financiamento</span></b>R$ 250.000,00<br>
+            <b><span>Recursos Próprios</span></b>R$ 250.000,00<br>
+            <b><span>FGTS</span></b>R$ 0,00<br>
+            <b><span>Subsídio</span></b>R$ 0,00<br><br>
+          </div>
           
-          <table>
+          <table class="tabela-propostas-comerciais">
+            <tbody>
+              <tr>
+                <th colspan="5">Propostas Comerciais</th>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="form-check-input" disabled></td>
+                <td colspan="3">Conta Corrente</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="form-check-input" disabled></td>
+                <td colspan="3">Conta Poupança</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="form-check-input" disabled></td>
+                <td colspan="3">Cartão de Crédito</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="form-check-input" disabled></td>
+                <td>Cheque Especial</td>
+                <td><input type="checkbox" class="form-check-input" disabled></td>
+                <td>Crédito Consignado</td>
+              </tr>
+            </tbody>
+          </table><br>
+
+          <table class="tabela-dados-bancarios">
             <thead>
               <tr>
                 <th colspan="3"><b><span>Conta do comprador</span></b></th>
@@ -111,7 +140,7 @@
             </tbody>
           </table><br>
           
-          <table>
+          <table class="tabela-dados-bancarios">
             <thead>
               <tr>
                 <th colspan="3"><b><span>Conta do vendedor</span></b></th>
@@ -136,7 +165,8 @@
   
   <footer class="container mt-5 mb-5">
     <div>
-      <button class="btn btn-secondary" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
+      <button class="btn btn-secondary" data-action="carregar-espelho"><i class="bi bi-file-earmark-arrow-up"></i>Carregar com espelho</button>
+      <button class="btn btn-secondary" data-action="editar-informacoes" data-bs-target="#modal-editar-informacoes" data-bs-toggle="modal"><i class="bi bi-pencil-square"></i>Editar informações</button>
       <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
     </div>
     
@@ -151,7 +181,160 @@
     </address> 
   </footer>
   
-  <script src="./assets/html5shivs.js"></script>
-  <script src="./assets/jquery.js"></script>
+  <div class="modal modal-xl fade" id="modal-editar-informacoes" aria-hidden="true" aria-labelledby="modal-editar-informacoes-Label" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modal-editar-informacoes-Label">Editar informações</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            <div class="row">
+              <div class="col">
+                <span class="d-block"><b>1º proponente</b></span>
+                <div class="form-group mt-3 mb-2">
+                  <label for="nome-1">Nome do proponente</label>
+                  <input type="text" class="form-control mt-1" id="nome-1" placeholder="Nome do proponente" required>
+                </div>
+                <div class="form-group mt-2 mb-2">
+                  <label for="CPF-1">CPF</label>
+                  <input type="text" class="form-control mt-1" id="CPF-1" placeholder="123.456.789-09" required>
+                </div>
+                
+                <span class="d-block mt-4"><b>2º proponente</b></span>
+                <div class="form-group mt-3 mb-2">
+                  <label for="nome-2">Nome do proponente</label>
+                  <input type="text" class="form-control mt-1" id="nome-2" placeholder="Nome do proponente" data-mascara="CPF">
+                </div>
+                <div class="form-group mt-2 mb-2">
+                  <label for="CPF-2">CPF</label>
+                  <input type="text" class="form-control mt-1" id="CPF-2" placeholder="123.456.789-09" data-mascara="CPF">
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col form-group">
+                    <label for="modalidade">Modalidade</label>
+                    <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required>
+                    <datalist id="lista-modalidades">
+                      <option value="CCSBPE"></option>
+                      <option value="CCNPMCMV"></option>
+                      <option value="Pró-cotista"></option>
+                    </datalist>
+                  </div>
+                  <div class="col form-group">
+                    <label for="n-contrato">N.º contrato</label>
+                    <input type="text" class="form-control mt-1" id="n-contrato" placeholder="Número do contrato" autocomplete="off" required>
+                  </div>
+                </div>
+                
+                <div class="form-group mt-3">
+                  <label for="endereco">Endereço</label>
+                  <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off" required>
+                </div>
+                
+                <div class="form-group mt-3">
+                  <label for="empreendimento">Empreendimento</label>
+                  <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off">
+                </div>
+              </div>
+              
+              <div class="col">
+                <span class="mt-4 mb-2 d-block"><b>Valores</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <label for="valor-compra-e-venda">Valor de compra e venda</label>
+                    <input type="text" class="form-control mt-1" id="valor-compra-e-venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                  <div class="col form-group">
+                    <label for="valor-financiamento">Valor de financiamento</label>
+                    <input type="text" class="form-control mt-1" id="valor-financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="recursos-proprios">Recursos próprios</label>
+                    <input type="text" class="form-control mt-1" id="recursos-proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                  <div class="col form-group">
+                    <label for="FGTS">FGTS</label>
+                    <input type="text" class="form-control mt-1" id="FGTS" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="subsidio">Subsídio</label>
+                    <input type="text" class="form-control mt-1" id="subsidio" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                  </div>
+                </div>
+                
+                <span class="mt-4 mb-2 d-block"><b>Produtos comerciais</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial-conta-corrente" class="form-check-input">
+                    <label for="comercial-conta-corrente">Conta corrente</label><br>
+                  </div>
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial-cheque-especial" class="form-check-input">
+                    <label for="comercial-cheque-especial">Cheque Especial</label><br>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial-conta-poupanca" class="form-check-input">
+                    <label for="comercial-conta-poupanca">Conta poupança</label><br>
+                  </div>
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial-cartao-de-credito" class="form-check-input">
+                    <label for="comercial-cartao-de-credito">Cartão de crédito</label><br>
+                  </div>
+                </div>
+                <div class="form-group mt-3">
+                  <label for="numero-da-conta">Número da conta</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control mt-1" id="conta-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                  </div>
+                </div>
+                
+                <span class="mt-4 mb-2 d-block"><b>Dados bancários</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <label for="conta-comprador">Conta do Comprador</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control mt-1" id="conta-comprador-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta-comprador-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta-comprador-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="conta-vendedor">Conta do Vendedor</label>
+                    <div class="form-group">
+                      <input type="text" list="lista-bancos" class="form-control" placeholder="000 - Banco">
+                      <datalist id="lista-bancos">
+                      </datalist>
+                    </div>
+                    <div class="input-group">
+                      <input type="text" class="form-control mt-1" id="conta-vendedor-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta-vendedor-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta-vendedor-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <button class="btn btn-primary mt-4">Concluir</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </body>
 </html>

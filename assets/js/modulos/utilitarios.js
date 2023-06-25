@@ -121,6 +121,15 @@ function resizeTextArea(textarea){
   });
 }
 
+function zeroEsquerda(quantidadeZeros, valor){
+  let zeros;
+  
+  for(let i = 0; i < quantidadeZeros; i++){
+    zeros == null ? zeros = "0" : zeros = zeros + "0";
+  }
+  return (zeros + valor).slice(-quantidadeZeros);
+}
+
 export{
   isEmpty,
   capitalize,
@@ -130,5 +139,6 @@ export{
   tooltips,
   popovers,
   SwalAlert,
-  resizeTextArea
+  resizeTextArea,
+  zeroEsquerda
 }

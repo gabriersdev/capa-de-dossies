@@ -31,7 +31,7 @@ body{
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  font-size: 14pt;
+  font-size: 13pt;
 }
 
 main{
@@ -56,10 +56,11 @@ div.principal{
 
 .container-esquerda img{
   width: 100%;
+  width: 150px;
 }
 
 .container-direita{
-  margin-top: calc(50px + 1rem);
+  margin-top: calc(25px + 1rem);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -108,15 +109,19 @@ main b{
   margin-top: 1rem;
 }
 
-table, tbody{
+.tabela-dados-bancarios{
+  text-transform: none;
+}
+
+.tabela-dados-bancarios, tbody{
   display: block;
 }
 
-table th{
+.tabela-dados-bancarios th{
   text-align: left;
 }
 
-table tbody tr{
+.tabela-dados-bancarios tbody tr{
   display: block;
   display: flex;
   justify-content: space-between;
@@ -163,4 +168,36 @@ a:is(:hover, :focus, :active), address a b{
 .text-gray{ 
   color: #808080; 
   font-weight: 600; 
+}
+
+#valores-imovel{
+  text-transform: none;
+}
+
+.tabela-propostas-comerciais{
+  /* width: 100%; */
+  text-transform: none;
+}
+
+.tabela-propostas-comerciais input[type=checkbox]{
+  margin: 0.25rem 0.05rem;
+  border-radius: 0;
+  width: 15px;
+  height: 15px;
+}
+
+.tabela-propostas-comerciais tr td,
+.tabela-propostas-comerciais tr th{
+  border: 1px solid #000;
+  padding: 0 0.5rem;
+}
+
+.tabela-propostas-comerciais tr th{
+  border-bottom: unset;
+}
+
+@media screen and (max-width: 600px) {
+  #modal-editar-informacoes .modal-body form > .row{
+    display: block;
+  }
 }
