@@ -120,7 +120,7 @@ setTimeout(() => {
         $(acao).on('click', () => {
           $('footer').hide();
           const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
-          document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Document';
+          document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para processos Habitacionais';
           $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
             elemento.setAttribute('show', elemento.getAttribute('checked'))
           })
@@ -129,7 +129,7 @@ setTimeout(() => {
           $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
             elemento.setAttribute('show', null)
           })
-          document.title = 'Document';
+          document.title = 'Capa para processos Habitacionais';
           $('footer').show();
         })
         break;
