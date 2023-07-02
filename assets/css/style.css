@@ -196,6 +196,11 @@ a:is(:hover, :focus, :active), address a b{
   border-bottom: unset;
 }
 
+footer,
+#modal-editar-informacoes{
+  font-size: 16px;
+}
+
 @media screen and (max-width: 600px) {
   #modal-editar-informacoes .modal-body form > .row{
     display: block;

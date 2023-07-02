@@ -47,7 +47,6 @@
   <script src="./assets/js/frameworks/simple-mask-money.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/sweet-alert.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/jquery-mask.js" defer crossorigin="anonymous"></script>
-  <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
   <script type="module" src="./assets/js/script.js" defer crossorigin="anonymous"></script>
 </head>
 <body>
@@ -71,7 +70,7 @@
     <div class="lds-ring-2"><div></div><div></div><div></div><div></div></div>
   </div>
   
-  <main>
+  <main id="capa">
     <div class="principal container">
       <section class="container-esquerda">
         <img src="./assets/img/logo-caixa.png" alt="">
@@ -157,7 +156,7 @@
         </div>
         <div class="grupo-footer">
           <span></span>
-          <img src="./assets/img/logo-teste.png" alt="">
+          <img src="./assets/img/logo-png.png" alt="">
         </div>
       </section>
     </div>
@@ -166,7 +165,7 @@
   <footer class="container mt-5 mb-5">
     <div>
       <button class="btn btn-secondary" data-action="carregar-espelho"><i class="bi bi-file-earmark-arrow-up"></i>Carregar com espelho</button>
-      <button class="btn btn-secondary" data-action="editar-informacoes" data-bs-target="#modal-editar-informacoes" data-bs-toggle="modal"><i class="bi bi-pencil-square"></i>Editar informações</button>
+      <button class="btn btn-secondary" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
       <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
     </div>
     
@@ -189,33 +188,33 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="POST">
+          <form method="POST" data-action="formulario-informacoes">
             <div class="row">
               <div class="col">
                 <span class="d-block"><b>1º proponente</b></span>
                 <div class="form-group mt-3 mb-2">
                   <label for="nome-1">Nome do proponente</label>
-                  <input type="text" class="form-control mt-1" id="nome-1" placeholder="Nome do proponente" required>
+                  <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required value="Gabriel">
                 </div>
                 <div class="form-group mt-2 mb-2">
                   <label for="CPF-1">CPF</label>
-                  <input type="text" class="form-control mt-1" id="CPF-1" placeholder="123.456.789-09" required>
+                  <input type="text" class="form-control mt-1" id="CPF_1" placeholder="123.456.789-09" data-mascara="CPF" required value="123.123.123-00">
                 </div>
                 
                 <span class="d-block mt-4"><b>2º proponente</b></span>
                 <div class="form-group mt-3 mb-2">
                   <label for="nome-2">Nome do proponente</label>
-                  <input type="text" class="form-control mt-1" id="nome-2" placeholder="Nome do proponente" data-mascara="CPF">
+                  <input type="text" class="form-control mt-1" id="nome_2" placeholder="Nome do proponente" value="Mateus">
                 </div>
                 <div class="form-group mt-2 mb-2">
                   <label for="CPF-2">CPF</label>
-                  <input type="text" class="form-control mt-1" id="CPF-2" placeholder="123.456.789-09" data-mascara="CPF">
+                  <input type="text" class="form-control mt-1" id="CPF_2" placeholder="123.456.789-09" data-mascara="CPF" value="123.123.123-00">
                 </div>
                 
                 <div class="row mt-4">
                   <div class="col form-group">
                     <label for="modalidade">Modalidade</label>
-                    <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required>
+                    <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required value="CCSBPE">
                     <datalist id="lista-modalidades">
                       <option value="CCSBPE"></option>
                       <option value="CCNPMCMV"></option>
@@ -224,18 +223,18 @@
                   </div>
                   <div class="col form-group">
                     <label for="n-contrato">N.º contrato</label>
-                    <input type="text" class="form-control mt-1" id="n-contrato" placeholder="Número do contrato" autocomplete="off" required>
+                    <input type="text" class="form-control mt-1" id="n_contrato" placeholder="Número do contrato" autocomplete="off" required value="1.1234.5678.970-1">
                   </div>
                 </div>
                 
                 <div class="form-group mt-3">
                   <label for="endereco">Endereço</label>
-                  <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off" required>
+                  <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off" required value="Rua A, N.º 1000">
                 </div>
                 
                 <div class="form-group mt-3">
                   <label for="empreendimento">Empreendimento</label>
-                  <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off">
+                  <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off" value="Novo Empreendimento">
                 </div>
               </div>
               
@@ -244,18 +243,18 @@
                 <div class="row">
                   <div class="col form-group">
                     <label for="valor-compra-e-venda">Valor de compra e venda</label>
-                    <input type="text" class="form-control mt-1" id="valor-compra-e-venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                    <input type="text" class="form-control mt-1" id="valor_compra_e_venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
                   </div>
                   <div class="col form-group">
                     <label for="valor-financiamento">Valor de financiamento</label>
-                    <input type="text" class="form-control mt-1" id="valor-financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                    <input type="text" class="form-control mt-1" id="valor_financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
                   </div>
                 </div>
                 
                 <div class="row mt-3">
                   <div class="col form-group">
                     <label for="recursos-proprios">Recursos próprios</label>
-                    <input type="text" class="form-control mt-1" id="recursos-proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                    <input type="text" class="form-control mt-1" id="recursos_proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
                   </div>
                   <div class="col form-group">
                     <label for="FGTS">FGTS</label>
@@ -273,30 +272,31 @@
                 <span class="mt-4 mb-2 d-block"><b>Produtos comerciais</b></span>
                 <div class="row">
                   <div class="col form-group">
-                    <input type="checkbox" id="comercial-conta-corrente" class="form-check-input">
+                    <input type="checkbox" id="comercial_conta_corrente" class="form-check-input">
                     <label for="comercial-conta-corrente">Conta corrente</label><br>
                   </div>
                   <div class="col form-group">
-                    <input type="checkbox" id="comercial-cheque-especial" class="form-check-input">
+                    <input type="checkbox" id="comercial_cheque_especial" class="form-check-input">
                     <label for="comercial-cheque-especial">Cheque Especial</label><br>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col form-group">
-                    <input type="checkbox" id="comercial-conta-poupanca" class="form-check-input">
+                    <input type="checkbox" id="comercial_conta_poupanca" class="form-check-input">
                     <label for="comercial-conta-poupanca">Conta poupança</label><br>
                   </div>
                   <div class="col form-group">
-                    <input type="checkbox" id="comercial-cartao-de-credito" class="form-check-input">
+                    <input type="checkbox" id="comercial_cartao_de_credito" class="form-check-input">
                     <label for="comercial-cartao-de-credito">Cartão de crédito</label><br>
                   </div>
                 </div>
                 <div class="form-group mt-3">
                   <label for="numero-da-conta">Número da conta</label>
+                  <span class="text-black-50">(Agência - Operação - Conta)</span>
                   <div class="input-group">
-                    <input type="text" class="form-control mt-1" id="conta-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                    <input type="text" class="form-control mt-1" id="conta-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                    <input type="text" class="form-control mt-1" id="conta-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta_numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
                   </div>
                 </div>
                 
@@ -304,37 +304,41 @@
                 <div class="row">
                   <div class="col form-group">
                     <label for="conta-comprador">Conta do Comprador</label>
+                    <span class="text-black-50">(Agência - Operação - Conta)</span>
                     <div class="input-group">
-                      <input type="text" class="form-control mt-1" id="conta-comprador-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta-comprador-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta-comprador-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
                     </div>
                   </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col form-group">
                     <label for="conta-vendedor">Conta do Vendedor</label>
+                    <span class="text-black-50">(Agência - Operação - Conta)</span>
                     <div class="form-group">
-                      <input type="text" list="lista-bancos" class="form-control" placeholder="000 - Banco">
+                      <input type="text" id="conta_vendedor_banco" list="lista-bancos" class="form-control" placeholder="000 - Banco">
                       <datalist id="lista-bancos">
                       </datalist>
                     </div>
                     <div class="input-group">
-                      <input type="text" class="form-control mt-1" id="conta-vendedor-agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta-vendedor-operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta-vendedor-numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             
-            <button class="btn btn-primary mt-4">Concluir</button>
+            <button type="submit" class="btn btn-primary mt-4">Concluir</button>
           </form>
         </div>
       </div>
     </div>
   </div>
   
+  <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
