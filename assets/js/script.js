@@ -40,53 +40,69 @@ setTimeout(() => {
     })
   }
   
-  function atribuirMascaras(){
-    document.querySelectorAll('[data-mascara]').forEach(input => {
-      switch(input.dataset.mascara.trim().toLowerCase()){
-        case 'cpf':
-        $(input).mask('000.000.000-00');
-        break;
-        
-        case 'data':
-        $(input).mask('00/00/0000');
-        break;
-        
+  function atribuirMascaras(param, input){
+    if(isEmpty(param) && isEmpty(input)){
+      document.querySelectorAll('[data-mascara]').forEach(input => {
+        switch(input.dataset.mascara.trim().toLowerCase()){
+          case 'cpf':
+          $(input).mask('000.000.000-00');
+          break;
+          
+          case 'data':
+          $(input).mask('00/00/0000');
+          break;
+          
+          case 'agencia':
+          $(input).mask('0000', {reverse: true});
+          break;
+          
+          case 'operacao':
+          $(input).mask('0000', {reverse: true});
+          break;
+          
+          case 'conta':
+          $(input).mask('00000-0', {reverse: true});
+          break;
+          
+          case 'money':
+          SimpleMaskMoney.setMask(input, {
+            prefix: 'R$ ',
+            fixed: true,
+            fractionDigits: 2,
+            decimalSeparator: ',',
+            thousandsSeparator: '.',
+            cursor: 'end'
+          });
+          input.removeAttribute('maxlength');
+          break;
+          
+          default:
+          throw new Error('Ação não implementada para o link informado.');
+          break;
+        }
+      })
+    }else{
+      switch(param.toLowerCase().trim()){
         case 'agencia':
-        $(input).mask('0000');
+        $(input).mask('0000', {reverse: true});
         break;
         
         case 'operacao':
-        $(input).mask('0000');
+        $(input).mask('0000', {reverse: true});
         break;
         
         case 'conta':
-        $(input).mask('00000-0');
-        break;
-        
-        case 'money':
-        SimpleMaskMoney.setMask(input, {
-          prefix: 'R$ ',
-          fixed: true,
-          fractionDigits: 2,
-          decimalSeparator: ',',
-          thousandsSeparator: '.',
-          cursor: 'end'
-        });
-        input.removeAttribute('maxlength');
-        break;
-        
-        default:
-        throw new Error('Ação não implementada para o link informado.');
+        $(input).mask('00000-0', {reverse: true});
         break;
       }
-    })
+    }
   }
   
   $('#modal-editar-informacoes').modal('show');
   setTimeout(() => {
     document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
   }, 500)
-
+  
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
@@ -112,12 +128,51 @@ setTimeout(() => {
         
         case 'carregar-espelho':
         break;
-
+        
         case 'formulario-informacoes':
-          $(acao).on('submit', (evento) => {
-            evento.preventDefault();
-            console.log('Concluindo')
-          })
+        $(acao).on('submit', (evento) => {
+          evento.preventDefault();
+          console.log('Concluindo');
+
+          const inputs_form = [
+            'nome_1', 
+            'CPF_1', 
+            'nome_2', 
+            'CPF_2', 
+            'modalidade', 
+            'n_contrato', 
+            'endereco', 
+            'empreendimento', 
+            'valor_compra_e_venda', 
+            'valor_financiamento', 
+            'recursos_proprios', 
+            'FGTS', 
+            'subsidio', 
+            'comercial_conta_corrente', 
+            'comercial_cheque_especial', 
+            'comercial_conta_poupanca', 
+            'comercial_cartao_de_credito', 
+            'conta_agencia', 
+            'conta_operacao', 
+            'conta_numero', 
+            'conta_comprador_agencia', 
+            'conta_comprador_operacao', 
+            'conta_comprador_numero', 
+            'conta_vendedor_banco', 
+            'conta_vendedor_agencia', 
+            'conta_vendedor_operacao', 
+            'conta_vendedor_numero'
+          ]
+
+          inputs_form.forEach(input => {
+            acao.closest('form').querySelector(`#${input}`).value
+
+            const capa = document.querySelector('#capa');
+            console.log(capa.querySelector(`[data-element-paste="${input}"]`).textContent)
+            console.log(input)
+          });
+
+        })
         break;
         
         default:
@@ -126,7 +181,7 @@ setTimeout(() => {
       }
     })
   }
-
+  
   const inputs_formulario = {
     nome_1: '', 
     CPF_1: '', 
@@ -157,6 +212,32 @@ setTimeout(() => {
     conta_vendedor_numero
   }
   
+  const dados_bancarios = document.querySelectorAll('[data-element="dados-bancarios"]');
+  dados_bancarios.forEach(dados => {
+    dados.querySelectorAll('input').forEach(inputx => {
+      $(inputx).on('keydown', (evento) => {
+        evento.target.setAttribute('data-mascara', inputx.getAttribute('data-param'));
+        try{
+          atribuirMascaras(inputx.getAttribute('data-param'), inputx)
+        }catch{}
+      })
+    })
+  })
+  
+  document.querySelectorAll('input[type=checkbox]').forEach(elemento => {
+    elemento.setAttribute('value', elemento.checked);
+    elemento.addEventListener('change', () => {
+      elemento.setAttribute('value', elemento.checked);
+    })
+  })
+
+  document.querySelectorAll('input[type=radio]').forEach(elemento => {
+    elemento.setAttribute('value', elemento.checked);
+    elemento.addEventListener('change', () => {
+      elemento.setAttribute('value', elemento.checked);
+    })
+  })
+
   const inputs = document.querySelectorAll('input[data-param="agencia"]');
   let i = 0;
   
@@ -214,7 +295,7 @@ setTimeout(() => {
     
     inputs[i].addEventListener('keypress', (evento) => {
       evento.target.setAttribute('data-mascara', evento.target.getAttribute('data-param'));
-      atribuirMascaras();
+      atribuirMascaras(evento.target.getAttribute('data-param'), inputs[i]);
     })
     
     i++;

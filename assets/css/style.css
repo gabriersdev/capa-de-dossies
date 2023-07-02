@@ -101,7 +101,7 @@ main b{
   margin-right: 0.25rem;
 }
 
-.grupo b span::after{
+.grupo b span:first-child::after{
   content: ":";
 }
 
@@ -199,6 +199,10 @@ a:is(:hover, :focus, :active), address a b{
 footer,
 #modal-editar-informacoes{
   font-size: 16px;
+}
+
+.no-bold{
+  font-weight: normal;
 }
 
 @media screen and (max-width: 600px) {
