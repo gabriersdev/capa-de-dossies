@@ -186,6 +186,60 @@ a:is(:hover, :focus, :active), address a b{
   height: 15px;
 }
 
+.tabela-propostas-comerciais .checkbox-proposta{
+  display: block;
+  height: 15px;
+  width: 15px;
+  padding-bottom: 100%;
+  z-index: 1;
+  position: relative;
+}
+
+.tabela-propostas-comerciais .checkbox-proposta[checked=false]{
+  background: url(../img/checkbox-nochecked.png) center / contain no-repeat;
+}
+
+.tabela-propostas-comerciais .checkbox-proposta[show="true"],
+.tabela-propostas-comerciais .checkbox-proposta[show="false"]{
+  background: #FFF;
+}
+
+.tabela-propostas-comerciais .checkbox-proposta[show="true"]::before{
+  content: "\2612";
+  display: block;
+  font-family: "bootstrap-icons";
+  font-size: inherit;
+  text-rendering: auto;
+  position: absolute;
+  font-size: 20px;
+
+  top: -50%;
+  left: -50%;
+  transform: translate(40%, -7%);
+
+  z-index: 1;
+}
+
+.tabela-propostas-comerciais .checkbox-proposta[show="false"]::before{
+  content: "\2610";
+  display: block;
+  font-family: "bootstrap-icons";
+  font-size: inherit;
+  text-rendering: auto;
+  position: absolute;
+  font-size: 20px;
+
+  top: -50%;
+  left: -50%;
+  transform: translate(40%, -7%);
+
+  z-index: 1;
+}
+
+.tabela-propostas-comerciais .checkbox-proposta[checked=true]{
+  background: url(../img/checkbox-checked.png) center / contain no-repeat;
+}
+
 .tabela-propostas-comerciais tr td,
 .tabela-propostas-comerciais tr th{
   border: 1px solid #000;
@@ -203,6 +257,19 @@ footer,
 
 .no-bold{
   font-weight: normal;
+}
+
+.btn-light{
+  cursor: pointer;
+  outline: none;
+  outline: none !important;
+  border: 1px solid #CCC;
+  background-color: #CCC;
+}
+
+.btn-light:hover{
+  background-color: #BBB;
+  border-color: #BBB;
 }
 
 @media screen and (max-width: 600px) {

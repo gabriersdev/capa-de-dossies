@@ -1,6 +1,6 @@
 "use strict";
 
-import { isEmpty, tooltips, zeroEsquerda } from './modulos/utilitarios.js';
+import { isEmpty, sanitizarString, tooltips, zeroEsquerda } from './modulos/utilitarios.js';
 
 setTimeout(() => {
   // $('#modal-editar-informacoes').modal('show');
@@ -98,9 +98,9 @@ setTimeout(() => {
     }
   }
   
-  $('#modal-editar-informacoes').modal('show');
+  // $('#modal-editar-informacoes').modal('show');
   setTimeout(() => {
-    document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
+    // document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
   }, 500)
   
   function atribuirAcoes(){
@@ -119,8 +119,16 @@ setTimeout(() => {
         case 'imprimir-capa':
         $(acao).on('click', () => {
           $('footer').hide();
-          // document.title = '12345678909';
+          const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
+          document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Document';
+          $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+            elemento.setAttribute('show', elemento.getAttribute('checked'))
+          })
+
           window.print();
+          $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+            elemento.setAttribute('show', null)
+          })
           document.title = 'Document';
           $('footer').show();
         })
@@ -130,10 +138,11 @@ setTimeout(() => {
         break;
         
         case 'formulario-informacoes':
+        const modal = acao.closest('.modal');
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
-          console.log('Concluindo');
-
+          // console.log('Concluindo');
+          
           const inputs_form = [
             'nome_1', 
             'CPF_1', 
@@ -152,9 +161,10 @@ setTimeout(() => {
             'comercial_cheque_especial', 
             'comercial_conta_poupanca', 
             'comercial_cartao_de_credito', 
-            'conta_agencia', 
-            'conta_operacao', 
-            'conta_numero', 
+            'comercial_credito_consignado',
+            // 'conta_agencia', 
+            // 'conta_operacao', 
+            // 'conta_numero', 
             'conta_comprador_agencia', 
             'conta_comprador_operacao', 
             'conta_comprador_numero', 
@@ -163,15 +173,44 @@ setTimeout(() => {
             'conta_vendedor_operacao', 
             'conta_vendedor_numero'
           ]
-
+          
           inputs_form.forEach(input => {
             acao.closest('form').querySelector(`#${input}`).value
-
             const capa = document.querySelector('#capa');
-            console.log(capa.querySelector(`[data-element-paste="${input}"]`).textContent)
-            console.log(input)
+            
+            const elemento_modal = acao.closest('form').querySelector(`#${input}`);
+            const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+            
+            if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
+              elemento_capa.setAttribute('checked', elemento_modal.checked);
+            }else if(input == 'nome_2' || input == 'CPF_2'){
+              if(isEmpty(elemento_modal.value)){
+                $('#proponente-2').hide();
+              }else{
+                $('#proponente-2').show();
+                elemento_capa.textContent = elemento_modal.value.trim();
+              }
+            }else if(input == 'empreendimento'){
+              if(isEmpty(elemento_modal.value)){
+                $('#empreendimento').hide();
+              }else{
+                $('#empreendimento').show();
+                elemento_capa.textContent = elemento_modal.value.trim();
+              }
+            }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
+              if(isEmpty(elemento_modal.value)){
+                $('#dados-bancarios-vendedor').hide();
+              }else{
+                $('#dados-bancarios-vendedor').show();
+                elemento_capa.textContent = elemento_modal.value.trim();
+              }
+            }
+            else{
+              elemento_capa.textContent = elemento_modal.value.trim();
+            }
           });
-
+          
+          $(modal).modal('hide');
         })
         break;
         
@@ -230,14 +269,14 @@ setTimeout(() => {
       elemento.setAttribute('value', elemento.checked);
     })
   })
-
+  
   document.querySelectorAll('input[type=radio]').forEach(elemento => {
     elemento.setAttribute('value', elemento.checked);
     elemento.addEventListener('change', () => {
       elemento.setAttribute('value', elemento.checked);
     })
   })
-
+  
   const inputs = document.querySelectorAll('input[data-param="agencia"]');
   let i = 0;
   

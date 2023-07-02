@@ -50,10 +50,14 @@ function sanitizarString(string){
         original: ' ',
         subst: ''
       },
+      {
+        original: '.',
+        subst: ''
+      },
     ]
 
     substituir.forEach(substituicao => {
-      string = string.replace(substituicao.original, substituicao.subst)
+      string = string.replaceAll(substituicao.original, substituicao.subst)
     })
 
     return string.trim();
