@@ -79,7 +79,7 @@ function popovers(){
   });
 }
 
-async function SwalAlert(tipo, icon, title, text, mensagem){
+async function SwalAlert(tipo, icon, title, text, mensagem, text_confirm, focus_cancel){
   tipo = tipo.toLowerCase().trim();
   if(tipo == 'confirmacao'){
     const dialog = await Swal.fire({
@@ -87,8 +87,8 @@ async function SwalAlert(tipo, icon, title, text, mensagem){
       title: title,
       text: text,
       showCancelButton: true,
-      confirmButtonText: 'Sim',
-      focusCancel: true
+      confirmButtonText: text_confirm,
+      focusCancel: focus_cancel
     })
 
     return new Promise((resolve, reject) => {

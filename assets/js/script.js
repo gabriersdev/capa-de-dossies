@@ -1,6 +1,7 @@
 "use strict";
 
-import { isEmpty, sanitizarString, tooltips, zeroEsquerda } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda } from './modulos/utilitarios.js';
+let form_alt = false;
 
 setTimeout(() => {
   // $('#modal-editar-informacoes').modal('show');
@@ -46,6 +47,10 @@ setTimeout(() => {
         switch(input.dataset.mascara.trim().toLowerCase()){
           case 'cpf':
           $(input).mask('000.000.000-00');
+          break;
+          
+          case 'numero-contrato':
+          $(input).mask('0.0000.0000000-0')
           break;
           
           case 'data':
@@ -118,99 +123,112 @@ setTimeout(() => {
         
         case 'imprimir-capa':
         $(acao).on('click', () => {
-          $('footer').hide();
-          const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
-          document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
-          $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
-            elemento.setAttribute('show', elemento.getAttribute('checked'))
-          })
-
-          window.print();
-          $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
-            elemento.setAttribute('show', null)
-          })
-          document.title = 'Capa para Processos Habitacionais';
-          $('footer').show();
+          if(form_alt){
+            $('footer').hide();
+            const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
+            document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
+            $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+              elemento.setAttribute('show', elemento.getAttribute('checked'))
+            })
+            
+            window.print();
+            $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+              elemento.setAttribute('show', null)
+            })
+            document.title = 'Capa para Processos Habitacionais';
+            $('footer').show();
+          }else{
+            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false);
+          }
         })
         break;
         
         case 'carregar-espelho':
+          $(acao).on('click', () => {
+            SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
+          })
         break;
         
         case 'formulario-informacoes':
         const modal = acao.closest('.modal');
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
-          // console.log('Concluindo');
-          
-          const inputs_form = [
-            'nome_1', 
-            'CPF_1', 
-            'nome_2', 
-            'CPF_2', 
-            'modalidade', 
-            'n_contrato', 
-            'endereco', 
-            'empreendimento', 
-            'valor_compra_e_venda', 
-            'valor_financiamento', 
-            'recursos_proprios', 
-            'FGTS', 
-            'subsidio', 
-            'comercial_conta_corrente', 
-            'comercial_cheque_especial', 
-            'comercial_conta_poupanca', 
-            'comercial_cartao_de_credito', 
-            'comercial_credito_consignado',
-            // 'conta_agencia', 
-            // 'conta_operacao', 
-            // 'conta_numero', 
-            'conta_comprador_agencia', 
-            'conta_comprador_operacao', 
-            'conta_comprador_numero', 
-            'conta_vendedor_banco', 
-            'conta_vendedor_agencia', 
-            'conta_vendedor_operacao', 
-            'conta_vendedor_numero'
-          ]
-          
-          inputs_form.forEach(input => {
-            acao.closest('form').querySelector(`#${input}`).value
-            const capa = document.querySelector('#capa');
+          try{
+            // console.log('Concluindo');
             
-            const elemento_modal = acao.closest('form').querySelector(`#${input}`);
-            const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+            const inputs_form = [
+              'nome_1', 
+              'CPF_1', 
+              'nome_2', 
+              'CPF_2', 
+              'modalidade', 
+              'n_contrato', 
+              'endereco', 
+              'empreendimento', 
+              'valor_compra_e_venda', 
+              'valor_financiamento', 
+              'recursos_proprios', 
+              'FGTS', 
+              'subsidio', 
+              'comercial_conta_corrente', 
+              'comercial_cheque_especial', 
+              'comercial_conta_poupanca', 
+              'comercial_cartao_de_credito', 
+              'comercial_credito_consignado',
+              // 'conta_agencia', 
+              // 'conta_operacao', 
+              // 'conta_numero', 
+              'conta_comprador_agencia', 
+              'conta_comprador_operacao', 
+              'conta_comprador_numero', 
+              'conta_vendedor_banco', 
+              'conta_vendedor_agencia', 
+              'conta_vendedor_operacao', 
+              'conta_vendedor_numero'
+            ]
             
-            if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
-              elemento_capa.setAttribute('checked', elemento_modal.checked);
-            }else if(input == 'nome_2' || input == 'CPF_2'){
-              if(isEmpty(elemento_modal.value)){
-                $('#proponente-2').hide();
-              }else{
-                $('#proponente-2').show();
+            inputs_form.forEach(input => {
+              acao.closest('form').querySelector(`#${input}`).value
+              const capa = document.querySelector('#capa');
+              
+              const elemento_modal = acao.closest('form').querySelector(`#${input}`);
+              const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+              
+              if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
+                elemento_capa.setAttribute('checked', elemento_modal.checked);
+              }else if(input == 'nome_2' || input == 'CPF_2'){
+                if(isEmpty(elemento_modal.value)){
+                  $('#proponente-2').hide();
+                }else{
+                  $('#proponente-2').show();
+                  elemento_capa.textContent = elemento_modal.value.trim();
+                }
+              }else if(input == 'empreendimento'){
+                if(isEmpty(elemento_modal.value)){
+                  $('#empreendimento').hide();
+                }else{
+                  $('#empreendimento').show();
+                  elemento_capa.textContent = elemento_modal.value.trim();
+                }
+              }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
+                if(isEmpty(elemento_modal.value)){
+                  $('#dados-bancarios-vendedor').hide();
+                }else{
+                  $('#dados-bancarios-vendedor').show();
+                  elemento_capa.textContent = elemento_modal.value.trim();
+                }
+              }
+              else{
                 elemento_capa.textContent = elemento_modal.value.trim();
               }
-            }else if(input == 'empreendimento'){
-              if(isEmpty(elemento_modal.value)){
-                $('#empreendimento').hide();
-              }else{
-                $('#empreendimento').show();
-                elemento_capa.textContent = elemento_modal.value.trim();
-              }
-            }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
-              if(isEmpty(elemento_modal.value)){
-                $('#dados-bancarios-vendedor').hide();
-              }else{
-                $('#dados-bancarios-vendedor').show();
-                elemento_capa.textContent = elemento_modal.value.trim();
-              }
-            }
-            else{
-              elemento_capa.textContent = elemento_modal.value.trim();
-            }
-          });
-          
-          $(modal).modal('hide');
+            });
+            
+            $(modal).modal('hide');
+            form_alt = true;
+          }catch(error){
+            console.log('Ocorreu um erro! %s', error);
+            SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
+          }
         })
         break;
         
@@ -254,8 +272,9 @@ setTimeout(() => {
   const dados_bancarios = document.querySelectorAll('[data-element="dados-bancarios"]');
   dados_bancarios.forEach(dados => {
     dados.querySelectorAll('input').forEach(inputx => {
-      $(inputx).on('keydown', (evento) => {
+      $(inputx).on('keypress', (evento) => {
         evento.target.setAttribute('data-mascara', inputx.getAttribute('data-param'));
+        console.log('aqui - evento');
         try{
           atribuirMascaras(inputx.getAttribute('data-param'), inputx)
         }catch{}
@@ -326,7 +345,8 @@ setTimeout(() => {
         }
         
         evento.target.setAttribute('data-mascara', input.getAttribute('data-param'));
-        atribuirMascaras();
+        atribuirMascaras(input.getAttribute('data-param'));
+        // 1111.111.11111-1
         
         input_agencia.focus();
       }, 0);
