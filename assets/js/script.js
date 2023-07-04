@@ -4,7 +4,7 @@ import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda } from './m
 let form_alt = false;
 
 setTimeout(() => {
-  // $('#modal-editar-informacoes').modal('show');
+  $('#modal-editar-informacoes').modal('show');
 }, 500);
 
 (() => {  
@@ -112,6 +112,26 @@ setTimeout(() => {
     // document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
   }, 500)
   
+  const prepararImpressao = () => {
+    $('header').hide();
+    $('footer').hide();
+    $('#modal-editar-informacoes').modal('hide');
+    const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
+    document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
+    $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+      elemento.setAttribute('show', elemento.getAttribute('checked'))
+    })
+  }
+  
+  const sairImpressao = () => {
+    $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+      elemento.setAttribute('show', null)
+    })
+    document.title = 'Capa para Processos Habitacionais';
+    $('header').show();
+    $('footer').show();
+  }
+
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
@@ -128,19 +148,9 @@ setTimeout(() => {
         case 'imprimir-capa':
         $(acao).on('click', () => {
           if(form_alt){
-            $('footer').hide();
-            const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
-            document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
-            $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
-              elemento.setAttribute('show', elemento.getAttribute('checked'))
-            })
-            
+            prepararImpressao()
             window.print();
-            $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
-              elemento.setAttribute('show', null)
-            })
-            document.title = 'Capa para Processos Habitacionais';
-            $('footer').show();
+            sairImpressao();
           }else{
             SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false);
           }
@@ -278,7 +288,7 @@ setTimeout(() => {
     dados.querySelectorAll('input').forEach(inputx => {
       $(inputx).on('keypress', (evento) => {
         evento.target.setAttribute('data-mascara', inputx.getAttribute('data-param'));
-        console.log('aqui - evento');
+        // console.log('aqui - evento');
         try{
           atribuirMascaras(inputx.getAttribute('data-param'), inputx)
         }catch{}
@@ -312,7 +322,7 @@ setTimeout(() => {
         
         const input_agencia = input.closest('.input-group').querySelector('input[placeholder="0000"]');
         const input_operacao = input.closest('.input-group').querySelector('input[data-mascara="operacao"]');
-        const input_conta = input.closest('.input-group').querySelector('input[data-mascara="conta"]');
+        const input_conta = input.closest('.input-group').querySelector('input[data-mascara="conta"]') || input.closest('.input-group').querySelector('input[data-mascara="conta-vendedor"]');
         
         if(Array.isArray(split) && split.length > 1){
           if(split[0].trim().length >= 4){
@@ -364,6 +374,34 @@ setTimeout(() => {
     i++;
   }
   
+  (function() {
+      
+    var beforePrint = function() {
+      // console.log('Antes de imprimir...');
+      prepararImpressao()
+    };
+    
+    var afterPrint = function() {
+      // console.log('Depois de imprimir...');
+      sairImpressao()
+    };
+    
+    if (window.matchMedia) {
+      var mediaQueryList = window.matchMedia('print');
+      mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+          beforePrint();
+        } else {
+          afterPrint();
+        }
+      });
+    }
+    
+    window.onbeforeprint = beforePrint;
+    window.onafterprint = afterPrint;
+    
+  }());
+
   window.addEventListener("load", function () {
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
