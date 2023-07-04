@@ -134,6 +134,57 @@ function zeroEsquerda(quantidadeZeros, valor){
   return (zeros + valor).slice(-quantidadeZeros);
 }
 
+function verificarCPF(cpf){
+  cpf = cpf.replace(/\D/g, '');
+  
+  switch (cpf){
+    case '00000000000':
+    resultado = false
+    break;
+    case '11111111111':
+    resultado = false
+    break;
+    case '22222222222':
+    resultado = false
+    break;
+    case '33333333333':
+    resultado = false
+    break;
+    case '44444444444':
+    resultado = false
+    break;
+    case '55555555555':
+    resultado = false
+    break;
+    case '66666666666':
+    resultado = false
+    break;
+    case '77777777777':
+    resultado = false
+    break;
+    case '88888888888':
+    resultado = false
+    break;
+    case '99999999999':
+    resultado = false
+    break;
+    default: 
+    if(cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+    var resultado = true;
+    [9,10].forEach(function(j){
+      var soma = 0, r;
+      cpf.split(/(?=)/).splice(0,j).forEach(function(e, i){
+        soma += parseInt(e) * ((j+2)-(i+1));
+      });
+      r = soma % 11;
+      r = (r <2)?0:11-r;
+      if(r != cpf.substring(j, j+1)) resultado = false;
+    });
+  }
+  
+  return resultado;
+}
+
 export{
   isEmpty,
   capitalize,
@@ -144,5 +195,6 @@ export{
   popovers,
   SwalAlert,
   resizeTextArea,
-  zeroEsquerda
+  zeroEsquerda,
+  verificarCPF
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF } from './modulos/utilitarios.js';
 let form_alt = false;
 
 setTimeout(() => {
@@ -47,6 +47,13 @@ setTimeout(() => {
         switch(input.dataset.mascara.trim().toLowerCase()){
           case 'cpf':
           $(input).mask('000.000.000-00');
+          $(input).on('input', (evento) => {
+            if(verificarCPF(evento.target.value)){
+              $(evento.target.closest('.area-validation-CPF').querySelector('.icon-invalid-CPF')).fadeOut(500);
+            }else{
+              $(evento.target.closest('.area-validation-CPF').querySelector('.icon-invalid-CPF')).fadeIn(500);
+            }
+          })
           break;
           
           case 'numero-contrato':

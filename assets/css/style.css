@@ -272,6 +272,18 @@ footer,
   border-color: #BBB;
 }
 
+.area-validation-CPF{
+  position: relative;
+}
+
+.icon-invalid-CPF{
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translate(0%, -50%);
+  color: #FF0000;
+}
+
 @media screen and (max-width: 600px) {
   #modal-editar-informacoes .modal-body form > .row{
     display: block;
