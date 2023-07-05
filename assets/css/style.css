@@ -284,6 +284,17 @@ footer,
   color: #FF0000;
 }
 
+.tooltip-CPF-invalido{
+  --bs-tooltip-bg: #FF0000 !important;
+}
+
+.custom-tooltip{
+  --bs-tooltip-bg: #FF0 !important;
+  --bs-tooltip-color: #000 !important;
+  --bs-tooltip-opacity: 1;
+  --bs-tooltip-margin: 1rem;
+}
+
 @media screen and (max-width: 600px) {
   #modal-editar-informacoes .modal-body form > .row{
     display: block;
