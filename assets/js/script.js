@@ -124,7 +124,7 @@ setTimeout(() => {
     const campos_CPF = $('[data-mascara="CPF"]');
 
     campos_CPF.each((index, campo) => {
-      console.log(campo)
+      // console.log(campo)
       verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false);
     })
 
