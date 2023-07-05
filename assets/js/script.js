@@ -2,6 +2,7 @@
 
 import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF } from './modulos/utilitarios.js';
 let form_alt = false;
+let CPF_ok = new Array();
 
 setTimeout(() => {
   $('#modal-editar-informacoes').modal('show');
@@ -120,6 +121,13 @@ setTimeout(() => {
   }, 500)
   
   const prepararImpressao = () => {
+    const campos_CPF = $('[data-mascara="CPF"]');
+
+    campos_CPF.each((index, campo) => {
+      console.log(campo)
+      verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false);
+    })
+
     $('header').hide();
     $('footer').hide();
     $('#modal-editar-informacoes').modal('hide');
