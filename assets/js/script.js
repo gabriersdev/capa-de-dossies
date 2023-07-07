@@ -171,6 +171,9 @@ setTimeout(() => {
           }
         })
         break;
+
+        case 'copiar-numero-contrato':
+        break;
         
         case 'carregar-espelho':
           $(acao).on('click', () => {
