@@ -191,6 +191,11 @@ const copiar = async (valor) => {
   await navigator.clipboard.writeText(valor);
 }
 
+function primeiroNome(nome){
+  const nome_separado = nome.split(' ');
+  return nome_separado[0];
+}
+
 export{
   isEmpty,
   capitalize,
@@ -203,5 +208,6 @@ export{
   resizeTextArea,
   zeroEsquerda,
   verificarCPF,
-  copiar
+  copiar,
+  primeiroNome
 }

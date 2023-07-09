@@ -1,11 +1,13 @@
 "use strict";
 
+import { conteudos } from './modulos/conteudos.js';
 import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 
 setTimeout(() => {
   // $('#modal-editar-informacoes').modal('show');
+  // $('#modal-ultimos-registros-salvos').modal('show');
 }, 500);
 
 (() => {  
@@ -80,7 +82,7 @@ setTimeout(() => {
           case 'conta-vendedor':
           $(input).mask('0000000000000-0', {reverse: true});
           break;
-
+          
           case 'money':
           SimpleMaskMoney.setMask(input, {
             prefix: 'R$ ',
@@ -123,16 +125,16 @@ setTimeout(() => {
   const prepararImpressao = () => {
     CPF_ok = new Array();
     const campos_CPF = $('[data-mascara="CPF"]');
-
+    
     campos_CPF.each((index, campo) => {
       // console.log(campo)
       !isEmpty(campo.value) ? verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false) : '';
     })
-
+    
     if(!CPF_ok.every(e => e == true)){
       SwalAlert('aviso', 'error', 'Um ou mais CPFs informados está inválido');
       // SwalAlert('aviso', 'warning', 'Um ou mais CPFs informados está inválido', null, null, null, null, 3000);
-
+      
       setTimeout(() => {
         // $('#modal-editar-informacoes').modal('show');
         // $('#modal-editar-informacoes input')[0];
@@ -147,7 +149,7 @@ setTimeout(() => {
         elemento.setAttribute('show', elemento.getAttribute('checked'))
       })
     }
-
+    
   }
   
   const sairImpressao = () => {
@@ -158,7 +160,7 @@ setTimeout(() => {
     $('header').show();
     $('footer').show();
   }
-
+  
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
@@ -180,47 +182,74 @@ setTimeout(() => {
             sairImpressao();
           }else{
             SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, 2000);
-
+            
             setTimeout(() => {
               // $('#modal-editar-informacoes').modal('show'); 
             }, 2000)
           }
         })
         break;
-
+        
         case 'copiar-titulo-processo':
-          $(acao).on('click', (evento) => {
+        $(acao).on('click', (evento) => {
+          
+          if(!form_alt){
+            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, 2000);
             
-            if(!form_alt){
-              SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, 2000);
-
+            setTimeout(() => {
+              // $('#modal-editar-informacoes').modal('show');
+            }, 2000);
+          }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
+            SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
+          }else{
+            copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`).then(retorno => {
+              const botao = $('[data-action="copiar-titulo-processo"]');
+              botao.html('<i class="bi bi-check2"></i>');
+              botao.toggleClass('btn-outline-primary');
+              botao.toggleClass('btn-success');
+              
               setTimeout(() => {
-                // $('#modal-editar-informacoes').modal('show');
-              }, 2000);
-            }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
-              SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
-            }else{
-              copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`).then(retorno => {
-                const botao = $('[data-action="copiar-titulo-processo"]');
-                botao.html('<i class="bi bi-check2"></i>');
+                botao.html(`<i class="bi bi-123"></i>`);
                 botao.toggleClass('btn-outline-primary');
                 botao.toggleClass('btn-success');
-                
-                setTimeout(() => {
-                  botao.html(`<i class="bi bi-123"></i>`);
-                  botao.toggleClass('btn-outline-primary');
-                  botao.toggleClass('btn-success');
-                }, 500)
-              });
-            }
-            
-          })
+              }, 500)
+            });
+          }
+          
+        })
         break;
         
         case 'carregar-espelho':
-          $(acao).on('click', () => {
-            SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
+        $(acao).on('click', () => {
+          SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
+        })
+        break;
+        
+        case 'apagar-registro':
+          $(acao).on('click', (evento) => {
+            evento.preventDefault();
+            console.log(evento.target.closest('tr'));
           })
+        break;
+        
+        case 'recuperar-registro':
+          $(acao).on('click', (evento) => {
+            evento.preventDefault();
+            console.log(evento.target.closest('tr'));
+          })
+        break;
+        
+        case 'limpar-registros-salvos':
+        const modal_utlimos = document.querySelector('#modal-ultimos-registros-salvos');
+        $(acao).on('click', (evento) => {
+          SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar os registros?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
+            if(retorno.isConfirmed){
+              modal_utlimos.querySelector('.modal-body').innerHTML = conteudos.alerts.sem_registros
+            }else{
+              
+            }
+          });
+        })
         break;
         
         case 'formulario-informacoes':
@@ -383,7 +412,7 @@ setTimeout(() => {
         const input_agencia = input.closest('.input-group').querySelector('input[placeholder="0000"]');
         const input_operacao = input.closest('.input-group').querySelector('input[data-mascara="operacao"]');
         const input_conta = input.closest('.input-group').querySelector('input[data-mascara="conta"]') || input.closest('.input-group').querySelector('input[data-mascara="conta-vendedor"]');
-
+        
         if(Array.isArray(split) && split.length > 1){
           if(split[0].trim().length >= 4){
             input_agencia.value = split[0].trim();
@@ -436,7 +465,7 @@ setTimeout(() => {
   }
   
   (function() {
-      
+    
     var beforePrint = function() {
       // console.log('Antes de imprimir...');
       prepararImpressao()
@@ -462,7 +491,7 @@ setTimeout(() => {
     window.onafterprint = afterPrint;
     
   }());
-
+  
   window.addEventListener("load", function () {
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";

@@ -115,11 +115,12 @@ main b{
   margin-top: 1rem;
 }
 
-.tabela-dados-bancarios{
+.tabela-dados-bancarios,
+.modal-ultimos-registros-salvos table{
   text-transform: none;
 }
 
-.tabela-dados-bancarios, tbody{
+.tabela-dados-bancarios, .tabela-dados-bancarios tbody{
   display: block;
 }
 
@@ -128,12 +129,21 @@ main b{
 }
 
 .tabela-dados-bancarios tbody tr{
-  display: block;
   display: flex;
   justify-content: space-between;
 }
 
-footer{
+#modal-ultimos-registros-salvos table:has(th, td){
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+#modal-ultimos-registros-salvos table,
+#modal-ultimos-registros-salvos .alert{
+  margin-bottom: 0;
+}
+
+footer, 
+.modal{
   font-size: 16px;
   width: 100%;
 }
@@ -142,7 +152,9 @@ button i{
   margin-right: 0.5rem;
 }
 
-button[data-action="copiar-titulo-processo"] i{
+button[data-action="copiar-titulo-processo"] i,
+button[data-action="apagar-registro"] i,
+button[data-action="recuperar-registro"] i{
   margin: 0;
 }
 
