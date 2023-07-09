@@ -110,7 +110,8 @@ async function SwalAlert(tipo, icon, title, text, mensagem, text_confirm, focus_
       icon: icon,
       title: title,
       text: text,
-      footer: mensagem
+      footer: mensagem,
+      timer: time
     }) 
   }
 }
@@ -186,6 +187,10 @@ function verificarCPF(cpf){
   return resultado;
 }
 
+const copiar = async (valor) => {
+  await navigator.clipboard.writeText(valor);
+}
+
 export{
   isEmpty,
   capitalize,
@@ -197,5 +202,6 @@ export{
   SwalAlert,
   resizeTextArea,
   zeroEsquerda,
-  verificarCPF
+  verificarCPF,
+  copiar
 }

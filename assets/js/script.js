@@ -1,6 +1,6 @@
 "use strict";
 
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 
@@ -178,12 +178,29 @@ setTimeout(() => {
             window.print();
             sairImpressao();
           }else{
-            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false);
+            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, 2000);
+
+            setTimeout(() => {
+              $('#modal-editar-informacoes').modal('show');
+            }, 2000)
           }
         })
         break;
 
         case 'copiar-titulo-processo':
+          $(acao).on('click', (evento) => {
+            
+            if(!form_alt){
+              SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, 2000);
+
+              setTimeout(() => {
+                $('#modal-editar-informacoes').modal('show');
+              }, 2000);
+            }else{
+              copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`);
+            }
+            
+          })
         break;
         
         case 'carregar-espelho':
