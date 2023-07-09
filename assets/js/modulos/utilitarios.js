@@ -79,7 +79,7 @@ function popovers(){
   });
 }
 
-async function SwalAlert(tipo, icon, title, text, mensagem, text_confirm, focus_cancel){
+async function SwalAlert(tipo, icon, title, text, mensagem, text_confirm, focus_cancel, time){
   tipo = tipo.toLowerCase().trim();
   if(tipo == 'confirmacao'){
     const dialog = await Swal.fire({
@@ -100,7 +100,8 @@ async function SwalAlert(tipo, icon, title, text, mensagem, text_confirm, focus_
     Swal.fire({
       icon: icon,
       title: title,
-      text: text
+      text: text,
+      timer: time
     })
   }
 
@@ -136,7 +137,7 @@ function zeroEsquerda(quantidadeZeros, valor){
 
 function verificarCPF(cpf){
   cpf = cpf.replace(/\D/g, '');
-  
+
   switch (cpf){
     case '00000000000':
     resultado = false

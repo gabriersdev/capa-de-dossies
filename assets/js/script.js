@@ -5,7 +5,7 @@ let form_alt = false;
 let CPF_ok = new Array();
 
 setTimeout(() => {
-  $('#modal-editar-informacoes').modal('show');
+  // $('#modal-editar-informacoes').modal('show');
 }, 500);
 
 (() => {  
@@ -121,21 +121,32 @@ setTimeout(() => {
   }, 500)
   
   const prepararImpressao = () => {
+    CPF_ok = new Array();
     const campos_CPF = $('[data-mascara="CPF"]');
 
     campos_CPF.each((index, campo) => {
       // console.log(campo)
-      verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false);
+      !isEmpty(campo.value) ? verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false) : '';
     })
 
-    $('header').hide();
-    $('footer').hide();
-    $('#modal-editar-informacoes').modal('hide');
-    const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
-    document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
-    $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
-      elemento.setAttribute('show', elemento.getAttribute('checked'))
-    })
+    if(!CPF_ok.every(e => e == true)){
+      SwalAlert('aviso', 'warning', 'Um ou mais CPFs informados está inválido', null, null, null, null, 3000);
+
+      setTimeout(() => {
+        $('#modal-editar-informacoes').modal('show');
+        $('#modal-editar-informacoes input')[0];
+      }, 3000)
+    }else{
+      $('header').hide();
+      $('footer').hide();
+      $('#modal-editar-informacoes').modal('hide');
+      const numero = sanitizarString($('[data-element-paste="n_contrato"]').text());
+      document.title = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : 'Capa para Processos Habitacionais';
+      $('.tabela-propostas-comerciais .checkbox-proposta').each((indice, elemento) => {
+        elemento.setAttribute('show', elemento.getAttribute('checked'))
+      })
+    }
+
   }
   
   const sairImpressao = () => {
@@ -172,7 +183,7 @@ setTimeout(() => {
         })
         break;
 
-        case 'copiar-numero-contrato':
+        case 'copiar-titulo-processo':
         break;
         
         case 'carregar-espelho':
