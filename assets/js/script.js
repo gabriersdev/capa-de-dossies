@@ -130,11 +130,12 @@ setTimeout(() => {
     })
 
     if(!CPF_ok.every(e => e == true)){
-      SwalAlert('aviso', 'warning', 'Um ou mais CPFs informados está inválido', null, null, null, null, 3000);
+      SwalAlert('aviso', 'error', 'Um ou mais CPFs informados está inválido');
+      // SwalAlert('aviso', 'warning', 'Um ou mais CPFs informados está inválido', null, null, null, null, 3000);
 
       setTimeout(() => {
-        $('#modal-editar-informacoes').modal('show');
-        $('#modal-editar-informacoes input')[0];
+        // $('#modal-editar-informacoes').modal('show');
+        // $('#modal-editar-informacoes input')[0];
       }, 3000)
     }else{
       $('header').hide();
@@ -181,7 +182,7 @@ setTimeout(() => {
             SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, 2000);
 
             setTimeout(() => {
-              $('#modal-editar-informacoes').modal('show');
+              // $('#modal-editar-informacoes').modal('show'); 
             }, 2000)
           }
         })
@@ -194,10 +195,23 @@ setTimeout(() => {
               SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, 2000);
 
               setTimeout(() => {
-                $('#modal-editar-informacoes').modal('show');
+                // $('#modal-editar-informacoes').modal('show');
               }, 2000);
+            }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
+              SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
             }else{
-              copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`);
+              copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`).then(retorno => {
+                const botao = $('[data-action="copiar-titulo-processo"]');
+                botao.html('<i class="bi bi-check2"></i>');
+                botao.toggleClass('btn-outline-primary');
+                botao.toggleClass('btn-success');
+                
+                setTimeout(() => {
+                  botao.html(`<i class="bi bi-123"></i>`);
+                  botao.toggleClass('btn-outline-primary');
+                  botao.toggleClass('btn-success');
+                }, 500)
+              });
             }
             
           })
