@@ -47,6 +47,7 @@
   <script src="./assets/js/frameworks/simple-mask-money.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/sweet-alert.js" defer crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/jquery-mask.js" defer crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/moment.js" defer crossorigin="anonymous"></script>
   <script type="module" src="./assets/js/script.js" defer crossorigin="anonymous"></script>
 </head>
 <body>
@@ -72,12 +73,13 @@
   
   <header class="container mb-5 mt-2">
     <div>
-      <button class="btn btn-secondary" data-action="carregar-espelho"><i class="bi bi-file-earmark-arrow-up"></i>Carregar com espelho</button>
+      <!-- <button class="btn btn-secondary" data-action="carregar-espelho"><i class="bi bi-file-earmark-arrow-up"></i>Carregar com espelho</button> -->
       <button class="btn btn-secondary" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
       <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
     </div>
     <div>
       <button class="btn btn-outline-primary" data-action="copiar-titulo-processo" data-toggle="tooltip" data-placement="bottom" title="Copiar título do processo"><i class="bi bi-123"></i></button>
+      <button class="btn btn-primary" data-action="exibir-ultimos-registros" data-toggle="tooltip" data-placement="bottom" title="Exibir últimos registros"><i class="bi bi-card-list"></i></button>
     </div>
   </header>
 
@@ -214,7 +216,7 @@
                 <span class="d-block"><b>1º proponente</b></span>
                 <div class="form-group mt-3 mb-2">
                   <label for="nome_1">Nome do proponente</label>
-                  <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required valuex="Gabriel">
+                  <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required>
                 </div>
                 <div class="form-group mt-2 mb-2">
                   <label for="CPF_1">CPF</label>
@@ -379,41 +381,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <table class="table table-striped">
-            <!-- <caption>
-              Registros salvos
-            </caption> -->
-            <thead>
-              <tr>
-                <th>1º proponente</th>
-                <th>Salvo em</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Gabriel</td>
-                <td>08/07/2023 - 12:50</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" data-action="recuperar-registro" data-toggle="tooltip" data-placement="bottom" title="Recuperar o registro"><i class="bi bi-arrow-counterclockwise"></i></button>&nbsp;<button class="btn btn-danger btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Apagar o registro"><i class="bi bi-x-lg"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>Gabriel</td>
-                <td>08/07/2023 - 12:50</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" data-action="recuperar-registro" data-toggle="tooltip" data-placement="bottom" title="Recuperar o registro"><i class="bi bi-arrow-counterclockwise"></i></button>&nbsp;<button class="btn btn-danger btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Apagar o registro"><i class="bi bi-x-lg"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>Gabriel</td>
-                <td>08/07/2023 - 12:50</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" data-action="recuperar-registro" data-toggle="tooltip" data-placement="bottom" title="Recuperar o registro"><i class="bi bi-arrow-counterclockwise"></i></button>&nbsp;<button class="btn btn-danger btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Apagar o registro"><i class="bi bi-x-lg"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
         <div class="modal-footer">
           <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>

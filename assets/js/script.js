@@ -215,7 +215,6 @@ setTimeout(() => {
               }, 500)
             });
           }
-          
         })
         break;
         
@@ -225,18 +224,10 @@ setTimeout(() => {
         })
         break;
         
-        case 'apagar-registro':
-          $(acao).on('click', (evento) => {
-            evento.preventDefault();
-            console.log(evento.target.closest('tr'));
-          })
-        break;
-        
-        case 'recuperar-registro':
-          $(acao).on('click', (evento) => {
-            evento.preventDefault();
-            console.log(evento.target.closest('tr'));
-          })
+        case 'exibir-ultimos-registros':
+        $(acao).on('click', (evento) => {
+          atualizarRegistros();
+        })
         break;
         
         case 'limpar-registros-salvos':
@@ -244,9 +235,14 @@ setTimeout(() => {
         $(acao).on('click', (evento) => {
           SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar os registros?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
             if(retorno.isConfirmed){
+              try{
+                localStorage.clear();
+                SwalAlert('aviso', 'success', 'Registros apagados com sucesso');
+              }catch(erro){
+                console.warn('Falha ao apagar registros salvos', 'Error: 2021LA');
+                SwalAlert('aviso', 'warning', 'Falha ao apagar registros salvos');
+              }
               modal_utlimos.querySelector('.modal-body').innerHTML = conteudos.alerts.sem_registros
-            }else{
-              
             }
           });
         })
@@ -256,6 +252,7 @@ setTimeout(() => {
         const modal = acao.closest('.modal');
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
+          let registro = new Object();
           try{
             // console.log('Concluindo');
             
@@ -324,7 +321,34 @@ setTimeout(() => {
               else{
                 elemento_capa.textContent = elemento_modal.value.trim();
               }
+              
+              registro[input] = elemento_modal.value;
             });
+            
+            const ultimos_registros = localStorage.getItem('ultimos-registros');
+            registro['datetime'] = Date.now();
+            
+            if(ultimos_registros !== null){
+              if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
+                const array = JSON.parse(ultimos_registros);
+                array.push(registro);
+                localStorage.setItem('ultimos-registros', JSON.stringify(array));
+              }else{
+                // console.log('aqui');
+                const array = new Array();
+                array.push(registro);
+                localStorage.setItem('ultimos-registros', JSON.stringify(array));
+              }
+            }else{
+              const array = new Array();
+              array.push(registro);
+              localStorage.setItem('ultimos-registros', JSON.stringify(array));
+            }
+            
+            // console.log(localStorage.getItem('ultimos-registros'), registro);
+            
+            // console.log(registro);
+            // console.log(Object.keys(registro));
             
             $(modal).modal('hide');
             form_alt = true;
@@ -491,6 +515,111 @@ setTimeout(() => {
     window.onafterprint = afterPrint;
     
   }());
+  
+  function atualizarRegistros(){
+    const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
+    $(modal_ultimos).modal('show');
+    
+    try{
+      const ultimos_registros = localStorage.getItem('ultimos-registros');
+      // console.log(isEmpty(ultimos_registros) && ultimos_registros !== null);
+      
+      if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros)) && JSON.parse(ultimos_registros).length > 0){
+        modal_ultimos.querySelector('.modal-body').innerHTML = conteudos.tabela_ultimos_registros;
+        JSON.parse(ultimos_registros).forEach((registro, index) => {
+          modal_ultimos.querySelector('.modal-body table tbody').innerHTML += `${conteudos.registro({id: index, nome: registro.nome_1, data_hora: registro.datetime})}`;
+        })
+        tooltips();
+      }else if(JSON.parse(ultimos_registros).length <= 0){
+        sem_registros();
+      }else{
+        sem_registros();
+      };
+    }catch(error){
+      // console.warn('Falha ao consultar registros salvos', 'Error: 6981RF');
+      sem_registros();
+    }
+
+    function sem_registros(){
+      modal_ultimos.querySelector('.modal-body').innerHTML = conteudos.alerts.sem_registros;
+    }
+  }
+  
+  function apagarRegistro(evento, elemento){
+    evento.preventDefault();
+    const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
+
+    if(!isEmpty(id) && typeof parseInt(id) == 'number'){
+      try{
+        const ultimos_registros = localStorage.getItem('ultimos-registros');
+        
+        if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
+          const array = new Array();
+
+          JSON.parse(ultimos_registros).forEach((elemento, index) => {
+            if(index !== parseInt(id)){
+              array.push(elemento);
+            }
+          })
+
+          localStorage.setItem('ultimos-registros', JSON.stringify(array));
+          atualizarRegistros();
+          $(evento.target).tooltip('hide');
+          tooltips();
+        }
+      }catch(error){
+        SwalAlert('aviso', 'error', 'Falha ao apagar o registro selecionado');
+        console.warn('Falha ao apagar o registro selecionado.', 'Error: 6098RG');
+      } 
+    }else{
+      SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
+      console.warn('Erro ao capturar o identificador do registro.', 'Erro: 7878KR');
+    }
+  }
+  
+  function recuperarRegistro(evento, elemento){
+    evento.preventDefault();
+    const modal = $('#modal-ultimos-registros-salvos');
+    const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
+
+    if(!isEmpty(id) && typeof parseInt(id) == 'number'){
+      try{
+        const ultimos_registros = localStorage.getItem('ultimos-registros');
+        
+        if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
+          const dados_recuperados = JSON.parse(ultimos_registros)[id];
+          const modal_informacoes = document.querySelector('#modal-editar-informacoes');
+
+          Object.keys(dados_recuperados).forEach(key => {
+            const input = modal_informacoes.querySelector(`#${key}`);
+            if(input !== null){
+              if(key == 'comercial_conta_corrente' || key == 'comercial_cheque_especial' || key == 'comercial_conta_poupanca' || key == 'comercial_cartao_de_credito' || key == 'comercial_credito_consignado' /* key == 'conta_agencia' || key == 'conta_operacao' || key == 'conta_numero' */ ){
+                input.checked = dados_recuperados[key];
+              }else{
+                input.value = dados_recuperados[key];
+              }
+            }
+          })
+
+          // modal_informacoes.querySelector('button[type=submit]');
+          modal.modal('hide');
+          SwalAlert('aviso', 'success', 'Registro recuperado com sucesso!', null, null, null, null, 3000);
+          setTimeout(() => {
+            $(modal_informacoes).modal('show');
+          }, 3000)
+        }
+      }catch(error){
+        SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
+        console.warn('Falha ao recuperar o registro selecionado.', 'Error: 3612RG');
+      } 
+    }else{
+      SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
+      console.warn('Erro ao capturar o identificador do registro.', 'Erro: 4933KR');
+    }
+  }
+  
+  window.apagarRegistro = apagarRegistro;
+  window.recuperarRegistro = recuperarRegistro;
   
   window.addEventListener("load", function () {
     const overlay2 = document.querySelector(".overlay-2");

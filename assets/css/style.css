@@ -154,7 +154,8 @@ button i{
 
 button[data-action="copiar-titulo-processo"] i,
 button[data-action="apagar-registro"] i,
-button[data-action="recuperar-registro"] i{
+button[data-action="recuperar-registro"] i,
+button[data-action="exibir-ultimos-registros"] i{
   margin: 0;
 }
 
