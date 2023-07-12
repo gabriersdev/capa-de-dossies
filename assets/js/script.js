@@ -455,7 +455,7 @@ setTimeout(() => {
           const valor_tratado = valor.replaceAll('.', '').replaceAll('-', '');
           
           if(valor_tratado.length >= 13){
-            const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 3), conta: valor_tratado.substr(7, (valor_tratado.length - 1))};
+            const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 3), conta: valor_tratado.substr(7, (valor_tratado.length - 2)) + '-' + valor_tratado.substr((valor_tratado.length - 1), 1)};
             
             if(!isEmpty(dados.agencia)){
               input_agencia.value = dados.agencia;
