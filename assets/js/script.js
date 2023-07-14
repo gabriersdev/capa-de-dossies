@@ -161,16 +161,20 @@ setTimeout(() => {
     $('footer').show();
   }
   
+  const exibirModalEditarInformacoes = () => {
+    $('#modal-editar-informacoes').modal('show');
+    setTimeout(() => {
+      document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
+    }, 500)
+  }
+
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
       switch(acao.dataset.action.toLowerCase().trim()){
         case 'editar-informacoes':
         $(acao).on('click', () => {
-          $('#modal-editar-informacoes').modal('show');
-          setTimeout(() => {
-            document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
-          }, 500)
+          exibirModalEditarInformacoes();
         })
         break;
         
@@ -657,4 +661,16 @@ setTimeout(() => {
     };
     
   });
+
+  document.addEventListener('keyup', (evento) => {
+    if(!isEmpty(evento.keyCode)){
+      if(evento.keyCode == 45){
+        //Ativar modal editar informações
+        exibirModalEditarInformacoes();
+      }else if(evento.keyCode == 113){
+        //Ativar modal últimos registros
+        atualizarRegistros();
+      }
+    }
+  })
 })();
