@@ -76,11 +76,11 @@ setTimeout(() => {
           break;
           
           case 'conta':
-          $(input).mask('00000000-0', {reverse: true});
+          $(input).mask('000000000000-0', {reverse: true});
           break;
           
           case 'conta-vendedor':
-          $(input).mask('0000000000000-0', {reverse: true});
+          $(input).mask('000000000000-0', {reverse: true});
           break;
           
           case 'money':
@@ -111,7 +111,7 @@ setTimeout(() => {
         break;
         
         case 'conta':
-        $(input).mask('00000-0', {reverse: true});
+        $(input).mask('000000000000-0', {reverse: true});
         break;
       }
     }
