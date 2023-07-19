@@ -598,7 +598,7 @@ setTimeout(() => {
             const input = modal_informacoes.querySelector(`#${key}`);
             if(input !== null){
               if(key == 'comercial_conta_corrente' || key == 'comercial_cheque_especial' || key == 'comercial_conta_poupanca' || key == 'comercial_cartao_de_credito' || key == 'comercial_credito_consignado' /* key == 'conta_agencia' || key == 'conta_operacao' || key == 'conta_numero' */ ){
-                input.checked = dados_recuperados[key];
+                input.checked = dados_recuperados[key] == 'false' || dados_recuperados[key] == false ? false : true;
               }else{
                 input.value = dados_recuperados[key];
               }
