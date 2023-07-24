@@ -274,6 +274,7 @@ setTimeout(() => {
               'recursos_proprios', 
               'FGTS', 
               'subsidio', 
+              'taxa_de_cartorio',
               'comercial_conta_corrente', 
               'comercial_cheque_especial', 
               'comercial_conta_poupanca', 
