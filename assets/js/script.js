@@ -17,6 +17,38 @@ setTimeout(() => {
     })
   })
   
+  const inputs_form = [
+    'nome_1', 
+    'CPF_1', 
+    'nome_2', 
+    'CPF_2', 
+    'modalidade', 
+    'n_contrato', 
+    'endereco', 
+    'empreendimento', 
+    'valor_compra_e_venda', 
+    'valor_financiamento', 
+    'recursos_proprios', 
+    'FGTS', 
+    'subsidio', 
+    'taxa_de_cartorio',
+    'comercial_conta_corrente', 
+    'comercial_cheque_especial', 
+    'comercial_conta_poupanca', 
+    'comercial_cartao_de_credito', 
+    'comercial_credito_consignado',
+    // 'conta_agencia', 
+    // 'conta_operacao', 
+    // 'conta_numero', 
+    'conta_comprador_agencia', 
+    'conta_comprador_operacao', 
+    'conta_comprador_numero', 
+    'conta_vendedor_banco', 
+    'conta_vendedor_agencia', 
+    'conta_vendedor_operacao', 
+    'conta_vendedor_numero'
+  ]
+
   function atribuirLinks(){
     const linkElementos = document.querySelectorAll('[data-link]');
     
@@ -259,38 +291,6 @@ setTimeout(() => {
           let registro = new Object();
           try{
             // console.log('Concluindo');
-            
-            const inputs_form = [
-              'nome_1', 
-              'CPF_1', 
-              'nome_2', 
-              'CPF_2', 
-              'modalidade', 
-              'n_contrato', 
-              'endereco', 
-              'empreendimento', 
-              'valor_compra_e_venda', 
-              'valor_financiamento', 
-              'recursos_proprios', 
-              'FGTS', 
-              'subsidio', 
-              'taxa_de_cartorio',
-              'comercial_conta_corrente', 
-              'comercial_cheque_especial', 
-              'comercial_conta_poupanca', 
-              'comercial_cartao_de_credito', 
-              'comercial_credito_consignado',
-              // 'conta_agencia', 
-              // 'conta_operacao', 
-              // 'conta_numero', 
-              'conta_comprador_agencia', 
-              'conta_comprador_operacao', 
-              'conta_comprador_numero', 
-              'conta_vendedor_banco', 
-              'conta_vendedor_agencia', 
-              'conta_vendedor_operacao', 
-              'conta_vendedor_numero'
-            ]
             
             inputs_form.forEach(input => {
               acao.closest('form').querySelector(`#${input}`).value
@@ -660,6 +660,29 @@ setTimeout(() => {
     }catch(error){
       console.warn('Falha ao requisitar dados bancários da API', 'Error: 1543CN')
     };
+    
+    try{
+      const url = new URL(window.location);
+
+      if(!isEmpty(url.search)){
+        const parametros = url.search.replace('?', '').split('&');
+        const parametros_alteracao = ['CPF_1', 'nome_1', 'CPF_2', 'nome_2', 'modalidade', 'n_contrato'];
+        
+        if(Array.isArray(parametros)){
+          parametros.forEach((parametro) => {
+            const parametro_split = parametro.split('=');
+            if(parametros_alteracao.includes(parametro_split[0])){
+              $(`#${parametro_split[0]}`).val(parametro_split[1]);
+            }
+          })
+
+          exibirModalEditarInformacoes()
+        }
+      }
+      
+    }catch(error){
+      console.warn('Erro ao capturar parâmetros na URL', 'Error: 6907XN')
+    }
     
   });
 
