@@ -217,7 +217,7 @@ setTimeout(() => {
             window.print();
             sairImpressao();
           }else{
-            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, 2000);
+            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, null);
             
             setTimeout(() => {
               // $('#modal-editar-informacoes').modal('show'); 
@@ -230,7 +230,7 @@ setTimeout(() => {
         $(acao).on('click', (evento) => {
           
           if(!form_alt){
-            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, 2000);
+            SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, null);
             
             setTimeout(() => {
               // $('#modal-editar-informacoes').modal('show');
