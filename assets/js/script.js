@@ -654,6 +654,8 @@ setTimeout(() => {
   window.recuperarRegistro = recuperarRegistro;
   
   window.addEventListener("load", function () {
+    $('body').append(conteudos.principal)
+
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
     atribuirLinks();
