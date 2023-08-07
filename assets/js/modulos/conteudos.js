@@ -26,8 +26,9 @@ const principal = `
     <!-- <button class="btn btn-secondary" data-action="carregar-espelho"><i class="bi bi-file-earmark-arrow-up"></i>Carregar com espelho</button> -->
     <button class="btn btn-secondary" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
     <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
-  </div>
-  <div>
+    </div>
+    <div>
+    <button class="btn btn-outline-secondary" data-action="limpar-tudo" data-toggle="tooltip" data-placement="bottom" title="Limpar tudo"><i class="bi bi-arrow-counterclockwise"></i></button>
     <button class="btn btn-outline-primary" data-action="copiar-titulo-processo" data-toggle="tooltip" data-placement="bottom" title="Copiar título do processo"><i class="bi bi-123"></i></button>
     <button class="btn btn-primary" data-action="exibir-ultimos-registros" data-toggle="tooltip" data-placement="bottom" title="Exibir últimos registros"><i class="bi bi-card-list"></i></button>
   </div>

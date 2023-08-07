@@ -304,6 +304,12 @@ setTimeout(() => {
         case 'confirma-visualizacao-alerta':
         // Ação implementada através de função a parte.
         break;
+
+        case 'limpar-tudo':
+          $(acao).click(() => {
+            window.location.reload();
+          })
+        break;
         
         default:
         throw new Error('Ação não implementada para a ação informada.');
