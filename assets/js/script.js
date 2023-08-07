@@ -733,14 +733,26 @@ setTimeout(() => {
           parametros.forEach((parametro) => {
             const parametro_split = parametro.split('=');
             if(parametros_alteracao.includes(parametro_split[0])){
-              $(`#${parametro_split[0]}`).val(parametro_split[1]);
+              if(['nome_1', 'nome_2', 'modalidade'].includes(parametro_split[0])){
+                $(`#${parametro_split[0]}`).val(desanitizarStringURL(parametro_split[1]));
+              }else{
+                $(`#${parametro_split[0]}`).val(parametro_split[1]);
+              }
             }
           })
           
-          exibirModalEditarInformacoes()
+          exibirModalEditarInformacoes();
         }
       }
       
+      function desanitizarStringURL(string){
+        if(!isEmpty(string)){
+          return string.replaceAll('-', ' ');
+        }else{
+          return '';
+        }
+      }
+
     }catch(error){
       console.warn('Erro ao capturar parâmetros na URL', 'Error: 6907XN')
     }
