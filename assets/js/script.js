@@ -388,6 +388,7 @@ setTimeout(() => {
         break;
         
         case 'confirma-visualizacao-alerta':
+          // Ação implementada através de função a parte.
         break;
 
         default:
@@ -708,6 +709,33 @@ setTimeout(() => {
       
     }catch(error){
       console.warn('Erro ao capturar parâmetros na URL', 'Error: 6907XN')
+    }
+    
+    try{
+      const variavel = sessionStorage.getItem('confirma-visualizacao-alerta');
+      if(variavel !== null && variavel !== undefined){
+        if(!isEmpty(variavel)){
+          if(JSON.parse(variavel) !== true){
+            $('header.container').append(conteudos.alerts.alerta_impressao);
+          }
+        }else{
+          $('header.container').append(conteudos.alerts.alerta_impressao);
+        };
+      }else{
+        $('header.container').append(conteudos.alerts.alerta_impressao);
+      }
+
+      $('[data-action="confirma-visualizacao-alerta"]').click(() => {
+        try{
+          sessionStorage.setItem('confirma-visualizacao-alerta', JSON.stringify(true));
+          $('[data-action="confirma-visualizacao-alerta"]').closest('div.alert').remove();
+        }catch(error){
+          console.log('Ocorreu um erro ao salvar confirmação de visualização de alerta. Erro: %s', error);
+        }
+      })
+
+    }catch(error){
+      console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
     
   });

@@ -1,7 +1,11 @@
 import { primeiroNome } from "./utilitarios.js"
 
 const alerts = {
-  sem_registros: `<div class="alert alert-secondary text-center">Não foram encontrados registros</div>`
+  sem_registros: `<div class="alert alert-secondary text-center">Não foram encontrados registros</div>`,
+  alerta_impressao: `<div class="alert alert-warning mt-3 d-flex align-items-center justify-content-between">
+  Recomendamos que você desabilite a exibição de cabeçalho e rodapé no documento que será impresso ou salvo.
+  <button class="btn btn-sm btn-outline-secondary" data-action="confirma-visualizacao-alerta">OK</button>
+  </div>`
 }
 
 const registro = ({id, nome, data_hora}) => {
