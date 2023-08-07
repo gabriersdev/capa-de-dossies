@@ -747,7 +747,7 @@ setTimeout(() => {
       
       function desanitizarStringURL(string){
         if(!isEmpty(string)){
-          return string.replaceAll('-', ' ');
+          return string.replaceAll('-', ' ').replaceAll('%20', ' ');
         }else{
           return '';
         }
