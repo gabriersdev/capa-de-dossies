@@ -48,7 +48,7 @@ setTimeout(() => {
     'conta_vendedor_operacao', 
     'conta_vendedor_numero'
   ]
-
+  
   function atribuirLinks(){
     const linkElementos = document.querySelectorAll('[data-link]');
     
@@ -199,7 +199,7 @@ setTimeout(() => {
       document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
     }, 500)
   }
-
+  
   function atribuirAcoes(){
     const acoes = document.querySelectorAll('[data-action]');
     acoes.forEach(acao => {
@@ -285,102 +285,16 @@ setTimeout(() => {
         break;
         
         case 'formulario-informacoes':
-        const modal = acao.closest('.modal');
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
-
-          let ok = new Array();
-
-          if(!isEmpty(document.querySelector('#CPF_1').value)){
-            if(verificarCPF(document.querySelector('#CPF_1').value)){
-              ok.push(true);
-            }else{
-              ok.push(false);
-            }
-          }
           
-          if(!isEmpty(document.querySelector('#CPF_2').value)){
-            if(verificarCPF(document.querySelector('#CPF_2').value)){
-              ok.push(true);
-            }else{
-              ok.push(false);
-            }
-          }
-
+          const ok = verificarInputsCPFValidos();
+          
           if(ok.every(e => e == true)){
-            let registro = new Object();
-            try{
-              // console.log('Concluindo');
-              
-              inputs_form.forEach(input => {
-                acao.closest('form').querySelector(`#${input}`).value
-                const capa = document.querySelector('#capa');
-                
-                const elemento_modal = acao.closest('form').querySelector(`#${input}`);
-                const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
-                
-                if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
-                  elemento_capa.setAttribute('checked', elemento_modal.checked);
-                }else if(input == 'nome_2' || input == 'CPF_2'){
-                  if(isEmpty(elemento_modal.value)){
-                    $('#proponente-2').hide();
-                  }else{
-                    $('#proponente-2').show();
-                    elemento_capa.textContent = elemento_modal.value.trim();
-                  }
-                }else if(input == 'empreendimento'){
-                  if(isEmpty(elemento_modal.value)){
-                    $('#empreendimento').hide();
-                  }else{
-                    $('#empreendimento').show();
-                    elemento_capa.textContent = elemento_modal.value.trim();
-                  }
-                }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
-                  if(isEmpty(elemento_modal.value)){
-                    $('#dados-bancarios-vendedor').hide();
-                  }else{
-                    $('#dados-bancarios-vendedor').show();
-                    elemento_capa.textContent = elemento_modal.value.trim();
-                  }
-                }
-                else{
-                  elemento_capa.textContent = elemento_modal.value.trim();
-                }
-                
-                registro[input] = elemento_modal.value;
-              });
-              
-              const ultimos_registros = localStorage.getItem('ultimos-registros');
-              registro['datetime'] = Date.now();
-              
-              if(ultimos_registros !== null){
-                if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
-                  const array = JSON.parse(ultimos_registros);
-                  array.push(registro);
-                  localStorage.setItem('ultimos-registros', JSON.stringify(array));
-                }else{
-                  // console.log('aqui');
-                  const array = new Array();
-                  array.push(registro);
-                  localStorage.setItem('ultimos-registros', JSON.stringify(array));
-                }
-              }else{
-                const array = new Array();
-                array.push(registro);
-                localStorage.setItem('ultimos-registros', JSON.stringify(array));
-              }
-              
-              // console.log(localStorage.getItem('ultimos-registros'), registro);
-              
-              // console.log(registro);
-              // console.log(Object.keys(registro));
-              
-              $(modal).modal('hide');
-              form_alt = true;
-            }catch(error){
-              console.log('Ocorreu um erro! %s', error);
-              SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
-            }
+            const registro = enviarFormulario(acao);
+            if(!isEmpty(registro)){
+              salvarRegistro(registro)
+            };
           }else{
             SwalAlert('aviso', 'error', 'Um ou mais CPF informado está inválido');
           }
@@ -388,9 +302,9 @@ setTimeout(() => {
         break;
         
         case 'confirma-visualizacao-alerta':
-          // Ação implementada através de função a parte.
+        // Ação implementada através de função a parte.
         break;
-
+        
         default:
         throw new Error('Ação não implementada para a ação informada.');
         break;
@@ -398,6 +312,109 @@ setTimeout(() => {
     })
   }
   
+  function enviarFormulario(acao){
+    let registro = new Object();
+    const modal = acao.closest('.modal');
+    try{
+      // console.log('Concluindo');
+      
+      inputs_form.forEach(input => {
+        acao.closest('form').querySelector(`#${input}`).value
+        const capa = document.querySelector('#capa');
+        
+        const elemento_modal = acao.closest('form').querySelector(`#${input}`);
+        const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+        
+        if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
+          elemento_capa.setAttribute('checked', elemento_modal.checked);
+        }else if(input == 'nome_2' || input == 'CPF_2'){
+          if(isEmpty(elemento_modal.value)){
+            $('#proponente-2').hide();
+          }else{
+            $('#proponente-2').show();
+            elemento_capa.textContent = elemento_modal.value.trim();
+          }
+        }else if(input == 'empreendimento'){
+          if(isEmpty(elemento_modal.value)){
+            $('#empreendimento').hide();
+          }else{
+            $('#empreendimento').show();
+            elemento_capa.textContent = elemento_modal.value.trim();
+          }
+        }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
+          if(isEmpty(elemento_modal.value)){
+            $('#dados-bancarios-vendedor').hide();
+          }else{
+            $('#dados-bancarios-vendedor').show();
+            elemento_capa.textContent = elemento_modal.value.trim();
+          }
+        }
+        else{
+          elemento_capa.textContent = elemento_modal.value.trim();
+        }
+        
+        registro[input] = elemento_modal.value;
+      });
+            
+      $(modal).modal('hide');
+      form_alt = true;
+
+    }catch(error){
+      console.log('Ocorreu um erro! %s', error);
+      SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
+    }
+    return registro;
+  }
+
+  function salvarRegistro(registro){
+    const ultimos_registros = localStorage.getItem('ultimos-registros');
+    registro['datetime'] = Date.now();
+    
+    if(ultimos_registros !== null){
+      if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
+        const array = JSON.parse(ultimos_registros);
+        array.push(registro);
+        localStorage.setItem('ultimos-registros', JSON.stringify(array));
+      }else{
+        // console.log('aqui');
+        const array = new Array();
+        array.push(registro);
+        localStorage.setItem('ultimos-registros', JSON.stringify(array));
+      }
+    }else{
+      const array = new Array();
+      array.push(registro);
+      localStorage.setItem('ultimos-registros', JSON.stringify(array));
+    }
+    
+    // console.log(localStorage.getItem('ultimos-registros'), registro);
+    
+    // console.log(registro);
+    // console.log(Object.keys(registro));
+  }
+
+  function verificarInputsCPFValidos(){
+    let ok = new Array();
+          
+    if(!isEmpty(document.querySelector('#CPF_1').value)){
+      if(verificarCPF(document.querySelector('#CPF_1').value)){
+        ok.push(true);
+      }else{
+        ok.push(false);
+      }
+    }
+    
+    if(!isEmpty(document.querySelector('#CPF_2').value)){
+      if(verificarCPF(document.querySelector('#CPF_2').value)){
+        ok.push(true);
+      }else{
+        ok.push(false);
+      }
+    }
+
+    return ok;
+  }
+
   const inputs_formulario = {
     nome_1: '', 
     CPF_1: '', 
@@ -571,7 +588,7 @@ setTimeout(() => {
       // console.warn('Falha ao consultar registros salvos', 'Error: 6981RF');
       sem_registros();
     }
-
+    
     function sem_registros(){
       modal_ultimos.querySelector('.modal-body').innerHTML = conteudos.alerts.sem_registros;
     }
@@ -580,20 +597,20 @@ setTimeout(() => {
   function apagarRegistro(evento, elemento){
     evento.preventDefault();
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
-
+    
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
       try{
         const ultimos_registros = localStorage.getItem('ultimos-registros');
         
         if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
           const array = new Array();
-
+          
           JSON.parse(ultimos_registros).forEach((elemento, index) => {
             if(index !== parseInt(id)){
               array.push(elemento);
             }
           })
-
+          
           localStorage.setItem('ultimos-registros', JSON.stringify(array));
           atualizarRegistros();
           $(evento.target).tooltip('hide');
@@ -613,7 +630,7 @@ setTimeout(() => {
     evento.preventDefault();
     const modal = $('#modal-ultimos-registros-salvos');
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
-
+    
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
       try{
         const ultimos_registros = localStorage.getItem('ultimos-registros');
@@ -621,7 +638,7 @@ setTimeout(() => {
         if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
           const dados_recuperados = JSON.parse(ultimos_registros)[id];
           const modal_informacoes = document.querySelector('#modal-editar-informacoes');
-
+          
           Object.keys(dados_recuperados).forEach(key => {
             const input = modal_informacoes.querySelector(`#${key}`);
             if(input !== null){
@@ -632,22 +649,31 @@ setTimeout(() => {
               }
             }
           })
-
+          
           // modal_informacoes.querySelector('button[type=submit]');
           modal.modal('hide');
+          $(evento.target.closest('[data-toggle="tooltip"]')).tooltip('dispose');
           SwalAlert('aviso', 'success', 'Registro recuperado com sucesso!', null, null, null, null, 3000);
+          
+          if(verificarInputsCPFValidos().every(e => e == true)){
+            enviarFormulario(document.querySelector('[data-action="formulario-informacoes"]'));
+          }else{
+            SwalAlert('aviso', 'error', 'Um ou mais CPF informado está inválido');
+          }
+          
           setTimeout(() => {
-            $(modal_informacoes).modal('show');
-          }, 3000)
-        }
-      }catch(error){
-        SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
-        console.warn('Falha ao recuperar o registro selecionado.', 'Error: 3612RG');
-      } 
-    }else{
-      SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
-      console.warn('Erro ao capturar o identificador do registro.', 'Erro: 4933KR');
-    }
+            // $(modal_informacoes).modal('show');
+          }, 0)
+          
+          }
+        }catch(error){
+          SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
+          console.warn('Falha ao recuperar o registro selecionado.', 'Error: 3612RG', error);
+        } 
+      }else{
+        SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
+        console.warn('Erro ao capturar o identificador do registro.', 'Erro: 4933KR');
+      }
   }
   
   window.apagarRegistro = apagarRegistro;
@@ -655,7 +681,7 @@ setTimeout(() => {
   
   window.addEventListener("load", function () {
     $('body').append(conteudos.principal)
-
+    
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
     atribuirLinks();
@@ -692,7 +718,7 @@ setTimeout(() => {
     
     try{
       const url = new URL(window.location);
-
+      
       if(!isEmpty(url.search)){
         const parametros = url.search.replace('?', '').split('&');
         const parametros_alteracao = ['CPF_1', 'nome_1', 'CPF_2', 'nome_2', 'modalidade', 'n_contrato'];
@@ -704,7 +730,7 @@ setTimeout(() => {
               $(`#${parametro_split[0]}`).val(parametro_split[1]);
             }
           })
-
+          
           exibirModalEditarInformacoes()
         }
       }
@@ -726,7 +752,7 @@ setTimeout(() => {
       }else{
         $('header.container').append(conteudos.alerts.alerta_impressao);
       }
-
+      
       $('[data-action="confirma-visualizacao-alerta"]').click(() => {
         try{
           sessionStorage.setItem('confirma-visualizacao-alerta', JSON.stringify(true));
@@ -735,13 +761,13 @@ setTimeout(() => {
           console.log('Ocorreu um erro ao salvar confirmação de visualização de alerta. Erro: %s', error);
         }
       })
-
+      
     }catch(error){
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
     
   });
-
+  
   document.addEventListener('keyup', (evento) => {
     if(!isEmpty(evento.keyCode)){
       if(evento.keyCode == 45){
