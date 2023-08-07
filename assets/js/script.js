@@ -387,6 +387,9 @@ setTimeout(() => {
         })
         break;
         
+        case 'confirma-visualizacao-alerta':
+        break;
+
         default:
         throw new Error('Ação não implementada para a ação informada.');
         break;

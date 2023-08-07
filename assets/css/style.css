@@ -34,7 +34,7 @@ body{
   font-size: 13pt;
 }
 
-header.container{
+header.container .header-principal{
   display: flex;
   justify-content: space-between;
   align-items: center;
