@@ -288,78 +288,101 @@ setTimeout(() => {
         const modal = acao.closest('.modal');
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
-          let registro = new Object();
-          try{
-            // console.log('Concluindo');
-            
-            inputs_form.forEach(input => {
-              acao.closest('form').querySelector(`#${input}`).value
-              const capa = document.querySelector('#capa');
+
+          let ok = new Array();
+
+          if(!isEmpty(document.querySelector('#CPF_1').value)){
+            if(verificarCPF(document.querySelector('#CPF_1').value)){
+              ok.push(true);
+            }else{
+              ok.push(false);
+            }
+          }
+          
+          if(!isEmpty(document.querySelector('#CPF_2').value)){
+            if(verificarCPF(document.querySelector('#CPF_2').value)){
+              ok.push(true);
+            }else{
+              ok.push(false);
+            }
+          }
+
+          if(ok.every(e => e == true)){
+            let registro = new Object();
+            try{
+              // console.log('Concluindo');
               
-              const elemento_modal = acao.closest('form').querySelector(`#${input}`);
-              const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
-              
-              if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
-                elemento_capa.setAttribute('checked', elemento_modal.checked);
-              }else if(input == 'nome_2' || input == 'CPF_2'){
-                if(isEmpty(elemento_modal.value)){
-                  $('#proponente-2').hide();
-                }else{
-                  $('#proponente-2').show();
+              inputs_form.forEach(input => {
+                acao.closest('form').querySelector(`#${input}`).value
+                const capa = document.querySelector('#capa');
+                
+                const elemento_modal = acao.closest('form').querySelector(`#${input}`);
+                const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+                
+                if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
+                  elemento_capa.setAttribute('checked', elemento_modal.checked);
+                }else if(input == 'nome_2' || input == 'CPF_2'){
+                  if(isEmpty(elemento_modal.value)){
+                    $('#proponente-2').hide();
+                  }else{
+                    $('#proponente-2').show();
+                    elemento_capa.textContent = elemento_modal.value.trim();
+                  }
+                }else if(input == 'empreendimento'){
+                  if(isEmpty(elemento_modal.value)){
+                    $('#empreendimento').hide();
+                  }else{
+                    $('#empreendimento').show();
+                    elemento_capa.textContent = elemento_modal.value.trim();
+                  }
+                }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
+                  if(isEmpty(elemento_modal.value)){
+                    $('#dados-bancarios-vendedor').hide();
+                  }else{
+                    $('#dados-bancarios-vendedor').show();
+                    elemento_capa.textContent = elemento_modal.value.trim();
+                  }
+                }
+                else{
                   elemento_capa.textContent = elemento_modal.value.trim();
                 }
-              }else if(input == 'empreendimento'){
-                if(isEmpty(elemento_modal.value)){
-                  $('#empreendimento').hide();
-                }else{
-                  $('#empreendimento').show();
-                  elemento_capa.textContent = elemento_modal.value.trim();
-                }
-              }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
-                if(isEmpty(elemento_modal.value)){
-                  $('#dados-bancarios-vendedor').hide();
-                }else{
-                  $('#dados-bancarios-vendedor').show();
-                  elemento_capa.textContent = elemento_modal.value.trim();
-                }
-              }
-              else{
-                elemento_capa.textContent = elemento_modal.value.trim();
-              }
+                
+                registro[input] = elemento_modal.value;
+              });
               
-              registro[input] = elemento_modal.value;
-            });
-            
-            const ultimos_registros = localStorage.getItem('ultimos-registros');
-            registro['datetime'] = Date.now();
-            
-            if(ultimos_registros !== null){
-              if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
-                const array = JSON.parse(ultimos_registros);
-                array.push(registro);
-                localStorage.setItem('ultimos-registros', JSON.stringify(array));
+              const ultimos_registros = localStorage.getItem('ultimos-registros');
+              registro['datetime'] = Date.now();
+              
+              if(ultimos_registros !== null){
+                if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
+                  const array = JSON.parse(ultimos_registros);
+                  array.push(registro);
+                  localStorage.setItem('ultimos-registros', JSON.stringify(array));
+                }else{
+                  // console.log('aqui');
+                  const array = new Array();
+                  array.push(registro);
+                  localStorage.setItem('ultimos-registros', JSON.stringify(array));
+                }
               }else{
-                // console.log('aqui');
                 const array = new Array();
                 array.push(registro);
                 localStorage.setItem('ultimos-registros', JSON.stringify(array));
               }
-            }else{
-              const array = new Array();
-              array.push(registro);
-              localStorage.setItem('ultimos-registros', JSON.stringify(array));
+              
+              // console.log(localStorage.getItem('ultimos-registros'), registro);
+              
+              // console.log(registro);
+              // console.log(Object.keys(registro));
+              
+              $(modal).modal('hide');
+              form_alt = true;
+            }catch(error){
+              console.log('Ocorreu um erro! %s', error);
+              SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
             }
-            
-            // console.log(localStorage.getItem('ultimos-registros'), registro);
-            
-            // console.log(registro);
-            // console.log(Object.keys(registro));
-            
-            $(modal).modal('hide');
-            form_alt = true;
-          }catch(error){
-            console.log('Ocorreu um erro! %s', error);
-            SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
+          }else{
+            SwalAlert('aviso', 'error', 'Um ou mais CPF informado está inválido');
           }
         })
         break;
