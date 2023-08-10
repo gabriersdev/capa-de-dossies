@@ -342,9 +342,9 @@ setTimeout(() => {
           }
         }else if(input == 'empreendimento'){
           if(isEmpty(elemento_modal.value)){
-            $('#empreendimento').hide();
+            $('#campo-empreendimento').hide();
           }else{
-            $('#empreendimento').show();
+            $('#campo-empreendimento').show();
             elemento_capa.textContent = elemento_modal.value.trim();
           }
         }else if(input == 'conta_vendedor_banco' || input == 'conta_vendedor_agencia' || input == 'conta_vendedor_numero'){
@@ -658,7 +658,7 @@ setTimeout(() => {
           
           // modal_informacoes.querySelector('button[type=submit]');
           modal.modal('hide');
-          $(evento.target.closest('[data-toggle="tooltip"]')).tooltip('dispose');
+          // $(evento.target.closest('[data-toggle="tooltip"]')).tooltip('dispose');
           SwalAlert('aviso', 'success', 'Registro recuperado com sucesso!', null, null, null, null, 3000);
           
           if(verificarInputsCPFValidos().every(e => e == true)){
