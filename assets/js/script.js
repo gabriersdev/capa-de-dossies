@@ -265,6 +265,45 @@ setTimeout(() => {
           atualizarRegistros();
         })
         break;
+
+        case 'enviar-para-ateste':
+        $(acao).on('click', (evento) => {
+          evento.preventDefault();
+          const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
+
+          const saida = new Array();
+
+          elementos.forEach((elemento) => {
+            const input = document.querySelector(`#${elemento}`);
+            // console.log(input.value, input.checked);
+            
+            if(input !== null){
+              console.log(elemento, input)
+              switch(elemento){
+                case 'comercial_conta_corrente':
+                case 'comercial_conta_poupanca':
+                break;
+
+                case 'comercial_cheque_especial':
+                case 'comercial_cartao_de_credito':
+                case 'comercial_credito_consignado':
+                break;
+
+                default:
+                  console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
+                  if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
+                  input.getAttribute('type') == 'checkbox' && !input.checked == false ||
+                  input.getAttribute('type') == 'radio' && !input.checked == false){
+                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                  }
+                break;
+              }
+
+            }
+            console.log(saida)
+          })
+        })
+        break;
         
         case 'limpar-registros-salvos':
         const modal_utlimos = document.querySelector('#modal-ultimos-registros-salvos');

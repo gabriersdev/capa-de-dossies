@@ -161,7 +161,8 @@ button[data-action="copiar-titulo-processo"] i,
 button[data-action="apagar-registro"] i,
 button[data-action="recuperar-registro"] i,
 button[data-action="exibir-ultimos-registros"] i,
-button[data-action="limpar-tudo"] i{
+button[data-action="limpar-tudo"] i,
+button[data-action="enviar-para-ateste"] i{
   margin: 0;
 }
 
