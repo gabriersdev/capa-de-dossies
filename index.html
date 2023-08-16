@@ -48,6 +48,202 @@
 </head>
 <body>
   
+  <div class="overlay-2">
+    <div class="lds-ring-2"><div></div><div></div><div></div><div></div></div>
+  </div>
+  
+  <div class="modal modal-xl fade" id="modal-editar-informacoes" aria-hidden="true" aria-labelledby="modal-editar-informacoes-Label" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modal-editar-informacoes-Label">Editar informações</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" data-action="formulario-informacoes">
+            <div class="row">
+              <div class="col">
+                <span class="d-block"><b>1º proponente</b></span>
+                <div class="form-group mt-3 mb-2">
+                  <label for="nome_1">Nome do proponente</label>
+                  <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required>
+                </div>
+                <div class="form-group mt-2 mb-2">
+                  <label for="CPF_1">CPF</label>
+                  <div class="area-validation-CPF">
+                    <input type="text" class="form-control mt-1" id="CPF_1" placeholder="123.456.789-09" data-mascara="CPF" required valuex="123.123.123-00">
+                    <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
+                  </div>
+                </div>
+                
+                <span class="d-block mt-4"><b>2º proponente</b></span>
+                <div class="form-group mt-3 mb-2">
+                  <label for="nome_2">Nome do proponente</label>
+                  <input type="text" class="form-control mt-1" id="nome_2" placeholder="Nome do proponente" valuex="Mateus">
+                </div>
+                <div class="form-group mt-2 mb-2">
+                  <label for="CPF_2">CPF</label>
+                  <div class="area-validation-CPF">
+                    <input type="text" class="form-control mt-1" id="CPF_2" placeholder="123.456.789-09" data-mascara="CPF" valuex="123.123.123-00">
+                    <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
+                  </div>
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col form-group">
+                    <label for="modalidade">Modalidade</label>
+                    <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required valuex="CCSBPE">
+                    <datalist id="lista-modalidades">
+                      <option value="CCSBPE"></option>
+                      <option value="CCNPMCMV"></option>
+                      <option value="Pró-cotista"></option>
+                    </datalist>
+                  </div>
+                  <div class="col form-group">
+                    <label for="n_contrato">N.º contrato</label>
+                    <input type="text" class="form-control mt-1" id="n_contrato" placeholder="Número do contrato" data-mascara="numero-contrato" autocomplete="off" required valuex="1.1234.5678.970-1">
+                  </div>
+                </div>
+                
+                <div class="form-group mt-3">
+                  <label for="endereco">Endereço</label>
+                  <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off" required valuex="Rua A, N.º 1000">
+                </div>
+                
+                <div class="form-group mt-3">
+                  <label for="empreendimento">Empreendimento</label>
+                  <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off" valuex="Novo Empreendimento">
+                </div>
+              </div>
+              
+              <div class="col">
+                <span class="mt-4 mb-2 d-block"><b>Valores</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <label for="valor_compra_e_venda">Valor de compra e venda</label>
+                    <input type="text" class="form-control mt-1" id="valor_compra_e_venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                  <div class="col form-group">
+                    <label for="valor_financiamento">Valor de financiamento</label>
+                    <input type="text" class="form-control mt-1" id="valor_financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="recursos_proprios">Recursos próprios</label>
+                    <input type="text" class="form-control mt-1" id="recursos_proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                  </div>
+                  <div class="col form-group">
+                    <label for="FGTS">FGTS</label>
+                    <input type="text" class="form-control mt-1" id="FGTS" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                  </div>
+                </div>
+                
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="subsidio">Subsídio</label>
+                    <input type="text" class="form-control mt-1" id="subsidio" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                  </div>
+                  
+                  <div class="col form-group">
+                    <label for="taxa_de_cartorio">Taxas de cartório</label>
+                    <input type="text" id="taxa_de_cartorio" class="form-control mt-1" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                  </div>
+                </div>
+                
+                <span class="mt-4 mb-2 d-block"><b>Produtos comerciais</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial_conta_corrente" class="form-check-input">
+                    <label for="comercial_conta_corrente">Conta corrente</label><br>
+                  </div>
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial_cheque_especial" class="form-check-input">
+                    <label for="comercial_cheque_especial">Cheque Especial</label><br>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial_conta_poupanca" class="form-check-input">
+                    <label for="comercial_conta_poupanca">Conta poupança</label><br>
+                  </div>
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial_cartao_de_credito" class="form-check-input">
+                    <label for="comercial_cartao_de_credito">Cartão de crédito</label><br>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col form-group">
+                    <input type="checkbox" id="comercial_credito_consignado" class="form-check-input">
+                    <label for="comercial_credito_consignado">Crédito Consignado</label><br>
+                  </div>
+                </div>
+                <!-- <div class="form-group mt-3">
+                  <label for="numero-da-conta">Número da conta</label>
+                  <span class="text-black-50">(Agência - Operação - Conta)</span>
+                  <div class="input-group" data-element="dados-bancarios">
+                    <input type="text" class="form-control mt-1" id="conta_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                    <input type="text" class="form-control mt-1" id="conta_numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
+                  </div>
+                </div> -->
+                
+                <span class="mt-4 mb-2 d-block"><b>Dados bancários</b></span>
+                <div class="row">
+                  <div class="col form-group">
+                    <label for="conta-comprador">Conta do Comprador</label>
+                    <span class="text-black-50">(Agência - Operação - Conta)</span>
+                    <div class="input-group" data-element="dados-bancarios">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_comprador_numero" data-mascara="conta" placeholder="000000000000-0" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col form-group">
+                    <label for="conta-vendedor">Conta do Vendedor</label>
+                    <span class="text-black-50">(Agência - Operação - Conta)</span>
+                    <div class="form-group">
+                      <input type="text" id="conta_vendedor_banco" list="lista-bancos" class="form-control" placeholder="000 - Banco">
+                      <datalist id="lista-bancos">
+                      </datalist>
+                    </div>
+                    <div class="input-group" data-element="dados-bancarios">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
+                      <input type="text" class="form-control mt-1" id="conta_vendedor_numero" data-mascara="conta-vendedor" placeholder="0000000000000-0" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary mt-4">Concluir</button>
+            <button type="reset" class="btn btn-outline-secondary mt-4">Limpar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="modal-ultimos-registros-salvos" aria-hidden="true" aria-labelledby="modal-ultimos-registros-salvos-Label" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modal-ultimos-registros-salvos-Label">Editar informações</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <noscript>
     <div class="box-no-script">         
       <div class="texto-pagina-centralizado-alt">
@@ -63,203 +259,7 @@
     </div>
   </noscript>
   
-  <div class="overlay-2">
-    <div class="lds-ring-2"><div></div><div></div><div></div><div></div></div>
-  </div>
-    
-    <div class="modal modal-xl fade" id="modal-editar-informacoes" aria-hidden="true" aria-labelledby="modal-editar-informacoes-Label" tabindex="-1">
-      <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modal-editar-informacoes-Label">Editar informações</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form method="POST" data-action="formulario-informacoes">
-              <div class="row">
-                <div class="col">
-                  <span class="d-block"><b>1º proponente</b></span>
-                  <div class="form-group mt-3 mb-2">
-                    <label for="nome_1">Nome do proponente</label>
-                    <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required>
-                  </div>
-                  <div class="form-group mt-2 mb-2">
-                    <label for="CPF_1">CPF</label>
-                    <div class="area-validation-CPF">
-                      <input type="text" class="form-control mt-1" id="CPF_1" placeholder="123.456.789-09" data-mascara="CPF" required valuex="123.123.123-00">
-                      <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
-                    </div>
-                  </div>
-                  
-                  <span class="d-block mt-4"><b>2º proponente</b></span>
-                  <div class="form-group mt-3 mb-2">
-                    <label for="nome_2">Nome do proponente</label>
-                    <input type="text" class="form-control mt-1" id="nome_2" placeholder="Nome do proponente" valuex="Mateus">
-                  </div>
-                  <div class="form-group mt-2 mb-2">
-                    <label for="CPF_2">CPF</label>
-                    <div class="area-validation-CPF">
-                      <input type="text" class="form-control mt-1" id="CPF_2" placeholder="123.456.789-09" data-mascara="CPF" valuex="123.123.123-00">
-                      <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
-                    </div>
-                  </div>
-                  
-                  <div class="row mt-4">
-                    <div class="col form-group">
-                      <label for="modalidade">Modalidade</label>
-                      <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required valuex="CCSBPE">
-                      <datalist id="lista-modalidades">
-                        <option value="CCSBPE"></option>
-                        <option value="CCNPMCMV"></option>
-                        <option value="Pró-cotista"></option>
-                      </datalist>
-                    </div>
-                    <div class="col form-group">
-                      <label for="n_contrato">N.º contrato</label>
-                      <input type="text" class="form-control mt-1" id="n_contrato" placeholder="Número do contrato" data-mascara="numero-contrato" autocomplete="off" required valuex="1.1234.5678.970-1">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group mt-3">
-                    <label for="endereco">Endereço</label>
-                    <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off" required valuex="Rua A, N.º 1000">
-                  </div>
-                  
-                  <div class="form-group mt-3">
-                    <label for="empreendimento">Empreendimento</label>
-                    <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off" valuex="Novo Empreendimento">
-                  </div>
-                </div>
-                
-                <div class="col">
-                  <span class="mt-4 mb-2 d-block"><b>Valores</b></span>
-                  <div class="row">
-                    <div class="col form-group">
-                      <label for="valor_compra_e_venda">Valor de compra e venda</label>
-                      <input type="text" class="form-control mt-1" id="valor_compra_e_venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
-                    </div>
-                    <div class="col form-group">
-                      <label for="valor_financiamento">Valor de financiamento</label>
-                      <input type="text" class="form-control mt-1" id="valor_financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
-                    </div>
-                  </div>
-                  
-                  <div class="row mt-3">
-                    <div class="col form-group">
-                      <label for="recursos_proprios">Recursos próprios</label>
-                      <input type="text" class="form-control mt-1" id="recursos_proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
-                    </div>
-                    <div class="col form-group">
-                      <label for="FGTS">FGTS</label>
-                      <input type="text" class="form-control mt-1" id="FGTS" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
-                    </div>
-                  </div>
-                  
-                  <div class="row mt-3">
-                    <div class="col form-group">
-                      <label for="subsidio">Subsídio</label>
-                      <input type="text" class="form-control mt-1" id="subsidio" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
-                    </div>
-
-                    <div class="col form-group">
-                      <label for="taxa_de_cartorio">Taxas de cartório</label>
-                      <input type="text" id="taxa_de_cartorio" class="form-control mt-1" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
-                    </div>
-                  </div>
-                  
-                  <span class="mt-4 mb-2 d-block"><b>Produtos comerciais</b></span>
-                  <div class="row">
-                    <div class="col form-group">
-                      <input type="checkbox" id="comercial_conta_corrente" class="form-check-input">
-                      <label for="comercial_conta_corrente">Conta corrente</label><br>
-                    </div>
-                    <div class="col form-group">
-                      <input type="checkbox" id="comercial_cheque_especial" class="form-check-input">
-                      <label for="comercial_cheque_especial">Cheque Especial</label><br>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col form-group">
-                      <input type="checkbox" id="comercial_conta_poupanca" class="form-check-input">
-                      <label for="comercial_conta_poupanca">Conta poupança</label><br>
-                    </div>
-                    <div class="col form-group">
-                      <input type="checkbox" id="comercial_cartao_de_credito" class="form-check-input">
-                      <label for="comercial_cartao_de_credito">Cartão de crédito</label><br>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col form-group">
-                      <input type="checkbox" id="comercial_credito_consignado" class="form-check-input">
-                      <label for="comercial_credito_consignado">Crédito Consignado</label><br>
-                    </div>
-                  </div>
-                  <!-- <div class="form-group mt-3">
-                    <label for="numero-da-conta">Número da conta</label>
-                    <span class="text-black-50">(Agência - Operação - Conta)</span>
-                    <div class="input-group" data-element="dados-bancarios">
-                      <input type="text" class="form-control mt-1" id="conta_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                      <input type="text" class="form-control mt-1" id="conta_numero" data-mascara="conta" placeholder="00000-0" autocomplete="off">
-                    </div>
-                  </div> -->
-                  
-                  <span class="mt-4 mb-2 d-block"><b>Dados bancários</b></span>
-                  <div class="row">
-                    <div class="col form-group">
-                      <label for="conta-comprador">Conta do Comprador</label>
-                      <span class="text-black-50">(Agência - Operação - Conta)</span>
-                      <div class="input-group" data-element="dados-bancarios">
-                        <input type="text" class="form-control mt-1" id="conta_comprador_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                        <input type="text" class="form-control mt-1" id="conta_comprador_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                        <input type="text" class="form-control mt-1" id="conta_comprador_numero" data-mascara="conta" placeholder="000000000000-0" autocomplete="off">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-3">
-                    <div class="col form-group">
-                      <label for="conta-vendedor">Conta do Vendedor</label>
-                      <span class="text-black-50">(Agência - Operação - Conta)</span>
-                      <div class="form-group">
-                        <input type="text" id="conta_vendedor_banco" list="lista-bancos" class="form-control" placeholder="000 - Banco">
-                        <datalist id="lista-bancos">
-                        </datalist>
-                      </div>
-                      <div class="input-group" data-element="dados-bancarios">
-                        <input type="text" class="form-control mt-1" id="conta_vendedor_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                        <input type="text" class="form-control mt-1" id="conta_vendedor_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                        <input type="text" class="form-control mt-1" id="conta_vendedor_numero" data-mascara="conta-vendedor" placeholder="0000000000000-0" autocomplete="off">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <button type="submit" class="btn btn-primary mt-4">Concluir</button>
-              <button type="reset" class="btn btn-outline-secondary mt-4">Limpar</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="modal fade" id="modal-ultimos-registros-salvos" aria-hidden="true" aria-labelledby="modal-ultimos-registros-salvos-Label" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modal-ultimos-registros-salvos-Label">Editar informações</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
-    <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
-  </body>
-  </html>
+  <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
+  <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
