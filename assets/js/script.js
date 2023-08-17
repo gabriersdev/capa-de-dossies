@@ -278,7 +278,7 @@ setTimeout(() => {
             // console.log(input.value, input.checked);
             
             if(input !== null){
-              console.log(elemento, input)
+              // console.log(elemento, input)
               switch(elemento){
                 case 'comercial_conta_corrente':
                 case 'comercial_conta_poupanca':
@@ -290,18 +290,24 @@ setTimeout(() => {
                 break;
 
                 default:
-                  console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
+                  // console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
                   if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
                   input.getAttribute('type') == 'checkbox' && !input.checked == false ||
                   input.getAttribute('type') == 'radio' && !input.checked == false){
-                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
                   }
                 break;
               }
 
             }
-            console.log(saida)
           })
+          
+          if(!isEmpty(saida)){
+            window.open(`https://gabrieszin.github.io/ateste-processo?${saida.join('&')}`)
+          }else{
+            SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
+          }
+
         })
         break;
         
