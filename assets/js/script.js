@@ -271,22 +271,43 @@ setTimeout(() => {
           evento.preventDefault();
           const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
 
+          const elementos_substituicao = {
+            comercial_cartao_de_credito: 'c_credito',
+            comercial_cheque_especial: 'cheque',
+            comercial_conta_corrente: 'conta_corrente',
+            comercial_conta_poupanca: 'conta_poupanca',
+            comercial_credito_consignado: 'consignado'
+          }
+
           const saida = new Array();
 
           elementos.forEach((elemento) => {
             const input = document.querySelector(`#${elemento}`);
             // console.log(input.value, input.checked);
             
-            if(input !== null){
+            if(input !== null && (input.type == 'checkbox' && input.checked)){
               // console.log(elemento, input)
               switch(elemento){
                 case 'comercial_conta_corrente':
                 case 'comercial_conta_poupanca':
-                break;
-
                 case 'comercial_cheque_especial':
                 case 'comercial_cartao_de_credito':
                 case 'comercial_credito_consignado':
+                  console.log(elementos_substituicao.elemento)
+                  saida.push(`${elementos_substituicao[elemento]}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+
+                  if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
+                    const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
+                    saida.push(`${prefixo + '_numero'}=${$('#conta_comprador_numero').val().replaceAll('.', '').replaceAll('-', '')}`)
+                    saida.push(`${prefixo + '_operacao'}=${$('#conta_comprador_operacao').val().replaceAll('.', '').replaceAll('-', '')}`)
+                    saida.push(`${prefixo + '_agencia'}=${$('#conta_comprador_agencia').val().replaceAll('.', '').replaceAll('-', '')}`)
+                  }
+                break;
+
+                case 'CPF_1':
+                case 'CPF_2':
+                case 'n_contrato':
+                  saida.push(`${elemento}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
                 break;
 
                 default:
