@@ -31,6 +31,7 @@ const principal = `
     <button class="btn btn-outline-secondary" data-action="limpar-tudo" data-toggle="tooltip" data-placement="bottom" title="Limpar tudo"><i class="bi bi-arrow-counterclockwise"></i></button>
     <button class="btn btn-outline-secondary" data-action="enviar-para-ateste" data-toggle="tooltip" data-placement="bottom" title="Enviar para Ateste"><i class="bi bi-journal-medical"></i></button>
     <button class="btn btn-outline-primary" data-action="copiar-titulo-processo" data-toggle="tooltip" data-placement="bottom" title="Copiar título do processo"><i class="bi bi-123"></i></button>
+    <button class="btn btn-outline-primary" data-action="copiar-nome-capa" data-toggle="tooltip" data-placement="bottom" title="Copiar nome da capa"><i class="bi bi-fonts"></i></button>
     <button class="btn btn-primary" data-action="exibir-ultimos-registros" data-toggle="tooltip" data-placement="bottom" title="Exibir últimos registros"><i class="bi bi-card-list"></i></button>
   </div>
 </section>

@@ -254,6 +254,19 @@ setTimeout(() => {
         })
         break;
         
+        case 'copiar-nome-capa':
+        $(acao).on('click', (evento) => {
+          evento.preventDefault();
+          const numero = sanitizarString($('#n_contrato').val());
+          const nome_capa = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : '';
+          if(!isEmpty(nome_capa) && !isEmpty(numero)){
+            copiar(nome_capa);
+          }else{
+            SwalAlert('aviso', 'error', 'Preencha os dados do processo para gerar o nome da capa');
+          }
+        })
+        break;
+
         case 'carregar-espelho':
         $(acao).on('click', () => {
           SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
