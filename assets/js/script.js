@@ -298,7 +298,7 @@ setTimeout(() => {
             const input = document.querySelector(`#${elemento}`);
             // console.log(input.value, input.checked);
             
-            if(input !== null && (input.type == 'checkbox' && input.checked)){
+            if(input !== null && ((input.type == 'checkbox' && input.checked) || !isEmpty(input.value))){
               // console.log(elemento, input)
               switch(elemento){
                 case 'comercial_conta_corrente':
@@ -306,7 +306,7 @@ setTimeout(() => {
                 case 'comercial_cheque_especial':
                 case 'comercial_cartao_de_credito':
                 case 'comercial_credito_consignado':
-                  console.log(elementos_substituicao.elemento)
+                  // console.log(elementos_substituicao.elemento)
                   saida.push(`${elementos_substituicao[elemento]}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
 
                   if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
@@ -341,6 +341,8 @@ setTimeout(() => {
           }else{
             SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
           }
+
+          console.log(saida, elementos)
 
         })
         break;
