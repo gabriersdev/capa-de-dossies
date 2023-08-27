@@ -1,7 +1,7 @@
 "use strict";
 
 import { conteudos } from './modulos/conteudos.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 
@@ -308,12 +308,12 @@ setTimeout(() => {
                 case 'comercial_credito_consignado':
                   // console.log(elementos_substituicao.elemento)
                   if(input.checked){
-                    saida.push(`${elementos_substituicao[elemento]}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+                    saida.push(`${elementos_substituicao[elemento]}=${sanitizarNumero(input.value)}`)
                     if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
                       const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
-                      saida.push(`${prefixo + '_numero'}=${$('#conta_comprador_numero').val().replaceAll('.', '').replaceAll('-', '')}`)
-                      saida.push(`${prefixo + '_operacao'}=${$('#conta_comprador_operacao').val().replaceAll('.', '').replaceAll('-', '')}`)
-                      saida.push(`${prefixo + '_agencia'}=${$('#conta_comprador_agencia').val().replaceAll('.', '').replaceAll('-', '')}`)
+                      saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
+                      saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
+                      saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
                     }
                   }
                 break;
@@ -322,7 +322,7 @@ setTimeout(() => {
                 case 'CPF_2':
                 case 'n_contrato':
                   if(!isEmpty(input.value)){
-                    saida.push(`${elemento}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+                    saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
                   }
                 break;
 

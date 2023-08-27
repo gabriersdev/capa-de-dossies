@@ -67,6 +67,10 @@ function sanitizarString(string){
   }
 }
 
+const sanitizarNumero = (valor) => {
+  return !isEmpty(valor) ? valor.replace(/\D/g, '') : valor;
+}
+
 function tooltips(){
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
@@ -209,5 +213,6 @@ export{
   zeroEsquerda,
   verificarCPF,
   copiar,
-  primeiroNome
+  primeiroNome,
+  sanitizarNumero
 }
