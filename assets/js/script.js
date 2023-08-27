@@ -347,8 +347,7 @@ setTimeout(() => {
             SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
           }
 
-          console.log(saida, elementos)
-
+          // console.log(saida, elementos)
         })
         break;
         
