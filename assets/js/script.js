@@ -307,20 +307,23 @@ setTimeout(() => {
                 case 'comercial_cartao_de_credito':
                 case 'comercial_credito_consignado':
                   // console.log(elementos_substituicao.elemento)
-                  saida.push(`${elementos_substituicao[elemento]}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
-
-                  if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
-                    const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
-                    saida.push(`${prefixo + '_numero'}=${$('#conta_comprador_numero').val().replaceAll('.', '').replaceAll('-', '')}`)
-                    saida.push(`${prefixo + '_operacao'}=${$('#conta_comprador_operacao').val().replaceAll('.', '').replaceAll('-', '')}`)
-                    saida.push(`${prefixo + '_agencia'}=${$('#conta_comprador_agencia').val().replaceAll('.', '').replaceAll('-', '')}`)
+                  if(input.checked){
+                    saida.push(`${elementos_substituicao[elemento]}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+                    if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
+                      const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
+                      saida.push(`${prefixo + '_numero'}=${$('#conta_comprador_numero').val().replaceAll('.', '').replaceAll('-', '')}`)
+                      saida.push(`${prefixo + '_operacao'}=${$('#conta_comprador_operacao').val().replaceAll('.', '').replaceAll('-', '')}`)
+                      saida.push(`${prefixo + '_agencia'}=${$('#conta_comprador_agencia').val().replaceAll('.', '').replaceAll('-', '')}`)
+                    }
                   }
                 break;
 
                 case 'CPF_1':
                 case 'CPF_2':
                 case 'n_contrato':
-                  saida.push(`${elemento}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+                  if(!isEmpty(input.value)){
+                    saida.push(`${elemento}=${input.value.replaceAll('.', '').replaceAll('-', '')}`)
+                  }
                 break;
 
                 default:
@@ -328,7 +331,9 @@ setTimeout(() => {
                   if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
                   input.getAttribute('type') == 'checkbox' && !input.checked == false ||
                   input.getAttribute('type') == 'radio' && !input.checked == false){
-                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                    if(!isEmpty(input.value)){
+                      saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                    }
                   }
                 break;
               }
