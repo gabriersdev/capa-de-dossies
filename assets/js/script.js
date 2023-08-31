@@ -325,6 +325,14 @@ setTimeout(() => {
                     saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
                   }
                 break;
+                
+                case 'modalidade':
+                  if(input.value == 'Pró-cotista'){
+                    saida.push(`${elemento}=PROCOTISTA`);
+                  }else{
+                    saida.push(`${elemento}=${input.value.replaceAll(' ', '-')}`)
+                  }
+                break;
 
                 default:
                   // console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
