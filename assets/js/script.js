@@ -780,6 +780,10 @@ setTimeout(() => {
   
   window.addEventListener("load", function () {
     $('body').append(conteudos.principal)
+
+    $('[data-element-paste]').each((index, element) => {
+      element.textContent = '';
+    })
     
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
