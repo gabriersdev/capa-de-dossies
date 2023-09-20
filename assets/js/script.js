@@ -449,7 +449,9 @@ setTimeout(() => {
           }
         }
         else{
-          elemento_capa.textContent = elemento_modal.value.trim();
+          if(elemento_modal.value.trim() !== 'R$ 0,00'){
+            elemento_capa.textContent = elemento_modal.value.trim();
+          }
         }
         
         registro[input] = elemento_modal.value;
