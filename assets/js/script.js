@@ -451,6 +451,8 @@ setTimeout(() => {
         else{
           if(elemento_modal.value.trim() !== 'R$ 0,00'){
             elemento_capa.textContent = elemento_modal.value.trim();
+          }else{
+            elemento_capa.textContent = '';
           }
         }
         
