@@ -1,7 +1,7 @@
 "use strict";
 
 import { conteudos } from './modulos/conteudos.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 
@@ -396,6 +396,12 @@ setTimeout(() => {
         
         case 'confirma-visualizacao-alerta':
         // Ação implementada através de função a parte.
+        break;
+
+        case 'baixar-capas-armazenadas':
+          $(acao).click(() => {
+            criarEBaixarArquivo(JSON.stringify(localStorage.getItem('ultimos-registros')), `BACKUP - ${Date.now()}`, 'txt')
+          })
         break;
 
         case 'limpar-tudo':

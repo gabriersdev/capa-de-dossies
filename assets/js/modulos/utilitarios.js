@@ -200,6 +200,16 @@ function primeiroNome(nome){
   return nome_separado[0];
 }
 
+const criarEBaixarArquivo = (conteudo, nome_arquivo, ext) => {
+  try{
+    let blob = new Blob([`${JSON.parse(conteudo)}`], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, `${nome_arquivo.toUpperCase()}.${ext}`);
+  }catch(error){
+    console.warn('Framework File Saver necessário');
+    throw new Error(error);
+  }
+}
+
 export{
   isEmpty,
   capitalize,
@@ -214,5 +224,6 @@ export{
   verificarCPF,
   copiar,
   primeiroNome,
-  sanitizarNumero
+  sanitizarNumero,
+  criarEBaixarArquivo
 }

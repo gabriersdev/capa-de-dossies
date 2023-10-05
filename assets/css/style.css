@@ -163,7 +163,8 @@ button[data-action="recuperar-registro"] i,
 button[data-action="exibir-ultimos-registros"] i,
 button[data-action="limpar-tudo"] i,
 button[data-action="enviar-para-ateste"] i,
-button[data-action="copiar-nome-capa"] i{
+button[data-action="copiar-nome-capa"] i,
+button[data-action="baixar-capas-armazenadas"] i{
   margin: 0;
 }
 
