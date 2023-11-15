@@ -17,7 +17,9 @@ function formatoHorario(datetime){
   return `${data_hora.format('DD/MM/YYYY - hh:mm')}`
 }
 
-const tabela_ultimos_registros = `<table class="table"><thead><tr><th>1º proponente</th><th>Salvo em</th><th>Ações</th></tr></thead><tbody></tbody></table>`;
+const tabela_ultimos_registros = (id) => {
+  return `<table class="table table-page-${id} ${id !== 0 ? 'none' : ''}"><thead><tr><th>1º proponente</th><th>Salvo em</th><th>Ações</th></tr></thead><tbody></tbody></table>`;
+} 
 
 const principal = `
 <header class="container mb-5 mt-2">

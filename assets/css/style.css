@@ -19,14 +19,6 @@ html{
   scroll-behavior: smooth;
 }
 
-.none{
-  display: none;
-}
-
-.block{
-  display: block;
-}
-
 body{
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -326,4 +318,12 @@ a:is(:hover, :focus, :active), address a b{
   #modal-editar-informacoes .modal-body form > .row{
     display: block;
   }
+}
+
+.none{
+  display: none;
+}
+
+.block{
+  display: block;
 }

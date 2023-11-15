@@ -1,7 +1,7 @@
 "use strict";
 
 import { conteudos } from './modulos/conteudos.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 
@@ -266,7 +266,7 @@ setTimeout(() => {
           }
         })
         break;
-
+        
         case 'carregar-espelho':
         $(acao).on('click', () => {
           SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
@@ -278,12 +278,12 @@ setTimeout(() => {
           atualizarRegistros();
         })
         break;
-
+        
         case 'enviar-para-ateste':
         $(acao).on('click', (evento) => {
           evento.preventDefault();
           const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
-
+          
           const elementos_substituicao = {
             comercial_cartao_de_credito: 'c_credito',
             comercial_cheque_especial: 'cheque',
@@ -291,9 +291,9 @@ setTimeout(() => {
             comercial_conta_poupanca: 'conta_poupanca',
             comercial_credito_consignado: 'consignado'
           }
-
+          
           const saida = new Array();
-
+          
           elementos.forEach((elemento) => {
             const input = document.querySelector(`#${elemento}`);
             // console.log(input.value, input.checked);
@@ -306,46 +306,46 @@ setTimeout(() => {
                 case 'comercial_cheque_especial':
                 case 'comercial_cartao_de_credito':
                 case 'comercial_credito_consignado':
-                  // console.log(elementos_substituicao.elemento)
-                  if(input.checked){
-                    saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
-                    if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
-                      const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
-                      saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
-                      saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
-                      saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
-                    }
+                // console.log(elementos_substituicao.elemento)
+                if(input.checked){
+                  saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
+                  if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
+                    const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
+                    saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
+                    saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
+                    saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
                   }
+                }
                 break;
-
+                
                 case 'CPF_1':
                 case 'CPF_2':
                 case 'n_contrato':
-                  if(!isEmpty(input.value)){
-                    saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
-                  }
+                if(!isEmpty(input.value)){
+                  saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
+                }
                 break;
                 
                 case 'modalidade':
-                  if(input.value == 'Pró-cotista'){
-                    saida.push(`${elemento}=PROCOTISTA`);
-                  }else{
-                    saida.push(`${elemento}=${input.value.replaceAll(' ', '-')}`)
-                  }
+                if(input.value == 'Pró-cotista'){
+                  saida.push(`${elemento}=PROCOTISTA`);
+                }else{
+                  saida.push(`${elemento}=${input.value.replaceAll(' ', '-')}`)
+                }
                 break;
-
+                
                 default:
-                  // console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
-                  if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
-                  input.getAttribute('type') == 'checkbox' && !input.checked == false ||
-                  input.getAttribute('type') == 'radio' && !input.checked == false){
-                    if(!isEmpty(input.value)){
-                      saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
-                    }
+                // console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
+                if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
+                input.getAttribute('type') == 'checkbox' && !input.checked == false ||
+                input.getAttribute('type') == 'radio' && !input.checked == false){
+                  if(!isEmpty(input.value)){
+                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
                   }
+                }
                 break;
               }
-
+              
             }
           })
           
@@ -354,7 +354,7 @@ setTimeout(() => {
           }else{
             SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
           }
-
+          
           // console.log(saida, elementos)
         })
         break;
@@ -397,17 +397,17 @@ setTimeout(() => {
         case 'confirma-visualizacao-alerta':
         // Ação implementada através de função a parte.
         break;
-
+        
         case 'baixar-capas-armazenadas':
-          $(acao).click(() => {
-            criarEBaixarArquivo(JSON.stringify(localStorage.getItem('ultimos-registros')), `BACKUP - ${Date.now()}`, 'txt')
-          })
+        $(acao).click(() => {
+          criarEBaixarArquivo(JSON.stringify(localStorage.getItem('ultimos-registros')), `BACKUP - ${Date.now()}`, 'txt')
+        })
         break;
-
+        
         case 'limpar-tudo':
-          $(acao).click(() => {
-            window.location.reload();
-          })
+        $(acao).click(() => {
+          window.location.reload();
+        })
         break;
         
         default:
@@ -464,17 +464,17 @@ setTimeout(() => {
         
         registro[input] = elemento_modal.value;
       });
-            
+      
       $(modal).modal('hide');
       form_alt = true;
-
+      
     }catch(error){
       console.log('Ocorreu um erro! %s', error);
       SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
     }
     return registro;
   }
-
+  
   function salvarRegistro(registro){
     const ultimos_registros = localStorage.getItem('ultimos-registros');
     registro['datetime'] = Date.now();
@@ -501,10 +501,10 @@ setTimeout(() => {
     // console.log(registro);
     // console.log(Object.keys(registro));
   }
-
+  
   function verificarInputsCPFValidos(){
     let ok = new Array();
-          
+    
     if(!isEmpty(document.querySelector('#CPF_1').value)){
       if(verificarCPF(document.querySelector('#CPF_1').value)){
         ok.push(true);
@@ -520,10 +520,10 @@ setTimeout(() => {
         ok.push(false);
       }
     }
-
+    
     return ok;
   }
-
+  
   const inputs_formulario = {
     nome_1: '', 
     CPF_1: '', 
@@ -680,18 +680,57 @@ setTimeout(() => {
     
     try{
       const ultimos_registros = localStorage.getItem('ultimos-registros');
+      const nav_pagination = document.querySelector('.nav-pagination');
       // console.log(isEmpty(ultimos_registros) && ultimos_registros !== null);
       
       if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros)) && JSON.parse(ultimos_registros).length > 0){
-        modal_ultimos.querySelector('.modal-body').innerHTML = conteudos.tabela_ultimos_registros;
-        JSON.parse(ultimos_registros).forEach((registro, index) => {
-          modal_ultimos.querySelector('.modal-body table tbody').innerHTML += `${conteudos.registro({id: index, nome: registro.nome_1, data_hora: registro.datetime})}`;
+        modal_ultimos.querySelector('.modal-body').innerHTML = '';
+        nav_pagination.classList.remove('none');
+        
+        const itens = 5;
+        const quantidade_paginas = Math.ceil(JSON.parse(ultimos_registros).length / itens);
+        
+        if(quantidade_paginas <= 0){
+          nav_pagination.querySelector('ul').innerHTML = `<li class="page-item"><a data-navigation-page="0" class="page-link active">1</a></li>`;
+          
+          modal_ultimos.querySelector('.modal-body').innerHTML += conteudos.tabela_ultimos_registros(index);
+          
+          JSON.parse(ultimos_registros).splice(index * itens, itens).forEach((registro, index_registro) => {
+            modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: registro.nome_1, data_hora: registro.datetime});
+          })
+          
+        }else{
+          range({max: quantidade_paginas}).forEach((index) => {
+            if(index === 0){
+              nav_pagination.querySelector('ul').innerHTML = `<li class="page-item"><a data-navigation-control="${index}" class="page-link active">${index + 1}</a></li>`;
+            }else{
+              nav_pagination.querySelector('ul').innerHTML += `<li class="page-item"><a data-navigation-control="${index}" class="page-link">${index + 1}</a></li>`;
+            }
+            
+            modal_ultimos.querySelector('.modal-body').innerHTML += conteudos.tabela_ultimos_registros(index);
+            
+            JSON.parse(ultimos_registros).splice(index * itens, itens).forEach((registro, index_registro) => {
+              modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: registro.nome_1, data_hora: registro.datetime});
+            })
+          })
+          
+        }
+
+        $('[data-navigation-control]').on('click', (event) => {
+          const id = event.target.dataset.navigationControl;
+          $(`[data-navigation-control]`).removeClass('active');
+          $(`[data-navigation-control="${id}"]`).addClass('active');
+          $(`#modal-ultimos-registros-salvos .modal-body .table`).hide();
+          $(`#modal-ultimos-registros-salvos .modal-body .table.table-page-${id}`).show();
         })
+
         tooltips();
       }else if(JSON.parse(ultimos_registros).length <= 0){
         sem_registros();
+        nav_pagination.classList.add('none')
       }else{
         sem_registros();
+        nav_pagination.classList.add('none')
       };
     }catch(error){
       // console.warn('Falha ao consultar registros salvos', 'Error: 6981RF');
@@ -774,15 +813,15 @@ setTimeout(() => {
             // $(modal_informacoes).modal('show');
           }, 0)
           
-          }
-        }catch(error){
-          SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
-          console.warn('Falha ao recuperar o registro selecionado.', 'Error: 3612RG', error);
-        } 
-      }else{
-        SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
-        console.warn('Erro ao capturar o identificador do registro.', 'Erro: 4933KR');
-      }
+        }
+      }catch(error){
+        SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
+        console.warn('Falha ao recuperar o registro selecionado.', 'Error: 3612RG', error);
+      } 
+    }else{
+      SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
+      console.warn('Erro ao capturar o identificador do registro.', 'Erro: 4933KR');
+    }
   }
   
   window.apagarRegistro = apagarRegistro;
@@ -790,7 +829,7 @@ setTimeout(() => {
   
   window.addEventListener("load", function () {
     $('body').append(conteudos.principal)
-
+    
     $('[data-element-paste]').each((index, element) => {
       element.textContent = '';
     })
@@ -859,7 +898,7 @@ setTimeout(() => {
           return '';
         }
       }
-
+      
     }catch(error){
       console.warn('Erro ao capturar parâmetros na URL', 'Error: 6907XN')
     }
@@ -904,4 +943,5 @@ setTimeout(() => {
       }
     }
   })
+  
 })();

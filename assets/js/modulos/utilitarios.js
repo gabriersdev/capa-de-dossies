@@ -210,6 +210,27 @@ const criarEBaixarArquivo = (conteudo, nome_arquivo, ext) => {
   }
 }
 
+const range = ({min, max, scale}) => {
+  min = isEmpty(min)? 0 : parseInt(min);
+  scale = isEmpty(scale) ? 1 : parseInt(scale);
+  const ret = new Array();
+  
+  if(max !== 0 && scale !== 0){
+    if(scale >= 1 && min < max){
+      for(let i = min; i < max; i += scale){
+        ret.push(i)
+      }
+    }else if(scale < 0 && min < max){
+      for(let i = min; i < max; i -= scale){
+        ret.push(i)
+      }
+    }
+    return ret;
+  }else{
+    return max;
+  }
+}
+
 export{
   isEmpty,
   capitalize,
@@ -225,5 +246,6 @@ export{
   copiar,
   primeiroNome,
   sanitizarNumero,
-  criarEBaixarArquivo
+  criarEBaixarArquivo,
+  range
 }
