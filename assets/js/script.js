@@ -756,11 +756,15 @@ setTimeout(() => {
           JSON.parse(ultimos_registros).forEach((elemento, index) => {
             if(index !== parseInt(id)){
               array.push(elemento);
+            }else{
             }
           })
           
+          $(evento.target).tooltip('dispose');
+          evento.target.closest('[data-identificacao]').remove()
+          
           localStorage.setItem('ultimos-registros', JSON.stringify(array));
-          atualizarRegistros();
+          // atualizarRegistros();
           $(evento.target).tooltip('hide');
           tooltips();
         }
