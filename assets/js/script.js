@@ -674,9 +674,13 @@ setTimeout(() => {
     
   }());
   
+  let index_registro = 0;
+
   function atualizarRegistros(){
     const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
     $(modal_ultimos).modal('show');
+    // Variável de controle de indexação dos elementos
+    index_registro = 0;
     
     try{
       const ultimos_registros = localStorage.getItem('ultimos-registros');
@@ -687,7 +691,7 @@ setTimeout(() => {
         modal_ultimos.querySelector('.modal-body').innerHTML = '';
         nav_pagination.classList.remove('none');
         
-        const itens = 5;
+        const itens = 10;
         const quantidade_paginas = Math.ceil(JSON.parse(ultimos_registros).length / itens);
         
         if(quantidade_paginas <= 0){
@@ -695,8 +699,10 @@ setTimeout(() => {
           
           modal_ultimos.querySelector('.modal-body').innerHTML += conteudos.tabela_ultimos_registros(index);
           
-          JSON.parse(ultimos_registros).splice(index * itens, itens).forEach((registro, index_registro) => {
+          JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).splice(index * itens, itens).forEach((registro) => {
             modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: registro.nome_1, data_hora: registro.datetime});
+            // Incrementando variável de controle
+            index_registro++;
           })
           
         }else{
@@ -709,8 +715,10 @@ setTimeout(() => {
             
             modal_ultimos.querySelector('.modal-body').innerHTML += conteudos.tabela_ultimos_registros(index);
             
-            JSON.parse(ultimos_registros).splice(index * itens, itens).forEach((registro, index_registro) => {
+            JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).splice(index * itens, itens).forEach((registro) => {
               modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: registro.nome_1, data_hora: registro.datetime});
+              // Incrementando variável de controle
+              index_registro++;
             })
           })
           
@@ -753,7 +761,7 @@ setTimeout(() => {
         if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
           const array = new Array();
           
-          JSON.parse(ultimos_registros).forEach((elemento, index) => {
+          JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).forEach((elemento, index) => {
             if(index !== parseInt(id)){
               array.push(elemento);
             }else{
@@ -762,13 +770,14 @@ setTimeout(() => {
           
           $(evento.target).tooltip('dispose');
           evento.target.closest('[data-identificacao]').remove()
-          
-          localStorage.setItem('ultimos-registros', JSON.stringify(array));
+          // console.log(elemento)
+          // localStorage.setItem('ultimos-registros', JSON.stringify(array));
           // atualizarRegistros();
           $(evento.target).tooltip('hide');
           tooltips();
         }
       }catch(error){
+        // console.log(error)
         SwalAlert('aviso', 'error', 'Falha ao apagar o registro selecionado');
         console.warn('Falha ao apagar o registro selecionado.', 'Error: 6098RG');
       } 
@@ -788,7 +797,7 @@ setTimeout(() => {
         const ultimos_registros = localStorage.getItem('ultimos-registros');
         
         if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
-          const dados_recuperados = JSON.parse(ultimos_registros)[id];
+          const dados_recuperados = JSON.parse(localStorage.getItem('ultimos-registros')).toSorted((a, b) => b.datetime - a.datetime)[id];
           const modal_informacoes = document.querySelector('#modal-editar-informacoes');
           
           Object.keys(dados_recuperados).forEach(key => {
