@@ -4,7 +4,7 @@ const alerts = {
   sem_registros: `<div class="alert alert-secondary text-center">Não foram encontrados registros</div>`,
   alerta_impressao: `<div class="alert alert-warning mt-3 d-flex align-items-center justify-content-between">
   Recomendamos que você desabilite a exibição de cabeçalho e rodapé no documento que será impresso ou salvo.
-  <button class="btn btn-sm btn-outline-secondary" data-action="confirma-visualizacao-alerta">OK</button>
+  <button class="btn btn-sm btn-secondary" data-action="confirma-visualizacao-alerta">OK</button>
   </div>`
 }
 
@@ -30,11 +30,11 @@ const principal = `
     <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
     </div>
     <div>
-    <button class="btn btn-outline-secondary" data-action="baixar-capas-armazenadas" data-toggle="tooltip" data-placement="bottom" title="Baixar capas"><i class="bi bi-file-earmark-arrow-down"></i></button>
-    <button class="btn btn-outline-secondary" data-action="limpar-tudo" data-toggle="tooltip" data-placement="bottom" title="Limpar tudo"><i class="bi bi-arrow-counterclockwise"></i></button>
-    <button class="btn btn-outline-secondary" data-action="enviar-para-ateste" data-toggle="tooltip" data-placement="bottom" title="Enviar para Ateste"><small>-></small>&nbsp;<i class="bi bi-journal-medical"></i></button>
-    <button class="btn btn-outline-primary" data-action="copiar-titulo-processo" data-toggle="tooltip" data-placement="bottom" title="Copiar título do processo"><i class="bi bi-123"></i></button>
-    <button class="btn btn-outline-primary" data-action="copiar-nome-capa" data-toggle="tooltip" data-placement="bottom" title="Copiar nome da capa"><i class="bi bi-fonts"></i></button>
+    <button class="btn btn-secondary" data-action="baixar-capas-armazenadas" data-toggle="tooltip" data-placement="bottom" title="Baixar capas"><i class="bi bi-file-earmark-arrow-down"></i></button>
+    <button class="btn btn-secondary" data-action="limpar-tudo" data-toggle="tooltip" data-placement="bottom" title="Limpar tudo"><i class="bi bi-arrow-counterclockwise"></i></button>
+    <button class="btn btn-secondary" data-action="enviar-para-ateste" data-toggle="tooltip" data-placement="bottom" title="Enviar para Ateste"><small>-></small>&nbsp;<i class="bi bi-journal-medical"></i></button>
+    <button class="btn btn-primary" data-action="copiar-titulo-processo" data-toggle="tooltip" data-placement="bottom" title="Copiar título do processo"><i class="bi bi-123"></i></button>
+    <button class="btn btn-primary" data-action="copiar-nome-capa" data-toggle="tooltip" data-placement="bottom" title="Copiar nome da capa"><i class="bi bi-fonts"></i></button>
     <button class="btn btn-primary" data-action="exibir-ultimos-registros" data-toggle="tooltip" data-placement="bottom" title="Exibir últimos registros"><i class="bi bi-card-list"></i></button>
   </div>
 </section>
