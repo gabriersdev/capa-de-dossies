@@ -152,8 +152,9 @@ const principal = `
   <address>
     <a href="" data-link="github-dev">
       Desenvolvido por <b>Gabriel Ribeiro</b>
-    </a> 
+    </a>
     <div>
+      <button class="btn btn-secondary" data-action="exportar-dados"><i class="bi bi-file-arrow-down"></i>Exportar</button>
       <a href="" data-link="github-dev" data-toggle="tooltip" data-placement="top" title="Github"><i class="bi bi-github"></i></a>
       <a href="" data-link="link-outros-projetos" data-toggle="tooltip" data-placement="top" title="Outros projetos"><i class="bi bi-pc-display"></i></a>
     </div>

@@ -49,6 +49,46 @@ setTimeout(() => {
     'conta_vendedor_numero'
   ]
   
+  const inputs_formulario = {
+    nome_1: '', 
+    CPF_1: '', 
+    nome_2: '', 
+    CPF_2: '', 
+    modalidade: '', 
+    n_contrato: '', 
+    endereco: '', 
+    empreendimento: '', 
+    valor_compra_e_venda: '', 
+    valor_financiamento: '', 
+    recursos_proprios: '', 
+    FGTS: '', 
+    subsidio: '', 
+    comercial_conta_corrente: '', 
+    comercial_cheque_especial: '', 
+    comercial_conta_poupanca: '', 
+    comercial_cartao_de_credito: '', 
+    conta_agencia: '', 
+    conta_operacao: '', 
+    conta_numero: '', 
+    conta_comprador_agencia: '', 
+    conta_comprador_operacao: '', 
+    conta_comprador_numero: '', 
+    conta_vendedor_banco: '', 
+    conta_vendedor_agencia: '', 
+    conta_vendedor_operacao: '', 
+    conta_vendedor_numero
+  }
+
+  const masks = [
+    {input_id: 'CPF', mask: '000.000.000-00'},
+    {input_id: 'numero-contrato', mask: '0.0000.0000000-0'},
+    {input_id: 'data', mask: '00/00/0000'},
+    {input_id: 'agencia', mask: '0000'},
+    {input_id: 'operacao', mask: '0000'},
+    {input_id: 'conta', mask: '000000000000-0'},
+    {input_id: 'conta-vendedor', mask: '000000000000-0'},
+  ]
+
   function atribuirLinks(){
     const linkElementos = document.querySelectorAll('[data-link]');
     
@@ -81,7 +121,7 @@ setTimeout(() => {
       document.querySelectorAll('[data-mascara]').forEach(input => {
         switch(input.dataset.mascara.trim().toLowerCase()){
           case 'cpf':
-          $(input).mask('000.000.000-00');
+          $(input).mask(masks.filter(e => e.input_id == 'CPF')[0].mask);
           $(input).on('input', (evento) => {
             if(verificarCPF(evento.target.value)){
               $(evento.target.closest('.area-validation-CPF').querySelector('.icon-invalid-CPF')).fadeOut(500);
@@ -92,27 +132,24 @@ setTimeout(() => {
           break;
           
           case 'numero-contrato':
-          $(input).mask('0.0000.0000000-0')
+          $(input).mask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask)
           break;
           
           case 'data':
-          $(input).mask('00/00/0000');
+          $(input).mask(masks.filter(e => e.input_id == 'data')[0].mask);
           break;
           
           case 'agencia':
-          $(input).mask('0000', {reverse: true});
+          $(input).mask(masks.filter(e => e.input_id == 'agencia')[0].mask, {reverse: true});
           break;
           
           case 'operacao':
-          $(input).mask('0000', {reverse: true});
+          $(input).mask(masks.filter(e => e.input_id == 'operacao')[0].mask, {reverse: true});
           break;
           
-          case 'conta':
-          $(input).mask('000000000000-0', {reverse: true});
-          break;
-          
+          case 'conta':          
           case 'conta-vendedor':
-          $(input).mask('000000000000-0', {reverse: true});
+          $(input).mask(masks.filter(e => e.input_id == 'conta')[0].mask, {reverse: true});
           break;
           
           case 'money':
@@ -149,17 +186,11 @@ setTimeout(() => {
     }
   }
   
-  // $('#modal-editar-informacoes').modal('show');
-  setTimeout(() => {
-    // document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
-  }, 500)
-  
   const prepararImpressao = () => {
     CPF_ok = new Array();
     const campos_CPF = $('[data-mascara="CPF"]');
     
     campos_CPF.each((index, campo) => {
-      // console.log(campo)
       !isEmpty(campo.value) ? verificarCPF(campo.value.trim()) ? CPF_ok.push(true) : CPF_ok.push(false) : '';
     })
     
@@ -273,6 +304,33 @@ setTimeout(() => {
         })
         break;
         
+        case 'exportar-dados':
+        $(acao).on('click', () => {
+          try{
+            let armazenadas = JSON.parse(localStorage.getItem('ultimos-registros'));
+            let saida = '';
+            
+            if(armazenadas !== null || Array.isArray(armazenadas)){
+              SwalAlert('aviso', 'success', 'Registros exportados listados no console', null, null, null, false, 3000);
+              console.groupCollapsed('Registros armazenados.');
+              console.info(JSON.stringify(armazenadas));
+              console.groupEnd();
+            }else{
+              SwalAlert('aviso', 'warning', 'Não há registros armazenados', null, null, null, false, 3000);
+              console.groupCollapsed('Não há registros armazenados.');
+              console.info('Não há registros armazenados.');    
+              console.groupEnd();             
+            }
+            
+          }catch(error){
+            SwalAlert('aviso', 'warning', 'Não há registros armazenados', null, null, null, false, 3000);
+            console.groupCollapsed('Não há registros armazenados.');
+            console.info('Não há registros armazenados.');    
+            console.groupEnd();      
+          }
+        });
+        break;
+        
         case 'exibir-ultimos-registros':
         $(acao).on('click', (evento) => {
           atualizarRegistros();
@@ -296,17 +354,14 @@ setTimeout(() => {
           
           elementos.forEach((elemento) => {
             const input = document.querySelector(`#${elemento}`);
-            // console.log(input.value, input.checked);
             
             if(input !== null && ((input.type == 'checkbox' && input.checked) || !isEmpty(input.value))){
-              // console.log(elemento, input)
               switch(elemento){
                 case 'comercial_conta_corrente':
                 case 'comercial_conta_poupanca':
                 case 'comercial_cheque_especial':
                 case 'comercial_cartao_de_credito':
                 case 'comercial_credito_consignado':
-                // console.log(elementos_substituicao.elemento)
                 if(input.checked){
                   saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
                   if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
@@ -335,7 +390,6 @@ setTimeout(() => {
                 break;
                 
                 default:
-                // console.log(input.getAttribute('type') == 'text' && !isEmpty(input.value), input.getAttribute('type') == 'checkbox' && !input.checked == false, input.getAttribute('type') == 'radio' && !input.checked == false)
                 if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
                 input.getAttribute('type') == 'checkbox' && !input.checked == false ||
                 input.getAttribute('type') == 'radio' && !input.checked == false){
@@ -354,8 +408,6 @@ setTimeout(() => {
           }else{
             SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
           }
-          
-          // console.log(saida, elementos)
         })
         break;
         
@@ -365,9 +417,9 @@ setTimeout(() => {
           SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar os registros?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
             if(retorno.isConfirmed){
               try{
-                localStorage.clear();
+                localStorage.setItem('ultimos-registros', '');
                 SwalAlert('aviso', 'success', 'Registros apagados com sucesso');
-              }catch(erro){
+              }catch(error){
                 console.warn('Falha ao apagar registros salvos', 'Error: 2021LA');
                 SwalAlert('aviso', 'warning', 'Falha ao apagar registros salvos');
               }
@@ -420,9 +472,8 @@ setTimeout(() => {
   function enviarFormulario(acao){
     let registro = new Object();
     const modal = acao.closest('.modal');
+    
     try{
-      // console.log('Concluindo');
-      
       inputs_form.forEach(input => {
         acao.closest('form').querySelector(`#${input}`).value
         const capa = document.querySelector('#capa');
@@ -430,7 +481,7 @@ setTimeout(() => {
         const elemento_modal = acao.closest('form').querySelector(`#${input}`);
         const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
         
-        if(input == 'comercial_conta_corrente' || input == 'comercial_cheque_especial' || input == 'comercial_conta_poupanca' || input == 'comercial_cartao_de_credito' || input == 'comercial_credito_consignado' /* input == 'conta_agencia' || input == 'conta_operacao' || input == 'conta_numero' */ ){
+        if(['comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado'].includes(input)){
           elemento_capa.setAttribute('checked', elemento_modal.checked);
         }else if(input == 'nome_2' || input == 'CPF_2'){
           if(isEmpty(elemento_modal.value)){
@@ -462,7 +513,15 @@ setTimeout(() => {
           }
         }
         
-        registro[input] = elemento_modal.value;
+        if(['CPF_1', 'CPF_2', 'n_contrato', 'conta', 'conta-vendedor'].includes(input)){
+          let input_value = elemento_modal.value;
+          [{'.': ''}, {'-': ''}, {' ': ''}].forEach((replace) => {
+            input_value = input_value.replaceAll(Object.keys(replace)[0], Object.values(replace)[0]);
+          })
+          registro[input] = input_value;
+        }else{
+          registro[input] = elemento_modal.value;
+        }
       });
       
       $(modal).modal('hide');
@@ -472,6 +531,7 @@ setTimeout(() => {
       console.log('Ocorreu um erro! %s', error);
       SwalAlert('error', 'error', 'Ocorreu um erro ao enviar o formulário', null, 'X7260 - Formulário', null, false);
     }
+    
     return registro;
   }
   
@@ -479,27 +539,21 @@ setTimeout(() => {
     const ultimos_registros = localStorage.getItem('ultimos-registros');
     registro['datetime'] = Date.now();
     
-    if(ultimos_registros !== null){
-      if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
-        const array = JSON.parse(ultimos_registros);
-        array.push(registro);
-        localStorage.setItem('ultimos-registros', JSON.stringify(array));
+    try{
+      if(ultimos_registros !== null && !isEmpty(ultimos_registros)){
+        if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
+          const array = JSON.parse(ultimos_registros);
+          array.push(registro);
+          localStorage.setItem('ultimos-registros', JSON.stringify(array));
+        }else{
+          localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
+        }
       }else{
-        // console.log('aqui');
-        const array = new Array();
-        array.push(registro);
-        localStorage.setItem('ultimos-registros', JSON.stringify(array));
+        localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
       }
-    }else{
-      const array = new Array();
-      array.push(registro);
-      localStorage.setItem('ultimos-registros', JSON.stringify(array));
+    }catch(error){
+      localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
     }
-    
-    // console.log(localStorage.getItem('ultimos-registros'), registro);
-    
-    // console.log(registro);
-    // console.log(Object.keys(registro));
   }
   
   function verificarInputsCPFValidos(){
@@ -524,42 +578,11 @@ setTimeout(() => {
     return ok;
   }
   
-  const inputs_formulario = {
-    nome_1: '', 
-    CPF_1: '', 
-    nome_2: '', 
-    CPF_2: '', 
-    modalidade: '', 
-    n_contrato: '', 
-    endereco: '', 
-    empreendimento: '', 
-    valor_compra_e_venda: '', 
-    valor_financiamento: '', 
-    recursos_proprios: '', 
-    FGTS: '', 
-    subsidio: '', 
-    comercial_conta_corrente: '', 
-    comercial_cheque_especial: '', 
-    comercial_conta_poupanca: '', 
-    comercial_cartao_de_credito: '', 
-    conta_agencia: '', 
-    conta_operacao: '', 
-    conta_numero: '', 
-    conta_comprador_agencia: '', 
-    conta_comprador_operacao: '', 
-    conta_comprador_numero: '', 
-    conta_vendedor_banco: '', 
-    conta_vendedor_agencia: '', 
-    conta_vendedor_operacao: '', 
-    conta_vendedor_numero
-  }
-  
   const dados_bancarios = document.querySelectorAll('[data-element="dados-bancarios"]');
   dados_bancarios.forEach(dados => {
     dados.querySelectorAll('input').forEach(inputx => {
       $(inputx).on('keypress', (evento) => {
         evento.target.setAttribute('data-mascara', inputx.getAttribute('data-param'));
-        // console.log('aqui - evento');
         try{
           atribuirMascaras(inputx.getAttribute('data-param'), inputx)
         }catch{}
@@ -609,7 +632,6 @@ setTimeout(() => {
             // input_conta.focus();
           }
         }else{
-          // console.log('Não é um array');
           const valor_tratado = valor.replaceAll('.', '').replaceAll('-', '');
           
           if(valor_tratado.length >= 13){
@@ -649,12 +671,10 @@ setTimeout(() => {
   (function() {
     
     var beforePrint = function() {
-      // console.log('Antes de imprimir...');
       prepararImpressao()
     };
     
     var afterPrint = function() {
-      // console.log('Depois de imprimir...');
       sairImpressao()
     };
     
@@ -675,7 +695,7 @@ setTimeout(() => {
   }());
   
   let index_registro = 0;
-
+  
   function atualizarRegistros(){
     const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
     $(modal_ultimos).modal('show');
@@ -685,7 +705,6 @@ setTimeout(() => {
     try{
       const ultimos_registros = localStorage.getItem('ultimos-registros');
       const nav_pagination = document.querySelector('.nav-pagination');
-      // console.log(isEmpty(ultimos_registros) && ultimos_registros !== null);
       
       if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros)) && JSON.parse(ultimos_registros).length > 0){
         modal_ultimos.querySelector('.modal-body').innerHTML = '';
@@ -723,7 +742,7 @@ setTimeout(() => {
           })
           
         }
-
+        
         $('[data-navigation-control]').on('click', (event) => {
           const id = event.target.dataset.navigationControl;
           $(`[data-navigation-control]`).removeClass('active');
@@ -731,7 +750,7 @@ setTimeout(() => {
           $(`#modal-ultimos-registros-salvos .modal-body .table`).hide();
           $(`#modal-ultimos-registros-salvos .modal-body .table.table-page-${id}`).show();
         })
-
+        
         tooltips();
       }else if(JSON.parse(ultimos_registros).length <= 0){
         sem_registros();
@@ -741,7 +760,6 @@ setTimeout(() => {
         nav_pagination.classList.add('none')
       };
     }catch(error){
-      // console.warn('Falha ao consultar registros salvos', 'Error: 6981RF');
       sem_registros();
     }
     
@@ -764,20 +782,18 @@ setTimeout(() => {
           JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).forEach((elemento, index) => {
             if(index !== parseInt(id)){
               array.push(elemento);
-            }else{
             }
           })
           
           $(evento.target).tooltip('dispose');
           evento.target.closest('[data-identificacao]').remove()
-          // console.log(elemento)
-          // localStorage.setItem('ultimos-registros', JSON.stringify(array));
-          // atualizarRegistros();
           $(evento.target).tooltip('hide');
           tooltips();
+          
+          localStorage.setItem('ultimos-registros', JSON.stringify(array));
+          atualizarRegistros();
         }
       }catch(error){
-        // console.log(error)
         SwalAlert('aviso', 'error', 'Falha ao apagar o registro selecionado');
         console.warn('Falha ao apagar o registro selecionado.', 'Error: 6098RG');
       } 
@@ -806,7 +822,25 @@ setTimeout(() => {
               if(key == 'comercial_conta_corrente' || key == 'comercial_cheque_especial' || key == 'comercial_conta_poupanca' || key == 'comercial_cartao_de_credito' || key == 'comercial_credito_consignado' /* key == 'conta_agencia' || key == 'conta_operacao' || key == 'conta_numero' */ ){
                 input.checked = dados_recuperados[key] == 'false' || dados_recuperados[key] == false ? false : true;
               }else{
-                input.value = dados_recuperados[key];
+                switch(key){
+                  case 'CPF_1':
+                  case 'CPF_2':
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'CPF')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  break;
+                  
+                  case 'n_contrato':
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  break;
+                  
+                  case 'conta':
+                  case 'conta-vendedor':
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'conta')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  break;
+                  
+                  default:
+                  input.value = dados_recuperados[key];
+                  break;
+                }
               }
             }
           })
