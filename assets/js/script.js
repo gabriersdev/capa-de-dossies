@@ -825,16 +825,16 @@ setTimeout(() => {
                 switch(key){
                   case 'CPF_1':
                   case 'CPF_2':
-                  input.value = new StringMask(masks.filter(e => e.input_id == 'CPF')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'CPF')[0].mask, {reverse: true}).apply(sanitizarNumero(dados_recuperados[key]));
                   break;
                   
                   case 'n_contrato':
-                  input.value = new StringMask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask, {reverse: true}).apply(sanitizarNumero(dados_recuperados[key]));
                   break;
                   
                   case 'conta':
                   case 'conta-vendedor':
-                  input.value = new StringMask(masks.filter(e => e.input_id == 'conta')[0].mask, {reverse: true}).apply(dados_recuperados[key]);
+                  input.value = new StringMask(masks.filter(e => e.input_id == 'conta')[0].mask, {reverse: true}).apply(sanitizarNumero(dados_recuperados[key]));
                   break;
                   
                   default:
