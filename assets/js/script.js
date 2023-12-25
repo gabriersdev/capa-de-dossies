@@ -773,30 +773,35 @@ setTimeout(() => {
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
     
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
-      try{
-        const ultimos_registros = localStorage.getItem('ultimos-registros');
-        
-        if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
-          const array = new Array();
-          
-          JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).forEach((elemento, index) => {
-            if(index !== parseInt(id)){
-              array.push(elemento);
+
+      SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar o registro?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
+        if(retorno.isConfirmed){
+          try{
+            const ultimos_registros = localStorage.getItem('ultimos-registros');
+            
+            if(!isEmpty(ultimos_registros) && ultimos_registros !== null && Array.isArray(JSON.parse(ultimos_registros))){
+              const array = new Array();
+              
+              JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).forEach((elemento, index) => {
+                if(index !== parseInt(id)){
+                  array.push(elemento);
+                }
+              })
+              
+              $(evento.target).tooltip('dispose');
+              evento.target.closest('[data-identificacao]').remove()
+              $(evento.target).tooltip('hide');
+              tooltips();
+              
+              localStorage.setItem('ultimos-registros', JSON.stringify(array));
+              atualizarRegistros();
             }
-          })
-          
-          $(evento.target).tooltip('dispose');
-          evento.target.closest('[data-identificacao]').remove()
-          $(evento.target).tooltip('hide');
-          tooltips();
-          
-          localStorage.setItem('ultimos-registros', JSON.stringify(array));
-          atualizarRegistros();
+          }catch(error){
+            SwalAlert('aviso', 'error', 'Falha ao apagar o registro selecionado');
+            console.warn('Falha ao apagar o registro selecionado.', 'Error: 6098RG');
+          } 
         }
-      }catch(error){
-        SwalAlert('aviso', 'error', 'Falha ao apagar o registro selecionado');
-        console.warn('Falha ao apagar o registro selecionado.', 'Error: 6098RG');
-      } 
+      })
     }else{
       SwalAlert('aviso', 'error', 'Erro ao capturar o identificador do registro');
       console.warn('Erro ao capturar o identificador do registro.', 'Erro: 7878KR');
