@@ -1,14 +1,10 @@
 "use strict";
 
 import { conteudos } from './modulos/conteudos.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range } from './modulos/utilitarios.js';
+import { Settings } from './modulos/funcoes.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
-
-setTimeout(() => {
-  // $('#modal-editar-informacoes').modal('show');
-  // $('#modal-ultimos-registros-salvos').modal('show');
-}, 500);
 
 (() => {  
   document.querySelectorAll('[data-recarrega-pagina]').forEach(botao => {
@@ -78,7 +74,7 @@ setTimeout(() => {
     conta_vendedor_operacao: '', 
     conta_vendedor_numero
   }
-
+  
   const masks = [
     {input_id: 'CPF', mask: '000.000.000-00'},
     {input_id: 'numero-contrato', mask: '0.0000.0000000-0'},
@@ -88,7 +84,7 @@ setTimeout(() => {
     {input_id: 'conta', mask: '000000000000-0'},
     {input_id: 'conta-vendedor', mask: '000000000000-0'},
   ]
-
+  
   function atribuirLinks(){
     const linkElementos = document.querySelectorAll('[data-link]');
     
@@ -196,12 +192,6 @@ setTimeout(() => {
     
     if(!CPF_ok.every(e => e == true)){
       SwalAlert('aviso', 'error', 'Um ou mais CPFs informados está inválido');
-      // SwalAlert('aviso', 'warning', 'Um ou mais CPFs informados está inválido', null, null, null, null, 3000);
-      
-      setTimeout(() => {
-        // $('#modal-editar-informacoes').modal('show');
-        // $('#modal-editar-informacoes input')[0];
-      }, 3000)
     }else{
       $('header').hide();
       $('footer').hide();
@@ -231,8 +221,17 @@ setTimeout(() => {
     }, 500)
   }
   
-  function atribuirAcoes(){
+  function atribuirAcoes(acao, evento_acao){
     const acoes = document.querySelectorAll('[data-action]');
+
+    if(acao){
+      Array.from(acoes).filter((a) => a.dataset.action == acao)[0].addEventListener(evento_acao, (evento) => {
+        evento.preventDefault();
+        removerLogoCCA(evento)
+      })
+      return;
+    }
+
     acoes.forEach(acao => {
       switch(acao.dataset.action.toLowerCase().trim()){
         case 'editar-informacoes':
@@ -249,10 +248,6 @@ setTimeout(() => {
             sairImpressao();
           }else{
             SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9102 - Impressão', null, false, null);
-            
-            setTimeout(() => {
-              // $('#modal-editar-informacoes').modal('show'); 
-            }, 2000)
           }
         })
         break;
@@ -262,10 +257,6 @@ setTimeout(() => {
           
           if(!form_alt){
             SwalAlert('error', 'error', 'Os dados do processo não foram preenchidos ou não foram enviados', null, 'X9103 - Cópia título do processo', null, false, null);
-            
-            setTimeout(() => {
-              // $('#modal-editar-informacoes').modal('show');
-            }, 2000);
           }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
@@ -308,15 +299,24 @@ setTimeout(() => {
         $(acao).on('click', () => {
           try{
             let armazenadas = JSON.parse(localStorage.getItem('ultimos-registros'));
-            let saida = '';
             
-            if(armazenadas !== null || Array.isArray(armazenadas)){
-              SwalAlert('aviso', 'success', 'Registros exportados listados no console', null, null, null, false, 3000);
-              console.groupCollapsed('Registros armazenados.');
-              console.info(JSON.stringify(armazenadas));
-              console.groupEnd();
+            if(armazenadas !== null && Array.isArray(armazenadas) && armazenadas.length > 0){
+              SwalAlert('confirmacao', 'question', 'Deseja baixar um arquivo JSON com os registros?', null, null, 'Sim', false, null).then(({isConfirmed}) => {
+                if(isConfirmed){
+                  const data = new Date().toLocaleDateString("pt-BR").match("(?<day>[0-9]{2})\/(?<month>[0-9]{2})\/(?<year>[0-9]{4})").groups;
+                  
+                  // Gera arquivo e baixa JSON com os dados
+                  criarEBaixarArquivo(JSON.stringify(armazenadas), `Registros Armazenados ${data.day}.${data.month}.${data.year} ${new Date().toLocaleTimeString("pt-BR").replaceAll(':', '.')}`, 'json');
+                }else{
+                  // Exibe no console
+                  SwalAlert('aviso', 'success', 'Registros exportados listados no console', null, null, null, false, 3000);
+                  console.groupCollapsed('Registros armazenados.');
+                  console.info(JSON.stringify(armazenadas));
+                  console.groupEnd();
+                }
+              })
             }else{
-              SwalAlert('aviso', 'warning', 'Não há registros armazenados', null, null, null, false, 3000);
+              SwalAlert('aviso', 'warning', 'Não há registros armazenados. Crie uma capa primeiro.', null, null, null, false, 3000);
               console.groupCollapsed('Não há registros armazenados.');
               console.info('Não há registros armazenados.');    
               console.groupEnd();             
@@ -333,6 +333,7 @@ setTimeout(() => {
         
         case 'exibir-ultimos-registros':
         $(acao).on('click', (evento) => {
+          evento.preventDefault();
           atualizarRegistros();
         })
         break;
@@ -462,11 +463,128 @@ setTimeout(() => {
         })
         break;
         
+        case 'form-logo-cca':
+        case 'form-outras-configs':
+        $(acao).on('submit', (evento) => {
+          evento.preventDefault();
+          const button = {class: evento.target.querySelector('button[type=submit]').classList.value, text: evento.target.querySelector('button[type=submit]').innerText}
+          
+          try{
+            const inputs = Array.from(evento.target.querySelectorAll('input'));
+            let send = null;
+            const returns = new Array();
+            const arraySend = new Array();
+            
+            inputs.forEach((input) => {
+              switch(input.type.toLowerCase()){
+                case 'checkbox':
+                case 'radio':
+                send = input.checked;
+                arraySend.push({send: send, input: input});
+                break;
+                case 'file':
+
+                if(input.files[0]){
+                  const image = new FileReader();
+                  image.readAsDataURL(input.files[0]);
+                  
+                  image.addEventListener('loadend', (evento) => {
+                    send = JSON.stringify({value: input.files[0].name, file: evento.target.result});
+                    if(sendOptionValue(send, input)){
+                      $('#logo-cca').prop('src', evento.target.result);
+                    }else{
+                      $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+                    };
+                  })
+                }
+                break;
+                default:
+                // send = input.value;
+                // arraySend.push({send: send, input: input});
+                break;
+              }
+            })
+
+            arraySend.length > 0 ? sendOptionValue(null, null, arraySend) : "";
+            //TODO: em caso de erro, limpar o registro
+
+            function sendOptionValue(send, input, array){
+              if(array){
+                if(array.length > 0){
+                  array.forEach((option) => {
+                    console.log(option);
+                    const ret = new Settings().setOption(option.input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], option.send);
+  
+                    returns.push(!isEmpty(ret) && ret === option.send);
+                  })
+                }
+              }else{
+                if(!isEmpty(send)){ 
+                  const ret = new Settings().setOption(input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], send);
+                  
+                  returns.push(!isEmpty(ret) && JSON.parse(ret).value === JSON.parse(send).value);
+                }else{
+                  console.log('Input vazio');
+                }
+              }
+
+              if(returns.every((r) => r) && !isEmpty(returns)){
+                // 'Alterado com sucesso!'
+                feedback(evento.target.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-success', text: 'Alterado!'});
+                atualizarConfiguracoes();
+                return true;
+              }else{
+                console.log('Não houve alteração. Retorno vazio ou diferente do enviado.');
+                feedback(evento.target.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-danger', text: 'Ocorreu um erro!'});
+                return false;
+              }
+            }
+            
+          }catch(error){
+            console.log(error)
+            console.log("Algo de errado ocorreu. Erro: %s", error);
+          }
+        })
+        
+        function feedback(e, original, update){
+          e.setAttribute('class', `${update.class} button-disabled`);
+          e.innerText = update.text;
+          
+          setTimeout(() => {
+            e.setAttribute('class', original.class);
+            e.innerText = original.text;
+          }, 1500);
+        }
+        
+        break;
+        
+        case 'remover-logo-cca':
+        $(acao).click((evento) => removerLogoCCA(evento));
+        break;
+
+        case 'acessar-configs':
+        $(acao).on('click', (evento) => {
+          evento.preventDefault();
+          atualizarConfiguracoes();
+          $('#modal-configuracoes').modal('show');
+        })
+        break;
+
         default:
         throw new Error('Ação não implementada para a ação informada.');
         break;
       }
     })
+  }
+
+  function removerLogoCCA(evento){
+    try{
+      new Settings().CRUDoption("update", "logo-cca", "#");
+      evento.target.closest('div.input-group').remove();
+      atualizarConfiguracoes();
+    }catch(error){
+      //
+    }
   }
   
   function enviarFormulario(acao){
@@ -654,7 +772,6 @@ setTimeout(() => {
         
         evento.target.setAttribute('data-mascara', input.getAttribute('data-param'));
         atribuirMascaras(input.getAttribute('data-param'));
-        // 1111.111.11111-1
         
         input_agencia.focus();
       }, 0);
@@ -669,7 +786,6 @@ setTimeout(() => {
   }
   
   (function() {
-    
     var beforePrint = function() {
       prepararImpressao()
     };
@@ -691,7 +807,6 @@ setTimeout(() => {
     
     window.onbeforeprint = beforePrint;
     window.onafterprint = afterPrint;
-    
   }());
   
   let index_registro = 0;
@@ -773,7 +888,7 @@ setTimeout(() => {
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
     
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
-
+      
       SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar o registro?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
         if(retorno.isConfirmed){
           try{
@@ -860,11 +975,6 @@ setTimeout(() => {
           }else{
             SwalAlert('aviso', 'error', 'Um ou mais CPF informado está inválido');
           }
-          
-          setTimeout(() => {
-            // $(modal_informacoes).modal('show');
-          }, 0)
-          
         }
       }catch(error){
         SwalAlert('aviso', 'error', 'Falha ao recuperar o registro selecionado');
@@ -878,7 +988,7 @@ setTimeout(() => {
   
   window.apagarRegistro = apagarRegistro;
   window.recuperarRegistro = recuperarRegistro;
-  
+
   window.addEventListener("load", function () {
     $('body').append(conteudos.principal)
     
@@ -888,10 +998,6 @@ setTimeout(() => {
     
     const overlay2 = document.querySelector(".overlay-2");
     overlay2.style.display = "none";
-    atribuirLinks();
-    atribuirAcoes();
-    atribuirMascaras();
-    tooltips();
     
     try{
       const consultaAPIBancos = async () => {
@@ -982,6 +1088,13 @@ setTimeout(() => {
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
     
+    atualizarConfiguracoes();
+    atribuirLinks();
+    atribuirAcoes();
+    atribuirMascaras();
+    tooltips();
+    popovers();
+
   });
   
   document.addEventListener('keyup', (evento) => {
@@ -996,4 +1109,50 @@ setTimeout(() => {
     }
   })
   
+  const atualizarConfiguracoes = () => {
+    const settings = new Settings();
+    const options = settings.getOptionsValues();
+
+    //TODO: alterar a funcionalidade, além da visualização
+    
+    for(let option of Object.entries(options)){
+      if(option[0] !== "logo-cca"){
+        $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
+
+        switch(option[0]){
+          case "autocomplete":
+            $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
+          break;
+          case "exibir-opt-link":
+            // Implementar
+          break;
+        }
+      }else{
+        if(isEmpty(option[1]["values"])){
+          // Exibir o input file para enviar um arquivo
+          $('[data-element="logo-cca-selection"]').html(
+            conteudos.preencher_logo_cca
+          );
+          $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+          $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
+        }else{
+          const values = JSON.parse(option[1].values);
+          // Informar que já existe um arquivo
+          $('[data-element="logo-cca-selection"]').html(
+            `<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label>
+            <span class="text-muted">200x150 px</span>
+            <div class="input-group">
+              <input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly>
+              <button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button>
+            </div>`
+          );
+          $('#logo-cca').prop('src', values.file);
+          $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
+          atribuirAcoes("remover-logo-cca", "click");
+          tooltips();
+        }
+      };
+    }
+  }
+
 })();

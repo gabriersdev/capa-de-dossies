@@ -76,6 +76,8 @@ div.principal{
 .grupo-footer img{
   margin-top: 1rem;
   width: 200px;
+  height: 150px;
+  object-fit: contain;
   display: block;
   /* position: absolute; */
   right: 0;
@@ -156,7 +158,8 @@ button[data-action="exibir-ultimos-registros"] i,
 button[data-action="limpar-tudo"] i,
 button[data-action="enviar-para-ateste"] i,
 button[data-action="copiar-nome-capa"] i,
-button[data-action="baixar-capas-armazenadas"] i{
+button[data-action="baixar-capas-armazenadas"] i,
+button i.no-margin{
   margin: 0;
 }
 
@@ -332,4 +335,13 @@ a:is(:hover, :focus, :active), address a b{
 
 .block{
   display: block;
+}
+
+.font-inter{
+  font-family: "Inter", sans-serif;
+}
+
+.button-disabled{
+  opacity: 0.75;
+  pointer-events: none;
 }

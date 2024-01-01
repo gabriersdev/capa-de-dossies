@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow, follow">
+  <meta name="robots" content="index, nofollow">
   <meta name="keywords" content="capa, dossiê, habitação, processo">
   <meta name="author" content="Gabriel Ribeiro">
   <meta name="description" content="Crie capas de processos habitacionais com facilidade">
@@ -32,7 +32,6 @@
   connect-src 'self' 'unsafe-inline' https://brasilapi.com.br/api/banks/v1;">   
   
   <link rel="stylesheet" href="./assets/css/style.css">
-  
   <link rel="shortcut icon" href="./assets/img/favicon.svg" type="image/x-icon">
   
   <title>Capa para Processos Habitacionais</title>
@@ -254,6 +253,45 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modal-configuracoes" aria-hidden="true" aria-labelledby="modal-configuracoes-Label" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modal-configuracoes-Label">Editar configurações</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="#" data-action="form-logo-cca" method="POST">
+            <div data-element="logo-cca-selection">
+              <div class="form-group">
+                <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
+                <span class="text-muted">200x150 px</span>
+                <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Alterar logo</button>
+            <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
+            <button type="button" class="btn btn-light mt-3">Ver primeiro</button>
+          </form>
+          <hr class="mt-3">
+          <form action="#" data-action="form-outras-configs" method="POST" class="mt-2">
+            <div class="form-group">
+              <input type="checkbox" name="config-autocomplete" id="config-autocomplete" name="config-autocomplete" class="form-check-input">
+              <label for="config-autocomplete">Autocomplete para os campos&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Autocomplete para os campos" data-bs-content="Permite que sejam exibidas sugestões de preenchimento com dados já usados no campo de input anteriormente."></i></label>
+            </div>
+            <div class="form-group">
+              <input type="checkbox" name="config-exibir-opt-link" id="config-exibir-opt-link" name="config-exibir-opt-link" class="form-check-input">
+              <label for="config-exibir-opt-link">Permitir link para registros&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Permitir link para registros" data-bs-content="A opção de gerar link de compartilhamento da capa é habilitada."></i></label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Alterar configurações</button>
+            <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <noscript>
     <div class="box-no-script">         
@@ -269,7 +307,7 @@
       </div>
     </div>
   </noscript>
-  
+
   <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
   <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
 </body>

@@ -142,7 +142,7 @@ const principal = `
       </div>
       <div class="grupo-footer">
         <span></span>
-        <img src="./assets/img/logo-png.png" alt="">
+        <img src="./assets/img/logo-teste.png" alt="Logo do Correspondente" id="logo-cca">
       </div>
     </section>
   </div>
@@ -154,16 +154,26 @@ const principal = `
       Desenvolvido por <b>Gabriel Ribeiro</b>
     </a>
     <div>
-      <button class="btn btn-secondary" data-action="exportar-dados"><i class="bi bi-file-arrow-down"></i>Exportar</button>
+      <button class="btn btn-secondary" data-action="exportar-dados"><i class="bi bi-file-arrow-down"></i>Exportar</button>&nbsp;
+      <button class="btn btn-primary" data-action="acessar-configs"><i class="bi bi-gear-fill"></i>Config.</button>
       <a href="" data-link="github-dev" data-toggle="tooltip" data-placement="top" title="Github"><i class="bi bi-github"></i></a>
       <a href="" data-link="link-outros-projetos" data-toggle="tooltip" data-placement="top" title="Outros projetos"><i class="bi bi-pc-display"></i></a>
     </div>
   </address> 
 </footer>
 `
+
+const preencher_logo_cca = 
+`<div class="form-group">
+  <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
+  <span class="text-muted">200x150 px</span>
+  <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*" required>
+</div>`;
+
 export const conteudos = {
   alerts,
   registro,
   tabela_ultimos_registros,
-  principal
+  principal,
+  preencher_logo_cca
 }

@@ -202,8 +202,8 @@ function primeiroNome(nome){
 
 const criarEBaixarArquivo = (conteudo, nome_arquivo, ext) => {
   try{
-    let blob = new Blob([`${JSON.parse(conteudo)}`], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, `${nome_arquivo.toUpperCase()}.${ext}`);
+    let blob = new Blob([`${conteudo}`], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, `${nome_arquivo}.${ext}`);
   }catch(error){
     console.warn('Framework File Saver necessário');
     throw new Error(error);
