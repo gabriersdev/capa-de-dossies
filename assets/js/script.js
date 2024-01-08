@@ -260,7 +260,10 @@ let CPF_ok = new Array();
           }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
-            copiar(`000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`).then(retorno => {
+            // TODO : Adicionar configuração para informar número do CCA
+            const nome = `000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`;
+
+            copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
               botao.html('<i class="bi bi-check2"></i>');
               botao.toggleClass('btn-outline-primary');
@@ -271,6 +274,15 @@ let CPF_ok = new Array();
                 botao.toggleClass('btn-outline-primary');
                 botao.toggleClass('btn-success');
               }, 500)
+
+              // Exibir modal com o título do processo
+              if(document.querySelector('.div-flutuante')){
+                $('.div-flutuante input#div-flutuante--dado').val(nome);
+                $('.div-flutuante').show();
+              }
+
+            }).catch((error) => {
+              SwalAlert('aviso', 'error', 'Não foi possível copiar o título do processo', `Erro: ${error.message}`)
             });
           }
         })
@@ -567,6 +579,12 @@ let CPF_ok = new Array();
           evento.preventDefault();
           atualizarConfiguracoes();
           $('#modal-configuracoes').modal('show');
+        })
+        break;
+
+        case 'fechar-div-flutuante':
+        $(acao).click((evento) => {
+          $(evento.target.closest('div.div-flutuante')).close();
         })
         break;
 

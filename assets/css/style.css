@@ -11,6 +11,8 @@
 @import url(./componentes/no-script.css);
 @import url(./componentes/loader.css);
 
+@import url(./elementos/div-flutuante.css);
+
 :root{
   --bs-font-sans-serif: 'Inter', sans-serif;
 }
@@ -344,4 +346,10 @@ a:is(:hover, :focus, :active), address a b{
 .button-disabled{
   opacity: 0.75;
   pointer-events: none;
+}
+
+@media print {
+  .div-flutuante{
+    display: none;
+  }
 }

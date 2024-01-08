@@ -1,0 +1,25 @@
+.div-flutuante{
+  --border: 1px dashed #00000050;
+
+  display: none;
+  position: fixed;
+  z-index: 1;
+  width: min(400px, calc(100% - 1rem));
+  left: 1rem;
+  top: 1rem;
+
+  .card{
+    border: var(--border);
+
+    .card-header{
+      padding: 0.25rem 0.75rem;
+      border-bottom: var(--border);
+      display: flex;
+      place-content: space-between;
+    }
+
+    .bi{
+      margin-right: 0;
+    }
+  }
+}
