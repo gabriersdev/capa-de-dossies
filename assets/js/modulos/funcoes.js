@@ -16,6 +16,11 @@ class Settings{
       "type": "string",
       "default": "",
       "propertie": "value,src"
+    },
+    "codigo-cca": {
+      "type": "string",
+      "default": "000000000",
+      "propertie": "value"
     }
   }
   

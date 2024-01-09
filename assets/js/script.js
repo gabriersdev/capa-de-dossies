@@ -83,6 +83,7 @@ let CPF_ok = new Array();
     {input_id: 'operacao', mask: '0000'},
     {input_id: 'conta', mask: '000000000000-0'},
     {input_id: 'conta-vendedor', mask: '000000000000-0'},
+    {input_id: 'codigo-cca', mask: '000000000'},
   ]
   
   function atribuirLinks(){
@@ -158,6 +159,10 @@ let CPF_ok = new Array();
             cursor: 'end'
           });
           input.removeAttribute('maxlength');
+          break;
+
+          case 'codigo-cca':
+          $(input).mask(masks.filter(e => e.input_id == 'codigo-cca')[0].mask, {reverse: true});
           break;
           
           default:
@@ -1142,7 +1147,10 @@ let CPF_ok = new Array();
             $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
           break;
           case "exibir-opt-link":
-            // Implementar
+            // TODO: Implementar
+          break;
+          case "codigo-cca":
+            console.log('O código do CCA é ' + option[1]["values"]);
           break;
         }
       }else{
