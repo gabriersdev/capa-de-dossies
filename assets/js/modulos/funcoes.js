@@ -83,6 +83,8 @@ class Settings{
         }else{
           throw new Error("O valor informado para alterar a configuração não é válido.");
         }
+      }else{
+        this.CRUDoption("update", config_name, this.options[config_name]["default"]);
       }
       
       return this.CRUDoption("read", config_name);
@@ -104,6 +106,12 @@ class Settings{
   getOptionsValues(){
     const ret = new Object();
     for(let item of Object.entries(this.options)){
+      const values = this.CRUDoption("read", item[0]);
+
+      if(isEmpty(values)){
+        this.setOption(item[0]);
+      }
+
       ret[item[0]] = {values: this.CRUDoption("read", item[0]), propertie: item[1]["propertie"]};
     }
 

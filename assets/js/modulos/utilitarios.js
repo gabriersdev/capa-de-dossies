@@ -73,7 +73,7 @@ const sanitizarNumero = (valor) => {
 
 function tooltips(){
   $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
   })
 }
 

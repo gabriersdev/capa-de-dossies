@@ -5,6 +5,7 @@ import { Settings } from './modulos/funcoes.js';
 import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
+let configs = {};
 
 (() => {  
   document.querySelectorAll('[data-recarrega-pagina]').forEach(botao => {
@@ -160,7 +161,7 @@ let CPF_ok = new Array();
           });
           input.removeAttribute('maxlength');
           break;
-
+          
           case 'codigo-cca':
           $(input).mask(masks.filter(e => e.input_id == 'codigo-cca')[0].mask, {reverse: true});
           break;
@@ -228,7 +229,7 @@ let CPF_ok = new Array();
   
   function atribuirAcoes(acao, evento_acao){
     const acoes = document.querySelectorAll('[data-action]');
-
+    
     if(acao){
       Array.from(acoes).filter((a) => a.dataset.action == acao)[0].addEventListener(evento_acao, (evento) => {
         evento.preventDefault();
@@ -236,7 +237,7 @@ let CPF_ok = new Array();
       })
       return;
     }
-
+    
     acoes.forEach(acao => {
       switch(acao.dataset.action.toLowerCase().trim()){
         case 'editar-informacoes':
@@ -266,8 +267,8 @@ let CPF_ok = new Array();
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
             // TODO : Adicionar configuração para informar número do CCA
-            const nome = `000637637_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`;
-
+            const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`;
+            
             copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
               botao.html('<i class="bi bi-check2"></i>');
@@ -279,13 +280,13 @@ let CPF_ok = new Array();
                 botao.toggleClass('btn-outline-primary');
                 botao.toggleClass('btn-success');
               }, 500)
-
+              
               // Exibir modal com o título do processo
               if(document.querySelector('.div-flutuante')){
                 $('.div-flutuante input#div-flutuante--dado').val(nome);
                 $('.div-flutuante').show();
               }
-
+              
             }).catch((error) => {
               SwalAlert('aviso', 'error', 'Não foi possível copiar o título do processo', `Erro: ${error.message}`)
             });
@@ -484,101 +485,14 @@ let CPF_ok = new Array();
         case 'form-outras-configs':
         $(acao).on('submit', (evento) => {
           evento.preventDefault();
-          const button = {class: evento.target.querySelector('button[type=submit]').classList.value, text: evento.target.querySelector('button[type=submit]').innerText}
-          
-          try{
-            const inputs = Array.from(evento.target.querySelectorAll('input'));
-            let send = null;
-            const returns = new Array();
-            const arraySend = new Array();
-            
-            inputs.forEach((input) => {
-              switch(input.type.toLowerCase()){
-                case 'checkbox':
-                case 'radio':
-                send = input.checked;
-                arraySend.push({send: send, input: input});
-                break;
-                case 'file':
-
-                if(input.files[0]){
-                  const image = new FileReader();
-                  image.readAsDataURL(input.files[0]);
-                  
-                  image.addEventListener('loadend', (evento) => {
-                    send = JSON.stringify({value: input.files[0].name, file: evento.target.result});
-                    if(sendOptionValue(send, input)){
-                      $('#logo-cca').prop('src', evento.target.result);
-                    }else{
-                      $('#logo-cca').prop('src', './assets/img/logo-teste.png');
-                    };
-                  })
-                }
-                break;
-                default:
-                // send = input.value;
-                // arraySend.push({send: send, input: input});
-                break;
-              }
-            })
-
-            arraySend.length > 0 ? sendOptionValue(null, null, arraySend) : "";
-            //TODO: em caso de erro, limpar o registro
-
-            function sendOptionValue(send, input, array){
-              if(array){
-                if(array.length > 0){
-                  array.forEach((option) => {
-                    console.log(option);
-                    const ret = new Settings().setOption(option.input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], option.send);
-  
-                    returns.push(!isEmpty(ret) && ret === option.send);
-                  })
-                }
-              }else{
-                if(!isEmpty(send)){ 
-                  const ret = new Settings().setOption(input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], send);
-                  
-                  returns.push(!isEmpty(ret) && JSON.parse(ret).value === JSON.parse(send).value);
-                }else{
-                  console.log('Input vazio');
-                }
-              }
-
-              if(returns.every((r) => r) && !isEmpty(returns)){
-                // 'Alterado com sucesso!'
-                feedback(evento.target.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-success', text: 'Alterado!'});
-                atualizarConfiguracoes();
-                return true;
-              }else{
-                console.log('Não houve alteração. Retorno vazio ou diferente do enviado.');
-                feedback(evento.target.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-danger', text: 'Ocorreu um erro!'});
-                return false;
-              }
-            }
-            
-          }catch(error){
-            console.log(error)
-            console.log("Algo de errado ocorreu. Erro: %s", error);
-          }
+          alterarConfiguracoes(evento.target);
         })
-        
-        function feedback(e, original, update){
-          e.setAttribute('class', `${update.class} button-disabled`);
-          e.innerText = update.text;
-          
-          setTimeout(() => {
-            e.setAttribute('class', original.class);
-            e.innerText = original.text;
-          }, 1500);
-        }
-        
         break;
         
         case 'remover-logo-cca':
         $(acao).click((evento) => removerLogoCCA(evento));
         break;
-
+        
         case 'acessar-configs':
         $(acao).on('click', (evento) => {
           evento.preventDefault();
@@ -586,20 +500,186 @@ let CPF_ok = new Array();
           $('#modal-configuracoes').modal('show');
         })
         break;
+        
+        case 'ver-primeiro-logo-cca':
+        $(acao).click((evento) => {
+          evento.preventDefault();
+          const input = document.querySelector('#config-logo-cca');
+          
+          // Verificando se o input com a logo do CCA foi preenchido com uma imagem
+          try{
+            $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
 
+            if(input.files[0]){
+              const image = new FileReader();
+              image.readAsDataURL(input.files[0]);
+              
+              image.addEventListener('loadend', (eIMG) => {
+                eIMG.preventDefault();
+                $('#logo-cca').prop('src', eIMG.target.result);
+              })
+              
+              $('#modal-configuracoes').modal('hide');
+              setTimeout(() => {
+                $('.modo-visualizacao').show();
+              }, 300);
+              
+              // Desativando ações na página
+              $('#content').css('pointer-events', 'none');
+              $('#modais').css('pointer-events', 'none');
+              
+              // Evento de escuta da ação
+              $('[data-sub-action="desfazer"]').click((e) =>{
+                e.preventDefault();
+                atualizarConfiguracoes();
+                closeVisualization();
+              });
+              
+              $('[data-sub-action="confirmar"]').click((e) =>{
+                e.preventDefault();
+                // Enviando para alteração
+                alterarConfiguracoes(document.querySelector('[data-action="form-logo-cca"]'));
+                closeVisualization();
+              });
+              
+              function closeVisualization(){
+                // Reativando ações na página
+                $('#content').css('pointer-events', 'initial');
+                $('#modais').css('pointer-events', 'initial');
+                
+                // Removendo manipulação dos botões
+                $('[data-sub-action="desfazer"]').unbind();
+                $('[data-sub-action="confirmar"]').unbind();
+                
+                // Ocultando div do modo
+                $('.modo-visualizacao').hide();
+              }
+            }else{
+              // Necessário preencher o input
+              input.closest('form').querySelector('[type="submit"]').click();
+            }
+          }catch(error){
+            $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
+          }
+        });
+        break;
+        
         case 'fechar-div-flutuante':
         $(acao).click((evento) => {
-          $(evento.target.closest('div.div-flutuante')).close();
+          $(evento.target.closest('div.div-flutuante')).hide();
         })
         break;
-
+        
+        case 'fechar-modo-visualizacao':
+        $(acao).click((evento) => {
+          $(evento.target.closest('div.modo-visualizacao')).hide();
+        })
+        break;
+        
         default:
         throw new Error('Ação não implementada para a ação informada.');
         break;
       }
     })
   }
-
+  
+  function alterarConfiguracoes(form){
+    try{
+      const button = {class: form.querySelector('button[type=submit]').classList.value, text: form.querySelector('button[type=submit]').innerText}
+      const inputs = Array.from(form.querySelectorAll('input'));
+      let send = null;
+      const returns = new Array();
+      const arraySend = new Array();
+      
+      inputs.forEach((input) => {
+        switch(input.type.toLowerCase()){
+          case 'checkbox':
+          case 'radio':
+          send = input.checked;
+          arraySend.push({send: send, input: input});
+          break;
+          case 'file':
+          
+          if(input.files[0]){
+            const image = new FileReader();
+            image.readAsDataURL(input.files[0]);
+            
+            image.addEventListener('loadend', (evento) => {
+              send = JSON.stringify({value: input.files[0].name, file: evento.target.result});
+              
+              if(sendOptionValue(send, input)){
+                $('#logo-cca').prop('src', evento.target.result);
+              }else{
+                $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+              };
+            })
+            
+            return send;
+          }
+          break;
+          
+          case 'text':
+          send = input.value;
+          arraySend.push({send: send, input: input});
+          break;
+          
+          default:
+          // send = input.value;
+          // arraySend.push({send: send, input: input});
+          break;
+        }
+      })
+      
+      arraySend.length > 0 ? sendOptionValue(null, null, arraySend) : "";
+      //TODO: em caso de erro, limpar o registro
+      
+      function sendOptionValue(send, input, array){
+        if(array){
+          if(array.length > 0){
+            array.forEach((option) => {
+              const ret = new Settings().setOption(option.input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], option.send);
+              
+              returns.push(!isEmpty(ret) && ret === option.send);
+            })
+          }
+        }else{
+          if(!isEmpty(send)){ 
+            const ret = new Settings().setOption(input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], send);
+            
+            returns.push(!isEmpty(ret) && JSON.parse(ret).value === JSON.parse(send).value);
+          }else{
+            console.log('Input vazio');
+          }
+        }
+        
+        if(returns.every((r) => r) && !isEmpty(returns)){
+          // 'Alterado com sucesso!'
+          feedback(form.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-success', text: 'Alterado!'});
+          atualizarConfiguracoes();
+          return true;
+        }else{
+          console.log('Não houve alteração. Retorno vazio ou diferente do enviado.');
+          feedback(form.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-danger', text: 'Ocorreu um erro!'});
+          return false;
+        }
+      }
+      
+    }catch(error){
+      console.log(error)
+      console.log("Algo de errado ocorreu. Erro: %s", error);
+    }
+  }
+  
+  function feedback(e, original, update){
+    e.setAttribute('class', `${update.class} button-disabled`);
+    e.innerText = update.text;
+    
+    setTimeout(() => {
+      e.setAttribute('class', original.class);
+      e.innerText = original.text;
+    }, 1500);
+  }
+  
   function removerLogoCCA(evento){
     try{
       new Settings().CRUDoption("update", "logo-cca", "#");
@@ -1011,9 +1091,9 @@ let CPF_ok = new Array();
   
   window.apagarRegistro = apagarRegistro;
   window.recuperarRegistro = recuperarRegistro;
-
+  
   window.addEventListener("load", function () {
-    $('body').append(conteudos.principal)
+    $('body').append(`<div id="content">${conteudos.principal}</div>`)
     
     $('[data-element-paste]').each((index, element) => {
       element.textContent = '';
@@ -1117,7 +1197,7 @@ let CPF_ok = new Array();
     atribuirMascaras();
     tooltips();
     popovers();
-
+    
   });
   
   document.addEventListener('keyup', (evento) => {
@@ -1135,22 +1215,22 @@ let CPF_ok = new Array();
   const atualizarConfiguracoes = () => {
     const settings = new Settings();
     const options = settings.getOptionsValues();
-
+    
     //TODO: alterar a funcionalidade, além da visualização
     
     for(let option of Object.entries(options)){
       if(option[0] !== "logo-cca"){
         $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
-
+        
         switch(option[0]){
           case "autocomplete":
-            $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
+          $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
           break;
           case "exibir-opt-link":
-            // TODO: Implementar
+          // TODO: Implementar
           break;
-          case "codigo-cca":
-            console.log('O código do CCA é ' + option[1]["values"]);
+          case "codigo-cca":  
+          configs["codigo-cca"] = option[1]["values"];
           break;
         }
       }else{
@@ -1158,27 +1238,30 @@ let CPF_ok = new Array();
           // Exibir o input file para enviar um arquivo
           $('[data-element="logo-cca-selection"]').html(
             conteudos.preencher_logo_cca
-          );
-          $('#logo-cca').prop('src', './assets/img/logo-teste.png');
-          $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
-        }else{
-          const values = JSON.parse(option[1].values);
-          // Informar que já existe um arquivo
-          $('[data-element="logo-cca-selection"]').html(
-            `<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label>
-            <span class="text-muted">200x150 px</span>
-            <div class="input-group">
+            );
+
+            $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+            $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
+            $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
+          }else{
+            const values = JSON.parse(option[1].values);
+            // Informar que já existe um arquivo
+            $('[data-element="logo-cca-selection"]').html(
+              `<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label>
+              <span class="text-muted">200x150 px</span>
+              <div class="input-group">
               <input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly>
               <button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button>
-            </div>`
-          );
-          $('#logo-cca').prop('src', values.file);
-          $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
-          atribuirAcoes("remover-logo-cca", "click");
-          tooltips();
+              </div>`
+              );
+              $('#logo-cca').prop('src', values.file);
+              $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
+              $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
+              atribuirAcoes("remover-logo-cca", "click");
+              tooltips();
+            }
+          };
         }
-      };
-    }
-  }
-
-})();
+      }
+      
+    })();

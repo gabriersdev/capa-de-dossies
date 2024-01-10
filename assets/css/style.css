@@ -12,6 +12,7 @@
 @import url(./componentes/loader.css);
 
 @import url(./elementos/div-flutuante.css);
+@import url(./elementos/modo-visualizacao.css);
 
 :root{
   --bs-font-sans-serif: 'Inter', sans-serif;
@@ -344,12 +345,12 @@ a:is(:hover, :focus, :active), address a b{
 }
 
 .button-disabled{
-  opacity: 0.75;
+  opacity: 0.5;
   pointer-events: none;
 }
 
 @media print {
-  .div-flutuante{
-    display: none;
+  .div-flutuante, .modo-visualizacao-logo-cca{
+    display: none !important;
   }
 }
