@@ -23,13 +23,38 @@ class Settings{
       "propertie": "value"
     }
   }
-  
+
+  constructor(){
+    this.options = {
+      "autocomplete": {
+        "type": "boolean",
+        "default": true,
+        "propertie": "checked"
+      },
+      "exibir-opt-link": {
+        "type": "boolean",
+        "default": false,
+        "propertie": "checked"
+      },
+      "logo-cca": {
+        "type": "string",
+        "default": "",
+        "propertie": "value,src"
+      },
+      "codigo-cca": {
+        "type": "string",
+        "default": "000000000",
+        "propertie": "value"
+      }
+    }
+  }
+
   CRUDoption(action, config_name, config_value){
     try{
       const settings_saved = JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "";
       
       if(isEmpty(settings_saved)){
-        createSettingsObject(settings_saved);
+        this.createSettingsObject(settings_saved);
       }
 
       switch(action.toLowerCase()){
@@ -49,26 +74,26 @@ class Settings{
       }
 
     }catch(error){
-      createSettingsObject(JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "");
-    }
-    
-    // Criando o objeto no localStorage
-    function createSettingsObject(settings_saved){
-      if(isEmpty(settings_saved)){
-        try{
-          let value = new Object();
-          for(let option of Object.keys(this.options)){
-            // Com os valores padrões
-            value[option] = this.options[option]["default"];
-          }
-          localStorage.setItem("capa-dossie-html-configs", JSON.stringify(value));
-        }catch(error){
-          console.log("Ocorreu um erro ao criar o objeto em localStorage. Erro: %s", error);
-        }
-      }
+      this.createSettingsObject(JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "");
     }
   }
   
+  // Criando o objeto no localStorage
+  createSettingsObject(settings_saved){
+    if(isEmpty(settings_saved)){
+      try{
+        let value = new Object();
+        for(let option of Object.keys(this.options)){
+          // Com os valores padrões
+          value[option] = this.options[option]["default"];
+        }
+        localStorage.setItem("capa-dossie-html-configs", JSON.stringify(value));
+      }catch(error){
+        console.log("Ocorreu um erro ao criar o objeto em localStorage. Erro: %s", error);
+      }
+    }
+  }
+
   optionIsValid(config_name){
     return (Object.keys(this.options).includes(config_name));
   }

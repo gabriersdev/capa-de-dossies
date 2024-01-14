@@ -2,7 +2,7 @@
 
 import { conteudos } from './modulos/conteudos.js';
 import { Settings } from './modulos/funcoes.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range, verificarFuncionalidadeAteste } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();
 let configs = {};
@@ -358,7 +358,7 @@ let configs = {};
         
         case 'enviar-para-ateste':
         $(acao).on('click', (evento) => {
-          if(new Settings().getOption('codigo-cca') === '000637637'){
+          if(verificarFuncionalidadeAteste('action')){
             evento.preventDefault();
             const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
             
@@ -1261,18 +1261,6 @@ let configs = {};
           tooltips();
         }
       };
-    }
-  }
-  
-  const verificarFuncionalidadeAteste = () => {
-    if(new Settings().getOption('codigo-cca') === "000637637"){
-      $('[data-action="enviar-para-ateste"]').removeClass('none');
-      $('[data-action="enviar-para-ateste"]').attr('disabled', false);
-      return true;
-    }else{
-      $('[data-action="enviar-para-ateste"]').addClass('none');
-      $('[data-action="enviar-para-ateste"]').attr('disabled', true);
-      return false;
     }
   }
 

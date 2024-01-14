@@ -1,3 +1,5 @@
+import { Settings } from "./funcoes.js";
+
 const isEmpty = (valor) => {
   if(typeof valor == 'string'){
     return valor == undefined || valor == null || valor.length <= 0;
@@ -231,6 +233,27 @@ const range = ({min, max, scale}) => {
   }
 }
 
+const verificarFuncionalidadeAteste = (motivo) => {
+  const codigo = new Settings().getOption('codigo-cca');
+  if(codigo){
+    if(codigo[0] === "0" && codigo[1] === "0" & codigo[2] === "0" && codigo[3] === "6" && codigo[4] === "3" && codigo[5] === "7" && codigo[6] === "6" && codigo[7] === "3" && codigo[8] === "7"){
+      if(motivo === 'action'){
+        $('[data-action="enviar-para-ateste"]').removeClass('none');
+        $('[data-action="enviar-para-ateste"]').attr('disabled', false);
+      }
+      return true;
+    }else{
+      if(motivo === 'action'){
+        $('[data-action="enviar-para-ateste"]').addClass('none');
+        $('[data-action="enviar-para-ateste"]').attr('disabled', true);
+      }
+      return false;
+    }
+  }
+
+  return false;
+}
+
 export{
   isEmpty,
   capitalize,
@@ -247,5 +270,6 @@ export{
   primeiroNome,
   sanitizarNumero,
   criarEBaixarArquivo,
-  range
+  range,
+  verificarFuncionalidadeAteste
 }
