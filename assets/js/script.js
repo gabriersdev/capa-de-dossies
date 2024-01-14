@@ -358,74 +358,76 @@ let configs = {};
         
         case 'enviar-para-ateste':
         $(acao).on('click', (evento) => {
-          evento.preventDefault();
-          const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
-          
-          const elementos_substituicao = {
-            comercial_cartao_de_credito: 'c_credito',
-            comercial_cheque_especial: 'cheque',
-            comercial_conta_corrente: 'conta_corrente',
-            comercial_conta_poupanca: 'conta_poupanca',
-            comercial_credito_consignado: 'consignado'
-          }
-          
-          const saida = new Array();
-          
-          elementos.forEach((elemento) => {
-            const input = document.querySelector(`#${elemento}`);
+          if(new Settings().getOption('codigo-cca') === '000637637'){
+            evento.preventDefault();
+            const elementos = ['nome_1', 'nome_2', 'CPF_1', 'CPF_2', 'modalidade', 'n_contrato', 'empreendimento', 'comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado', 'conta_comprador_agencia', 'conta_comprador_operacao', 'conta_comprador_numero'];
             
-            if(input !== null && ((input.type == 'checkbox' && input.checked) || !isEmpty(input.value))){
-              switch(elemento){
-                case 'comercial_conta_corrente':
-                case 'comercial_conta_poupanca':
-                case 'comercial_cheque_especial':
-                case 'comercial_cartao_de_credito':
-                case 'comercial_credito_consignado':
-                if(input.checked){
-                  saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
-                  if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
-                    const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
-                    saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
-                    saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
-                    saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
-                  }
-                }
-                break;
-                
-                case 'CPF_1':
-                case 'CPF_2':
-                case 'n_contrato':
-                if(!isEmpty(input.value)){
-                  saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
-                }
-                break;
-                
-                case 'modalidade':
-                if(input.value == 'Pró-cotista'){
-                  saida.push(`${elemento}=PROCOTISTA`);
-                }else{
-                  saida.push(`${elemento}=${input.value.replaceAll(' ', '-')}`)
-                }
-                break;
-                
-                default:
-                if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
-                input.getAttribute('type') == 'checkbox' && !input.checked == false ||
-                input.getAttribute('type') == 'radio' && !input.checked == false){
-                  if(!isEmpty(input.value)){
-                    saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
-                  }
-                }
-                break;
-              }
-              
+            const elementos_substituicao = {
+              comercial_cartao_de_credito: 'c_credito',
+              comercial_cheque_especial: 'cheque',
+              comercial_conta_corrente: 'conta_corrente',
+              comercial_conta_poupanca: 'conta_poupanca',
+              comercial_credito_consignado: 'consignado'
             }
-          })
-          
-          if(!isEmpty(saida)){
-            window.open(`https://gabrieszin.github.io/ateste-processo?${saida.join('&')}`)
-          }else{
-            SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
+            
+            const saida = new Array();
+            
+            elementos.forEach((elemento) => {
+              const input = document.querySelector(`#${elemento}`);
+              
+              if(input !== null && ((input.type == 'checkbox' && input.checked) || !isEmpty(input.value))){
+                switch(elemento){
+                  case 'comercial_conta_corrente':
+                  case 'comercial_conta_poupanca':
+                  case 'comercial_cheque_especial':
+                  case 'comercial_cartao_de_credito':
+                  case 'comercial_credito_consignado':
+                  if(input.checked){
+                    saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
+                    if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
+                      const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
+                      saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
+                      saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
+                      saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
+                    }
+                  }
+                  break;
+                  
+                  case 'CPF_1':
+                  case 'CPF_2':
+                  case 'n_contrato':
+                  if(!isEmpty(input.value)){
+                    saida.push(`${elemento}=${sanitizarNumero(input.value)}`)
+                  }
+                  break;
+                  
+                  case 'modalidade':
+                  if(input.value == 'Pró-cotista'){
+                    saida.push(`${elemento}=PROCOTISTA`);
+                  }else{
+                    saida.push(`${elemento}=${input.value.replaceAll(' ', '-')}`)
+                  }
+                  break;
+                  
+                  default:
+                  if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
+                  input.getAttribute('type') == 'checkbox' && !input.checked == false ||
+                  input.getAttribute('type') == 'radio' && !input.checked == false){
+                    if(!isEmpty(input.value)){
+                      saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                    }
+                  }
+                  break;
+                }
+                
+              }
+            })
+            
+            if(!isEmpty(saida)){
+              window.open(`https://gabrieszin.github.io/ateste-processo?${saida.join('&')}`)
+            }else{
+              SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
+            }
           }
         })
         break;
@@ -509,7 +511,7 @@ let configs = {};
           // Verificando se o input com a logo do CCA foi preenchido com uma imagem
           try{
             $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
-
+            
             if(input.files[0]){
               const image = new FileReader();
               image.readAsDataURL(input.files[0]);
@@ -656,6 +658,7 @@ let configs = {};
           // 'Alterado com sucesso!'
           feedback(form.querySelector('button[type=submit]'), button, {class: 'mt-3 btn btn-success', text: 'Alterado!'});
           atualizarConfiguracoes();
+          verificarFuncionalidadeAteste();
           return true;
         }else{
           console.log('Não houve alteração. Retorno vazio ou diferente do enviado.');
@@ -1190,8 +1193,14 @@ let configs = {};
     }catch(error){
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
-    
+
+    // Atualizar configurações da capa
     atualizarConfiguracoes();
+    
+    // Verifica se o CCA definido é o mesmo habilitado para utilizar o ateste
+    verificarFuncionalidadeAteste();
+    
+    // Chamando outras funções
     atribuirLinks();
     atribuirAcoes();
     atribuirMascaras();
@@ -1236,32 +1245,35 @@ let configs = {};
       }else{
         if(isEmpty(option[1]["values"])){
           // Exibir o input file para enviar um arquivo
-          $('[data-element="logo-cca-selection"]').html(
-            conteudos.preencher_logo_cca
-            );
-
-            $('#logo-cca').prop('src', './assets/img/logo-teste.png');
-            $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
-            $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
-          }else{
-            const values = JSON.parse(option[1].values);
+          $('[data-element="logo-cca-selection"]').html(conteudos.preencher_logo_cca);
+            
+          $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+          $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
+          $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
+        }else{
+          const values = JSON.parse(option[1].values);
             // Informar que já existe um arquivo
-            $('[data-element="logo-cca-selection"]').html(
-              `<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label>
-              <span class="text-muted">200x150 px</span>
-              <div class="input-group">
-              <input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly>
-              <button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button>
-              </div>`
-              );
-              $('#logo-cca').prop('src', values.file);
-              $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
-              $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
-              atribuirAcoes("remover-logo-cca", "click");
-              tooltips();
-            }
-          };
+          $('[data-element="logo-cca-selection"]').html(`<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label><span class="text-muted">200x150 px</span><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
+          $('#logo-cca').prop('src', values.file);
+          $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
+          $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
+          atribuirAcoes("remover-logo-cca", "click");
+          tooltips();
         }
-      }
-      
-    })();
+      };
+    }
+  }
+  
+  const verificarFuncionalidadeAteste = () => {
+    if(new Settings().getOption('codigo-cca') === "000637637"){
+      $('[data-action="enviar-para-ateste"]').removeClass('none');
+      $('[data-action="enviar-para-ateste"]').attr('disabled', false);
+      return true;
+    }else{
+      $('[data-action="enviar-para-ateste"]').addClass('none');
+      $('[data-action="enviar-para-ateste"]').attr('disabled', true);
+      return false;
+    }
+  }
+
+})();
