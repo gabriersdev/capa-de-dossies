@@ -1,4 +1,4 @@
-import { Settings } from "./funcoes.js";
+import { Settings } from "../classes/Settings.js";
 
 const isEmpty = (valor) => {
   if(typeof valor == 'string'){
@@ -236,17 +236,21 @@ const range = ({min, max, scale}) => {
 const verificarFuncionalidadeAteste = (motivo) => {
   const codigo = new Settings().getOption('codigo-cca');
   if(codigo){
+    if (motivo === 'action'){
+      return true;
+    } 
+
     if(codigo[0] === "0" && codigo[1] === "0" & codigo[2] === "0" && codigo[3] === "6" && codigo[4] === "3" && codigo[5] === "7" && codigo[6] === "6" && codigo[7] === "3" && codigo[8] === "7"){
-      if(motivo === 'action'){
-        $('[data-action="enviar-para-ateste"]').removeClass('none');
-        $('[data-action="enviar-para-ateste"]').attr('disabled', false);
-      }
+      $('[data-action="enviar-para-ateste"]').removeClass('none');
+      $('[data-action="enviar-para-ateste"]').attr('disabled', false);
       return true;
     }else{
-      if(motivo === 'action'){
-        $('[data-action="enviar-para-ateste"]').addClass('none');
-        $('[data-action="enviar-para-ateste"]').attr('disabled', true);
+      if (motivo === 'action'){
+        return false;
       }
+
+      $('[data-action="enviar-para-ateste"]').addClass('none');
+      $('[data-action="enviar-para-ateste"]').attr('disabled', true);
       return false;
     }
   }
