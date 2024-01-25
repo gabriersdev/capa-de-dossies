@@ -284,7 +284,7 @@ let configs = {};
               // Exibir modal com o título do processo
               if(document.querySelector('.div-flutuante')){
                 $('.div-flutuante input#div-flutuante--dado').val(nome);
-                $('.div-flutuante').show();
+                // $('.div-flutuante').show();
               }
               
             }).catch((error) => {
