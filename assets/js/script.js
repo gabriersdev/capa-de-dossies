@@ -1,7 +1,7 @@
 "use strict";
 
 import { conteudos } from './modulos/conteudos.js';
-import { Settings } from './modulos/funcoes.js';
+import { Settings } from './classes/Settings.js';
 import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range, verificarFuncionalidadeAteste } from './modulos/utilitarios.js';
 let form_alt = false;
 let CPF_ok = new Array();

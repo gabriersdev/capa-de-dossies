@@ -1,4 +1,4 @@
-import { isEmpty } from "./utilitarios.js"
+import { isEmpty } from "../modulos/utilitarios.js"
 
 class Settings{
   options = {
