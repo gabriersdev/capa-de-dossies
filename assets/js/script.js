@@ -271,20 +271,23 @@ let configs = {};
             
             copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
+              botao.disabled = true;
+
               botao.html('<i class="bi bi-check2"></i>');
-              botao.toggleClass('btn-outline-primary');
-              botao.toggleClass('btn-success');
+              botao.removeClass('btn-primary');
+              botao.addClass('btn-success');
               
               setTimeout(() => {
+                botao.disabled = false;
                 botao.html(`<i class="bi bi-123"></i>`);
-                botao.toggleClass('btn-outline-primary');
-                botao.toggleClass('btn-success');
-              }, 500)
+                botao.addClass('btn-primary');
+                botao.removeClass('btn-success');
+              }, 1000);
               
-              // Exibir modal com o título do processo
+              // Exibir modal com o título do processo - não exibindo
               if(document.querySelector('.div-flutuante')){
                 $('.div-flutuante input#div-flutuante--dado').val(nome);
-                // $('.div-flutuante').show();
+                // $('.div-flutuante').show(); 
               }
               
             }).catch((error) => {
@@ -300,7 +303,23 @@ let configs = {};
           const numero = sanitizarString($('#n_contrato').val());
           const nome_capa = !isEmpty(numero) && !isNaN(parseInt(numero)) ? `Processo N.º ${numero}` : '';
           if(!isEmpty(nome_capa) && !isEmpty(numero)){
-            copiar(nome_capa);
+            copiar(nome_capa).then(retorno => {
+              const botao = $('[data-action="copiar-nome-capa"]');
+              botao.disabled = true;
+
+              botao.html('<i class="bi bi-check2"></i>');
+              botao.removeClass('btn-primary');
+              botao.addClass('btn-success');
+              
+              setTimeout(() => {
+                botao.disabled = false;
+                botao.html(`<i class="bi bi-fonts"></i>`);
+                botao.addClass('btn-primary');
+                botao.removeClass('btn-success');
+              }, 1000);
+            }).catch((error) => {
+              SwalAlert('aviso', 'error', 'Não foi possível copiar o nome da capa', `Erro: ${error.message}`)
+            });
           }else{
             SwalAlert('aviso', 'error', 'Preencha os dados do processo para gerar o nome da capa');
           }
