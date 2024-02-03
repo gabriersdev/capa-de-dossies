@@ -1225,8 +1225,17 @@ let configs = {};
     atribuirMascaras();
     tooltips();
     popovers();
-    
   });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if(true){
+      window.onbeforeunload = (evento) => {
+        if(Array.from($('input:not([type=checkbox], [type=radio], [type=number], #config-codigo-cca)')).filter(e => e.value !== "R$ 0,00" && e.value.trim().length > 0).length > 0){
+          evento.preventDefault();
+        }
+      }
+    }
+  })
   
   document.addEventListener('keyup', (evento) => {
     if(!isEmpty(evento.keyCode)){
