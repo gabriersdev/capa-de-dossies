@@ -233,7 +233,7 @@ let configs = {};
     if(acao){
       Array.from(acoes).filter((a) => a.dataset.action == acao)[0].addEventListener(evento_acao, (evento) => {
         evento.preventDefault();
-        removerLogoCCA(evento)
+        removerLogoCCA(evento);
       })
       return;
     }
@@ -267,7 +267,7 @@ let configs = {};
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
             // TODO : Adicionar configuração para informar número do CCA
-            const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`;
+            const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\d/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\d/g, ''))}_PR`;
             
             copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
@@ -354,16 +354,12 @@ let configs = {};
               })
             }else{
               SwalAlert('aviso', 'warning', 'Não há registros armazenados. Crie uma capa primeiro.', null, null, null, false, 3000);
-              console.groupCollapsed('Não há registros armazenados.');
-              console.info('Não há registros armazenados.');    
-              console.groupEnd();             
+              console.info('Não há registros armazenados.');            
             }
             
           }catch(error){
             SwalAlert('aviso', 'warning', 'Não há registros armazenados', null, null, null, false, 3000);
-            console.groupCollapsed('Não há registros armazenados.');
-            console.info('Não há registros armazenados.');    
-            console.groupEnd();      
+            console.info('Não há registros armazenados.');
           }
         });
         break;
@@ -758,9 +754,7 @@ let configs = {};
         
         if(['CPF_1', 'CPF_2', 'n_contrato', 'conta', 'conta-vendedor'].includes(input)){
           let input_value = elemento_modal.value;
-          [{'.': ''}, {'-': ''}, {' ': ''}].forEach((replace) => {
-            input_value = input_value.replaceAll(Object.keys(replace)[0], Object.values(replace)[0]);
-          })
+          input_value = input_value.match(/\d/g);
           registro[input] = input_value;
         }else{
           registro[input] = elemento_modal.value;
@@ -875,7 +869,7 @@ let configs = {};
             // input_conta.focus();
           }
         }else{
-          const valor_tratado = valor.replaceAll('.', '').replaceAll('-', '');
+          const valor_tratado = valor.match(/\d/g);
           
           if(valor_tratado.length >= 13){
             const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 3), conta: valor_tratado.substr(7, valor.length)};
