@@ -1108,6 +1108,31 @@ let configs = {};
   window.apagarRegistro = apagarRegistro;
   window.recuperarRegistro = recuperarRegistro;
   
+  window.exibirLinkCompartilhamento = (event)  => {
+    Swal.fire({
+      input: 'url',
+      inputLabel: 'Link de compartilhamento',
+      inputValue: `${window.location.href}?id=${event.target.closest('[data-identificacao]').dataset.identificacao}`,
+      showCloseButton: true,
+      showCancelButton: true,
+      cancelButtonText: 'Fechar',
+      confirmButtonText: 'Copiar',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      preConfirm: (url) => {
+        if(url){
+          navigator.clipboard.writeText(url);
+          Swal.fire({
+            title: 'Link copiado!',
+            icon: 'success',
+            timer: 1500
+          })
+        }
+      }
+    })
+  }
+
   window.addEventListener("load", function () {
     $('body').append(`<div id="content">${conteudos.principal}</div>`)
     

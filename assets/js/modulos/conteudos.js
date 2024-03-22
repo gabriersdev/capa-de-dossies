@@ -1,4 +1,7 @@
-import { primeiroNome } from "./utilitarios.js"
+import { Settings } from "../classes/Settings.js";
+import { primeiroNome } from "./utilitarios.js";
+
+const settings = new Settings();
 
 const alerts = {
   sem_registros: `<div class="alert alert-secondary text-center">Não foram encontrados registros</div>`,
@@ -9,7 +12,7 @@ const alerts = {
 }
 
 const registro = ({id, nome, data_hora}) => {
-  return `<tr data-identificacao=${id}><td>${primeiroNome(nome)}</td><td>${formatoHorario(data_hora)}</td><td><button class="btn btn-primary btn-sm" data-action="recuperar-registro" data-toggle="tooltip" data-placement="bottom" title="Recuperar o registro" onclick="recuperarRegistro(event, this)"><i class="bi bi-arrow-counterclockwise"></i></button>&nbsp;<button class="btn btn-danger btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Apagar o registro" onclick="apagarRegistro(event, this)"><i class="bi bi-x-lg"></i></button>&nbsp;<button class="btn btn-secondary btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Compartilhar" onclick=""><i class="bi bi-link-45deg"></i></button></td></tr>`
+  return `<tr data-identificacao=${id}><td>${primeiroNome(nome)}</td><td>${formatoHorario(data_hora)}</td><td><button class="btn btn-primary btn-sm" data-action="recuperar-registro" data-toggle="tooltip" data-placement="bottom" title="Recuperar o registro" onclick="recuperarRegistro(event, this)"><i class="bi bi-arrow-counterclockwise"></i></button>&nbsp;<button class="btn btn-danger btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Apagar o registro" onclick="apagarRegistro(event, this)"><i class="bi bi-x-lg"></i></button>${settings.getOption('exibir-opt-link') ? '&nbsp;<button class="btn btn-secondary btn-sm" data-action="apagar-registro" data-toggle="tooltip" data-placement="bottom" title="Compartilhar" onclick="exibirLinkCompartilhamento(event, this)"><i class="bi bi-link-45deg"></i></button>' : ''}</td></tr>`
 }
 
 function formatoHorario(datetime){
