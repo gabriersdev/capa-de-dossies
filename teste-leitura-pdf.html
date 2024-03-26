@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script src="./assets/js/frameworks/pdf.mjs" type="module"></script>
+  
+  <script type="module">
+    /**
+    * Retrieves the text of a specif page within a PDF Document obtained through pdf.js 
+    * 
+    * @param {Integer} pageNum Specifies the number of the page 
+    * @param {PDFDocument} PDFDocumentInstance The PDF document obtained 
+    **/
+    function getPageText(pageNum, PDFDocumentInstance) {
+      // Return a Promise that is solved once the text of the page is retrieven
+      return new Promise(function (resolve, reject) {
+        PDFDocumentInstance.getPage(pageNum).then(function (pdfPage) {
+          // The main trick to obtain the text of the PDF page, use the getTextContent method
+          pdfPage.getTextContent().then(function (textContent) {
+            var textItems = textContent.items;
+            var finalString = "";
+            
+            // Concatenate the string of the item to the final string
+            for (var i = 0; i < textItems.length; i++) {
+              var item = textItems[i];
+              
+              finalString += item.str + " ";
+            }
+            
+            // Solve promise with the text retrieven from the page
+            resolve(finalString);
+          });
+        });
+      });
+    }
+    
+    // If absolute URL from the remote server is provided, configure the CORS
+    // header on that server.
+    var url = 'doc.pdf';
+    
+    // Loaded via <script> tag, create shortcut to access PDF.js exports.
+      var { pdfjsLib } = globalThis;
+      
+      // The workerSrc property shall be specified.
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/js/frameworks/pdf.worker.mjs';
+      
+      // Asynchronous download of PDF
+      var loadingTask = pdfjsLib.getDocument(url);
+      loadingTask.promise.then(function(pdf) {
+        console.log('PDF loaded');
+        
+        var pdfDocument = pdf;
+        // Create an array that will contain our promises 
+        var pagesPromises = [];
+        
+        for (var i = 0; i < pdf.numPages; i++) {
+          // Required to prevent that i is always the total of pages
+          (function (pageNumber) {
+            // Store the promise of getPageText that returns the text of a page
+            pagesPromises.push(getPageText(pageNumber, pdfDocument));
+          })(i + 1);
+        }
+        
+        // Execute all the promises
+        Promise.all(pagesPromises).then(function (pagesText) {
+          
+          // Display text of all the pages in the console
+          // e.g ["Text content page 1", "Text content page 2", "Text content page 3" ... ]
+          
+          if (pagesText.some((p) => p.trim() === '')) {
+            console.log('PDF is empty');
+          } else {
+            
+            const sanitizedText = (text) => text.replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
+            const text = sanitizedText(pagesText.join(' '));
+            console.log(text);
+
+            const data = {
+              proponentes: {
+                nome: text.match(/(Nome:)\s[\w\s]*\s(Sexo)/gi).map((p) => p.replace(/(Nome:)|Sexo/gi, '').trim()),
+                CPF: text.match(/(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi).map((p) => p.replace(/(CPF:)|Nome/gi, '').trim())
+              },
+              modalidade: text.match(/(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi)[0].replace(/(Negociada Item de Produto: \d{1,} -)|\s/gi, '').trim(),
+              contrato: text.match(/(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi)[0].replace(/(Número Contrato para Administração:)|Situação/gi, '').trim(),
+              endereco: text.match(/(Endereço da Unidade Habitacional:).*Vagas/gi)[0].replace(/(Endereço da Unidade Habitacional:)|Vagas/gi, '').trim(),
+              empreendimento: text.match(/(Nome do Empreendimento:).*(Tipo de Unidade:)/gi)[0].replace(/(Nome do Empreendimento:)|(Tipo de Unidade:)/gi, '').trim(),
+              valores: {
+                compra_e_venda: text.match(/(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi)[0].replace(/(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|(Valor Financiamento Negociado)/gi, '').trim(),
+                finaciamento: text.match(/(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi)[0].replace(/(Valor Financiamento Negociado:)|(Cota de Financiamento Calculada)/gi, '').trim(),
+                recursos_proprios: text.match(/(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi)[0].replace(/(Valor Recursos Próprios Aportados:)|(Valor Recursos Próprios)/gi, '').trim(),
+                FGTS: text.match(/(Valor Total Utilizado FGTS:).*(Valor FMP:)/gi)[0].replace(/(Valor Total Utilizado FGTS:)|(Valor FMP:)/gi, '').trim(),
+                subsidio: text.search('Subsídio Complemento Capacidade Financeira') ? text.match(/(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi) ? text.match(/(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi)[0].replace(/(Subsídio Complemento Capacidade Financeira:)|(Valor Operação)/gi, '').trim() : '' : '',
+                taxas_de_cartorio: text.match(/(Valor das Taxas Financiadas:).*(Taxas à vista)/gi)[0].replace(/(Valor das Taxas Financiadas:)|(Taxas à vista)/gi, '').trim(),
+              },
+              // Conta para débito das parcelas
+              conta_debito: {
+                banco: '104',
+                agencia: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[0],
+                operacao: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[1],
+                conta: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[2],
+                digito: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[3],
+              },
+              // Apenas no caso de vendedor e processo individual
+              conta_deposito: {
+                banco: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[0],
+                agencia: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[1],
+                operacao: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[2],
+                conta: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[3],
+                digito: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[4],
+              },
+            }
+            
+            document.write(JSON.stringify(data, null, 2));
+          }
+
+        });
+        
+      }, function (reason) {
+        // PDF loading error
+        console.error(reason);
+      });
+    </script>
+    
+    <h1>Using PDF.js</h1>
+    
+    <canvas id="the-canvas"></canvas>
+    
+  </body>
+  </html>
