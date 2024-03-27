@@ -41,7 +41,7 @@
     
     // If absolute URL from the remote server is provided, configure the CORS
     // header on that server.
-    var url = 'doc.pdf';
+    var url = 'ESPELHO4.pdf';
     
     // Loaded via <script> tag, create shortcut to access PDF.js exports.
       var { pdfjsLib } = globalThis;
@@ -77,25 +77,36 @@
           } else {
             
             const sanitizedText = (text) => text.replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
+
+            const getContent = (text, start, end) => text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null;
+
+            const getContextUsingRegex = (text, regex, regexSanit) => text.match(new RegExp(regex, 'gi')).map((p) => p.replace(new RegExp(regexSanit, 'gi'), '').trim());
+
             const text = sanitizedText(pagesText.join(' '));
             console.log(text);
 
+            try{
+              //
+            } catch (e) {
+              console.error(e);
+            }
+
             const data = {
               proponentes: {
-                nome: text.match(/(Nome:)\s[\w\s]*\s(Sexo)/gi).map((p) => p.replace(/(Nome:)|Sexo/gi, '').trim()),
+                nome: getContent(text, 'Nome:', 'Sexo'),
                 CPF: text.match(/(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi).map((p) => p.replace(/(CPF:)|Nome/gi, '').trim())
               },
               modalidade: text.match(/(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi)[0].replace(/(Negociada Item de Produto: \d{1,} -)|\s/gi, '').trim(),
               contrato: text.match(/(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi)[0].replace(/(Número Contrato para Administração:)|Situação/gi, '').trim(),
-              endereco: text.match(/(Endereço da Unidade Habitacional:).*Vagas/gi)[0].replace(/(Endereço da Unidade Habitacional:)|Vagas/gi, '').trim(),
-              empreendimento: text.match(/(Nome do Empreendimento:).*(Tipo de Unidade:)/gi)[0].replace(/(Nome do Empreendimento:)|(Tipo de Unidade:)/gi, '').trim(),
+              endereco: getContent(text, 'Endereço da Unidade Habitacional:', 'Vagas'),
+              empreendimento: getContent(text, 'Nome do Empreendimento:', 'Tipo de Unidade'),
               valores: {
-                compra_e_venda: text.match(/(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi)[0].replace(/(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|(Valor Financiamento Negociado)/gi, '').trim(),
-                finaciamento: text.match(/(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi)[0].replace(/(Valor Financiamento Negociado:)|(Cota de Financiamento Calculada)/gi, '').trim(),
-                recursos_proprios: text.match(/(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi)[0].replace(/(Valor Recursos Próprios Aportados:)|(Valor Recursos Próprios)/gi, '').trim(),
-                FGTS: text.match(/(Valor Total Utilizado FGTS:).*(Valor FMP:)/gi)[0].replace(/(Valor Total Utilizado FGTS:)|(Valor FMP:)/gi, '').trim(),
-                subsidio: text.search('Subsídio Complemento Capacidade Financeira') ? text.match(/(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi) ? text.match(/(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi)[0].replace(/(Subsídio Complemento Capacidade Financeira:)|(Valor Operação)/gi, '').trim() : '' : '',
-                taxas_de_cartorio: text.match(/(Valor das Taxas Financiadas:).*(Taxas à vista)/gi)[0].replace(/(Valor das Taxas Financiadas:)|(Taxas à vista)/gi, '').trim(),
+                compra_e_venda: getContent(text, 'Valor Compra e Venda ou Orçamento Proposto pelo Cliente:', 'Valor Financiamento Negociado'),
+                finaciamento: getContent(text, 'Valor Financiamento Negociado:', 'Cota de Financiamento Calculada') || '0,00',
+                recursos_proprios: getContent(text, 'Valor Recursos Próprios Aportados:', 'Valor Recursos Próprios') || '0,00',
+                FGTS: getContent(text, 'Valor Total Utilizado FGTS:', 'Valor FMP:') || '0,00',
+                subsidio: getContent(text, 'Subsídio Complemento Capacidade Financeira:', 'Valor Operação') || '0,00',
+                taxas_de_cartorio: getContent(text, 'Valor das Taxas Financiadas:', 'Taxas à vista') || '0,00',
               },
               // Conta para débito das parcelas
               conta_debito: {
