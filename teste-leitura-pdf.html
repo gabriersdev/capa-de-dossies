@@ -41,7 +41,7 @@
     
     // If absolute URL from the remote server is provided, configure the CORS
     // header on that server.
-    var url = 'ESPELHO4.pdf';
+    var url = 'ESPELHO3.pdf';
     
     // Loaded via <script> tag, create shortcut to access PDF.js exports.
       var { pdfjsLib } = globalThis;
@@ -77,27 +77,48 @@
           } else {
             
             const sanitizedText = (text) => text.replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
-
-            const getContent = (text, start, end) => text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null;
-
-            const getContextUsingRegex = (text, regex, regexSanit) => text.match(new RegExp(regex, 'gi')).map((p) => p.replace(new RegExp(regexSanit, 'gi'), '').trim());
-
+            
+            const getContent = (text, start, end) => {
+              try { 
+                return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null
+              } catch (e) { return []; }
+            }
+            
+            const getContextUsingRegex = (text, regex, regexSanit, index) => {
+              try{
+                if (!new RegExp(regex).test(text)) return [];
+                if (!index) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
+                else return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim())[index];
+              } catch (e) {
+                return [];
+              }
+            }
+            
+            const getAccount = (ret,  index) => {
+              if (ret) {
+                const account = Array.isArray(ret) ? ret[0].split('-') : ret.split('-');
+                return account[index];
+              } else {
+                return [];
+              }
+            }
+            
             const text = sanitizedText(pagesText.join(' '));
             console.log(text);
-
+            
             try{
               //
             } catch (e) {
               console.error(e);
             }
-
+            
             const data = {
               proponentes: {
-                nome: getContent(text, 'Nome:', 'Sexo'),
+                nome: text.match(/(Nome:)\s[\w\s]*\s(Sexo)/gi).map((p) => p.replace(/Nome:|Sexo/gi, '').trim()),
                 CPF: text.match(/(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi).map((p) => p.replace(/(CPF:)|Nome/gi, '').trim())
               },
               modalidade: text.match(/(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi)[0].replace(/(Negociada Item de Produto: \d{1,} -)|\s/gi, '').trim(),
-              contrato: text.match(/(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi)[0].replace(/(Número Contrato para Administração:)|Situação/gi, '').trim(),
+              contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi),
               endereco: getContent(text, 'Endereço da Unidade Habitacional:', 'Vagas'),
               empreendimento: getContent(text, 'Nome do Empreendimento:', 'Tipo de Unidade'),
               valores: {
@@ -111,24 +132,24 @@
               // Conta para débito das parcelas
               conta_debito: {
                 banco: '104',
-                agencia: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[0],
-                operacao: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[1],
-                conta: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[2],
-                digito: text.match(/(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi)[0].replace(/(Conta para Débito:)|(Débito em Conta)/gi, '').trim().split('-')[3],
+                agencia: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 0),
+                operacao: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 1),
+                conta: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 2),
+                digito: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 3),
               },
               // Apenas no caso de vendedor e processo individual
               conta_deposito: {
-                banco: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[0],
-                agencia: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[1],
-                operacao: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[2],
-                conta: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[3],
-                digito: text.match(/(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi)[0].replace(/(Conta para Crédito:)|(Conta para Débito)/gi, '').trim().split('-')[4],
+                banco: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 0),
+                agencia: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 1),
+                operacao: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 2),
+                conta: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 3),
+                digito: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 4),
               },
             }
             
             document.write(JSON.stringify(data, null, 2));
           }
-
+          
         });
         
       }, function (reason) {
