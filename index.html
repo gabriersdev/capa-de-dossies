@@ -297,6 +297,117 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="modal-confirm-rec" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" aria-hidden="true" aria-labelledby="Modal estático de confirmação dos dados recuperados do arquivo" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modal-confirm-rec-Label">Recuperação de dados</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="fw-bold">Não foi possível recuperar alguns dados. Confira o que ficou pendente:</p>
+
+            <style>
+              .list-group-item{
+                display: flex;
+                gap: 0.5rem;
+
+                /* Expandindo espaço do label para que o click seja mais fácil */
+                [for]{
+                  flex-grow: 2;
+                }
+              }
+            </style>
+
+            <ul class="mt-2 mb-2 list-group list-group-numbered">
+              <li class="list-group-item">Identificação dos proponentes</li>
+              <li class="list-group-item">Identificação da unidade e proposta</li>
+              <li class="list-group-item">Valores da operação</li>
+              <li class="list-group-item">Dados bancários</li>
+            </ul>
+            <button class="btn btn-secondary mt-1"><i class="bi bi-pencil-square"></i>Editar informações</button>
+            <br>
+            <br>
+
+            <p class="fw-bold">Tivemos dificuldades em confirmar alguns dados. Poderia verificar por favor?</p>
+
+            <ul class="mt-3">
+              <li>
+                <span class="fw-semibold">A operação é um processo de imóvel individual?</span>
+                <ul class="mt-2 list-group">
+                  <li class="list-group-item">
+                    <input type="radio" class="form-check-input" name="op-tipo" id="op-nao-individual" required checked>
+                    <label for="op-nao-individual">Não</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="radio" class="form-check-input" name="op-tipo" id="op-sim-individual" required>
+                    <label for="op-sim-individual">Sim</label>
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-3">
+                <span class="fw-semibold">Nome dos proponentes</span>
+                <ul class="mt-2 list-group">
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="n-prop-1" id="n-prop-1">
+                    <label for="n-prop-1">José da Silva</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="n-prop-2" id="n-prop-2">
+                    <label for="n-prop-2">José da Silva</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="n-prop-3" id="n-prop-3">
+                    <label for="n-prop-3">José da Silva</label>
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-3">
+                <span class="fw-semibold">CPF dos proponentes</span>
+                <ul class="mt-2 list-group">
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="CPF-prop-1" id="CPF-prop-1">
+                    <label for="CPF-prop-1">123.456.789-09</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="CPF-prop-2" id="CPF-prop-2">
+                    <label for="CPF-prop-2">123.456.789-09</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="checkbox" class="form-check-input" name="CPF-prop-3" id="CPF-prop-3">
+                    <label for="CPF-prop-3">123.456.789-09</label>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <br>
+            <br>
+
+            <p class="fw-bold">Quais os produtos comerciais contratados nessa operação?</p>
+            <ul class="mt-3 list-group">
+              <li class="info list-group-item">
+                <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1">
+                <label for="prod-1">Produto 1</label>
+              </li>
+              <li class="info list-group-item">
+                <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2">
+                <label for="prod-2">Produto 2</label>
+              </li>
+              <li class="info list-group-item">
+                <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3">
+                <label for="prod-3">Produto 3</label>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+            <button class="btn btn-primary">Continuar</button>
+            <button class="btn btn-success">Finalizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <noscript>
