@@ -660,9 +660,13 @@ let configs = {};
                 if(Array.isArray(data) || Object.getOwnPropertyNames(data).length === 0){
                   SwalAlert('aviso', 'warning', 'Não foi possível recuperar dados do arquivo', 'O arquivo pode não ser um PDF legível ou pode estar corrompido. Retire o espelho outra vez e tente novamente.');
                 } else if (Object.getOwnPropertyNames(data).length > 0){
-                  console.log(data);
+                  // console.log(data);
                   
+                  const modal = $('#modal-confirm-rec')[0];
+
                   document.querySelector('#modal-editar-informacoes [type=reset]').click();
+                  modal.querySelectorAll('input').forEach(input => ['checkbox', 'radio'].includes(input.type) ? input.checked = false : input.value = '');
+
                   const naoRecuperado = [];
                   // Exibindo modal de confirmação dos dados de importação
                   // $('#modal-confirm-rec').modal('show');
@@ -673,7 +677,7 @@ let configs = {};
                     if (JSON.stringify(osvalores.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.valores).sort())) naoRecuperado.push('Valores da operação');
                     
                     for (let i = 0; i < Object.getOwnPropertyNames(data.valores).length; i++){
-                      $(`#${Object.getOwnPropertyNames(data.valores)[i]}`).val(data.valores[Object.getOwnPropertyNames(data.valores)[i]]);
+                      $(`#${Object.getOwnPropertyNames(data.valores)[i]}`).val(data.valores[Object.getOwnPropertyNames(data.valores)[i] || 'R$ 0,00']);
                     }
                   } else {
                     naoRecuperado.push('Valores da operação');
@@ -845,7 +849,6 @@ let configs = {};
                     // $(areaNaoRecuperado).hide();
                   }
                   
-                  const modal = $('#modal-confirm-rec');
                   $(modal).find('.modal-footer [data-confirm-rec]').remove();
                   $(modal).find('.modal-footer [onclick]').remove();
                   $(modal).find('.modal-footer').append(`<button class="btn btn-primary" onclick="proxContent(0, this)">Continuar</button>`);
