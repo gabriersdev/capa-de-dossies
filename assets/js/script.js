@@ -8,7 +8,7 @@ let form_alt = false;
 let CPF_ok = new Array();
 let configs = {};
 
-// setTimeout(() => $('#modal-confirm-rec').modal('show'), 500);
+setTimeout(() => $('#modal-confirm-rec').modal('show'), 500);
 
 (() => {  
   document.querySelectorAll('[data-recarrega-pagina]').forEach(botao => {
@@ -275,7 +275,7 @@ let configs = {};
             copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
               botao.disabled = true;
-
+              
               botao.html('<i class="bi bi-check2"></i>');
               botao.removeClass('btn-primary');
               botao.addClass('btn-success');
@@ -309,7 +309,7 @@ let configs = {};
             copiar(nome_capa).then(retorno => {
               const botao = $('[data-action="copiar-nome-capa"]');
               botao.disabled = true;
-
+              
               botao.html('<i class="bi bi-check2"></i>');
               botao.removeClass('btn-primary');
               botao.addClass('btn-success');
@@ -589,28 +589,261 @@ let configs = {};
           $(evento.target.closest('div.modo-visualizacao')).hide();
         })
         break;
-
+        
         case 'importar-com-espelho':
-          $(acao).click((evento) => {
-            evento.preventDefault();
-          });
+        $(acao).click((evento) => {
+          evento.preventDefault();
+        });
         break;
-
+        
         case 'input-import-arquivo-espelho':
-          $(acao).on('change', (evento) => {
-            const arquivo = evento.target.files[0];
-            const reader = new FileReader();
-            reader.readAsBinaryString(arquivo);
-            reader.onload = (e) => {
-              const fileData = e.target.result;
-              getData((fileData)).then((data) => {
+        const data = {
+          "proponentes": {
+            "nome": [
+              "EDER DE CASSIA DA SILVA",
+              "ALINE LORENA DA SILVA FERREIRA",
+            ],
+            "CPF": [
+              "101.549.016-60",
+              "113.034.186-06",
+            ]
+          },
+          "modalidade": [
+            "NPMCMV"
+          ],
+          "contrato": [
+            "8.7877.1888138-2"
+          ],
+          "endereco": [
+            "RUA MINAS GERAIS, nº 286, BL. 3, AP102, Caiapos, CEP 32.185-550, CONTAGEM/MG"
+          ],
+          "empreendimento": [
+            "CONQUISTA ALVORADA"
+          ],
+          "valores": {
+            "compra_e_venda": [
+              "224.000,00"
+            ],
+            "finaciamento": [
+              "175.200,00"
+            ],
+            "recursos_proprios": [
+              "45.780,62"
+            ],
+            "FGTS": [
+              "1.222,38"
+            ],
+            "subsidio": [
+              "1.797,00"
+            ],
+            "taxas_de_cartorio": [
+              "0,00"
+            ]
+          },
+          "conta_debito": {
+            "banco": "104",
+            "agencia": "2187",
+            "operacao": "3701",
+            "conta": "000581792157",
+            "digito": "6"
+          },
+          "conta_deposito": {
+            "banco": "104",
+            "agencia": "2187",
+            "operacao": "3701",
+            "conta": "000581792157",
+            "digito": "6"
+          }
+        }
+
+        const naoRecuperado = [];
+
+        if (data.valores && Object.getOwnPropertyNames(data.valores).length > 0) {
+          const osvalores = ['compra_e_venda', 'finaciamento', 'recursos_proprios', 'FGTS', 'subsidio', 'taxas_de_cartorio']
+
+          if (JSON.stringify(osvalores.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.valores).sort())) naoRecuperado.push('Valores da operação');
+
+          for (let i = 0; i < Object.getOwnPropertyNames(data.valores).length; i++){
+            Object.getOwnPropertyNames(data.valores)[i];
+            data.valores[Object.getOwnPropertyNames(data.valores)[i]];
+          }
+
+          Array.isArray(data.valores) ? data.valores[0] : data.valores;
+        } else {
+          naoRecuperado.push('Valores da operação');
+        }
+        
+        if (data.conta_debito && Object.getOwnPropertyNames(data.conta_debito).length > 0) {
+          const osdados = ['banco', 'agencia', 'operacao', 'conta', 'digito'];
+
+          if (JSON.stringify(osdados.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.conta_debito).sort())) naoRecuperado.push('Dados bancários');
+
+          for (let i = 0; i < Object.getOwnPropertyNames(data.conta_debito).length; i++){
+            Object.getOwnPropertyNames(data.conta_debito)[i];
+            data.conta_debito[Object.getOwnPropertyNames(data.conta_debito)[i]];
+          }
+        } else {
+          naoRecuperado.push('Dados bancários');
+        }
+
+        if (data.conta_deposito && Object.getOwnPropertyNames(data.conta_deposito).length > 0) {
+          const osdados = ['banco', 'agencia', 'operacao', 'conta', 'digito'];
+
+          // Verificando se os dados bancários são iguais e se as propriedades obtidas são as mesmas que deveriam
+          if (JSON.stringify(osdados.sort()) === JSON.stringify(Object.getOwnPropertyNames(data.conta_deposito).sort()) && JSON.stringify(data.conta_deposito) === JSON.stringify(data.conta_debito)){
+            // Se os dados bancários de débito e depósito são iguais, então não é um processo individual
+            document.querySelector('label[for="op-nao-individual"]').click();
+            // TODO - Separar variáveis pra evitar múltiplas chamadas
+            document.querySelector('label[for="op-nao-individual"]').click(); 
+            // Marcando operação conta corrente
+            document.querySelector('label[for="prod-1"]').click(); 
+          }else{
+            naoRecuperado.push('Dados bancários')
+          };
+
+          for (let i = 0; i < Object.getOwnPropertyNames(data.conta_deposito).length; i++){
+            Object.getOwnPropertyNames(data.conta_deposito)[i];
+            data.conta_deposito[Object.getOwnPropertyNames(data.conta_deposito)[i]];
+          }
+        } 
+
+        if (data.modalidade) {
+          if (data.modalidade.length !== 0){
+            // Preencher
+            Array.isArray(data.modalidade) ? data.modalidade[0] : data.modalidade;
+          } else if (data.modalidade.length == 0){
+            naoRecuperado.push('Identificação da unidade e proposta');
+          }
+        } else {
+          naoRecuperado.push('Identificação da unidade e proposta');
+        }
+
+        if (data.contrato) {
+          if (data.contrato.length !== 0){
+            // Preencher
+            Array.isArray(data.contrato) ? data.contrato[0] : data.contrato;
+          } else if (data.contrato.length == 0){
+            naoRecuperado.push('Identificação da unidade e proposta');
+          }
+        } else {
+          naoRecuperado.push('Identificação da unidade e proposta');
+        }
+
+        if (data.endereco) {
+          if (data.endereco.length !== 0){
+            // Preencher
+            Array.isArray(data.endereco) ? data.endereco[0] : data.endereco;
+          } else if (data.endereco.length == 0){
+            naoRecuperado.push('Identificação da unidade e proposta');
+          }
+        } else {
+          naoRecuperado.push('Identificação da unidade e proposta');
+        }
+
+        if (data.empreendimento) {
+          const [ naoIndividual, simIndividual ] = Array.from(document.querySelectorAll("[name='op-tipo']")).map((e) => e.closest('li.list-group-item').querySelector('label'));          
+
+          if (data.empreendimento.length !== 0){
+            // Preencher
+            naoIndividual.click();
+            Array.isArray(data.empreendimento) ? data.empreendimento[0] : data.empreendimento;
+          } else if (data.empreendimento.length == 0){
+            simIndividual.click()
+            naoRecuperado.push('Identificação da unidade e proposta');
+          }
+        } else {
+          document.querySelector('label[for="op-sim-individual"]').click()
+          naoRecuperado.push('Identificação da unidade e proposta');
+        }
+        
+        // Regras para preencher os campos com o que foi recuperado do arquivo
+        if (data.proponentes.nome && Array.isArray(data.proponentes.nome)) {
+          const area = $('[data-element="confirm-nome-prop"]');
+          if (data.proponentes.nome.length > 2) {
+            // Criar seleção para proponentes
+            $(area).show();
+            $(area).find('.list-group').empty();
+            data.proponentes.nome.toSpliced(5).forEach((nome, index) => {
+              $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="nome-prop-${index}" id="nome-prop-${index}"><label for="nome-prop-${index}">${nome}</label></li>`);
+            });
+          } else if (data.proponentes.nome.length == 0) {
+            $(area).hide();
+            naoRecuperado.push('Identificação dos proponentes');
+          } else {
+            $(area).hide();
+            // Preencher
+            data.proponentes.nome.forEach((nome, index) => {
+              
+            });
+          }
+        } else {
+          $('[data-element="confirm-nome-prop"]').hide();
+          naoRecuperado.push('Identificação dos proponentes');
+        }
+
+        if (data.proponentes.CPF) {
+          const area = $('[data-element="confirm-CPF-prop"]');
+          if (data.proponentes.CPF.length > 2) {
+            // Criar seleção para CPF
+            $(area).show();
+            $(area).find('.list-group').empty();
+            data.proponentes.CPF.toSpliced(5).forEach((CPF, index) => {
+              $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="CPF-prop-${index}" id="CPF-prop-${index}"><label for="CPF-prop-${index}">${CPF}</label></li>`);
+            });
+          } else if (data.proponentes.CPF.length == 0) {
+            $(area).hide();
+            naoRecuperado.push('Identificação dos proponentes');
+          } else {
+            $(area).hide();
+            // Preencher
+            data.proponentes.CPF.forEach((CPF, index) => {
+              
+            });
+          }
+        } else {
+          $('[data-element="confirm-CPF-prop"]').hide();
+          naoRecuperado.push('Identificação dos proponentes');
+        }
+
+        // Verificando o que não foi possível recuperar e exibindo em tela
+        const resNaoRecuperado = naoRecuperado.filter((el, e) => naoRecuperado.indexOf(el) === e);
+        const areaNaoRecuperado = $('[data-element="not-nao-recuperado"]');
+        if (resNaoRecuperado.length > 0) {
+          // Preencher
+          // TODO - Exibir de forma mais elegante
+          // $(areaNaoRecuperado).show();
+          $(areaNaoRecuperado).find('.list-group').empty();
+          resNaoRecuperado.forEach((item, index) => {
+            $(areaNaoRecuperado).find('.list-group').append(`<li class="list-group-item">${item}</li>`);
+          });
+        } else {
+          $(areaNaoRecuperado).find('.list-group').empty();
+          // TODO - Ocultar de forma mais elegante
+          // $(areaNaoRecuperado).hide();
+        }
+        
+        $(acao).on('change', (evento) => {
+          const arquivo = evento.target.files[0];
+          const reader = new FileReader();
+          reader.readAsBinaryString(arquivo);
+          reader.onload = (e) => {
+            const fileData = e.target.result;
+            getData((fileData)).then((data) => {
+              if(Array.isArray(data) || Object.getOwnPropertyNames(data).length === 0){
+                SwalAlert('aviso', 'warning', 'Não foi possível recuperar dados do arquivo', 'O arquivo pode não ser um PDF legível ou pode estar corrompido. Retire o espelho outra vez e tente novamente.');
+              } else if (Object.getOwnPropertyNames(data).length > 0){
                 console.log(data);
-              });
-            }
-            reader.onerror = (e) => {
-              // console.log(e);
-            }
-          })
+              }
+            })
+            .catch((error) => {
+              SwalAlert('aviso', 'error', 'Erro ao importar arquivo', `Verifique o console.`);
+              console.info(error.message);
+            });
+          }
+          reader.onerror = (e) => {
+            // console.log(e);
+          }
+        })
         break;
         
         default:
@@ -1152,7 +1385,7 @@ let configs = {};
       }
     })
   }
-
+  
   window.addEventListener("load", function () {
     $('body').append(`<div id="content">${conteudos.principal}</div>`)
     
@@ -1251,7 +1484,7 @@ let configs = {};
     }catch(error){
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
-
+    
     // Atualizar configurações da capa
     atualizarConfiguracoes();
     
@@ -1265,7 +1498,7 @@ let configs = {};
     tooltips();
     popovers();
   });
-
+  
   window.addEventListener('DOMContentLoaded', () => {
     if(true){
       window.onbeforeunload = (evento) => {
@@ -1313,13 +1546,13 @@ let configs = {};
         if(isEmpty(option[1]["values"])){
           // Exibir o input file para enviar um arquivo
           $('[data-element="logo-cca-selection"]').html(conteudos.preencher_logo_cca);
-            
+          
           $('#logo-cca').prop('src', './assets/img/logo-teste.png');
           $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
           $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
         }else{
           const values = JSON.parse(option[1].values);
-            // Informar que já existe um arquivo
+          // Informar que já existe um arquivo
           $('[data-element="logo-cca-selection"]').html(`<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label><span class="text-muted">200x150 px</span><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
           $('#logo-cca').prop('src', values.file);
           $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
@@ -1330,5 +1563,5 @@ let configs = {};
       };
     }
   }
-
+  
 })();

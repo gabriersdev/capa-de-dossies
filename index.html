@@ -335,16 +335,24 @@
                   <p class="fw-bold">Quais os produtos comerciais contratados nessa operação?</p>
                   <ul class="mt-3 list-group">
                     <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1">
-                      <label for="prod-1">Produto 1</label>
+                      <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1" data-e-target="#comercial_conta_corrente">
+                      <label for="prod-1">Conta corrente</label>
                     </li>
                     <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2">
-                      <label for="prod-2">Produto 2</label>
+                      <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2" data-e-target="#comercial_cheque_especial">
+                      <label for="prod-2">Cheque Especial</label>
                     </li>
                     <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3">
-                      <label for="prod-3">Produto 3</label>
+                      <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3" data-e-target="#comercial_conta_poupanca">
+                      <label for="prod-3">Conta poupança</label>
+                    </li>
+                    <li class="info list-group-item">
+                      <input type="checkbox" class="form-check-input" name="prod-4" id="prod-4" data-e-target="#comercial_cartao_de_credito">
+                      <label for="prod-4">Cartão de crédito</label>
+                    </li>
+                    <li class="info list-group-item">
+                      <input type="checkbox" class="form-check-input" name="prod-5" id="prod-5" data-e-target="#comercial_credito_consignado">
+                      <label for="prod-5">Crédito Consignado</label>
                     </li>
                   </ul>
                 </div>
@@ -365,44 +373,30 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="mt-3">
+                    <li class="mt-3" data-element="confirm-nome-prop">
                       <span class="fw-semibold">Nome dos proponentes</span>
+                      <span class="d-block text-muted">Selecione apenas 2</span>
                       <ul class="mt-2 list-group">
                         <li class="list-group-item">
                           <input type="checkbox" class="form-check-input" name="n-prop-1" id="n-prop-1">
                           <label for="n-prop-1">José da Silva</label>
                         </li>
-                        <li class="list-group-item">
-                          <input type="checkbox" class="form-check-input" name="n-prop-2" id="n-prop-2">
-                          <label for="n-prop-2">José da Silva</label>
-                        </li>
-                        <li class="list-group-item">
-                          <input type="checkbox" class="form-check-input" name="n-prop-3" id="n-prop-3">
-                          <label for="n-prop-3">José da Silva</label>
-                        </li>
                       </ul>
                     </li>
-                    <li class="mt-3">
+                    <li class="mt-3" data-element="confirm-CPF-prop">
                       <span class="fw-semibold">CPF dos proponentes</span>
+                      <span class="d-block text-muted">Selecione apenas 2</span>
                       <ul class="mt-2 list-group">
                         <li class="list-group-item">
                           <input type="checkbox" class="form-check-input" name="CPF-prop-1" id="CPF-prop-1">
                           <label for="CPF-prop-1">123.456.789-09</label>
-                        </li>
-                        <li class="list-group-item">
-                          <input type="checkbox" class="form-check-input" name="CPF-prop-2" id="CPF-prop-2">
-                          <label for="CPF-prop-2">123.456.789-09</label>
-                        </li>
-                        <li class="list-group-item">
-                          <input type="checkbox" class="form-check-input" name="CPF-prop-3" id="CPF-prop-3">
-                          <label for="CPF-prop-3">123.456.789-09</label>
                         </li>
                       </ul>
                     </li>
                   </ul>
                 </div>
                 
-                <div class="tab-pane fade" id="nav-pass-3" "="" role="tabpanel">
+                <div class="tab-pane fade" id="nav-pass-3" "="" role="tabpanel" data-element="not-nao-recuperado">
                   <p class="fw-bold">Não foi possível recuperar alguns dados. Confira o que ficou pendente:</p>
                   <ul class="mt-2 mb-2 list-group list-group-numbered">
                     <li class="list-group-item">Identificação dos proponentes</li>

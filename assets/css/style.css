@@ -349,6 +349,10 @@ a:is(:hover, :focus, :active), address a b{
   pointer-events: none;
 }
 
+.swal2-html-container{
+  font-size: 1rem !important;
+}
+
 @media print {
   .div-flutuante, .modo-visualizacao-logo-cca{
     display: none !important;

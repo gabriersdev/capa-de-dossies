@@ -64,8 +64,8 @@ const getData = (fileData) => {
       // e.g ["Text content page 1", "Text content page 2", "Text content page 3" ... ]
       
       if (pagesText.some((p) => p.trim() === '')) {
-        // When don't possible to read the PDF
-        console.log('PDF is empty');
+        // When don't possible to read the PDF - PDF is empty
+        return [];
       } else {
         // When possible to read the PDF
         /** 
@@ -78,7 +78,8 @@ const getData = (fileData) => {
         **/
         const getContent = (text, start, end) => {
           try { 
-            return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null
+            if (!index && index !== 0) return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null
+            else return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim())[index] : null;
           } catch (e) { return []; }
         }
         
@@ -94,7 +95,7 @@ const getData = (fileData) => {
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
           try{
             if (!new RegExp(regex).test(text)) return [];
-            if (!index) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
+            if (!index && index !== 0) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
             else return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim())[index];
           } catch (e) {
             return [];
@@ -122,24 +123,24 @@ const getData = (fileData) => {
         }
         
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
-        
+
         try{
           const data = {
             proponentes: {
               nome: getContextUsingRegex(text, /(Nome:)\s[\w\s]*\s(Sexo)/gi, /Nome:|Sexo/gi, ''),
               CPF: getContextUsingRegex(text, /(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi, /(CPF:)|Nome/gi)
             },
-            modalidade: getContextUsingRegex(text, /(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi, /(Negociada Item de Produto: \d{1,} -)|\s/gi),
-            contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi),
-            endereco: getContent(text, 'Endereço da Unidade Habitacional:', 'Vagas'),
-            empreendimento: getContent(text, 'Nome do Empreendimento:', 'Tipo de Unidade'),
+            modalidade: getContextUsingRegex(text, /(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi, /(Negociada Item de Produto: \d{1,} -)|\s/gi, 0),
+            contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi, 0),
+            endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
+            empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
             valores: {
-              compra_e_venda: getContent(text, 'Valor Compra e Venda ou Orçamento Proposto pelo Cliente:', 'Valor Financiamento Negociado'),
-              finaciamento: getContent(text, 'Valor Financiamento Negociado:', 'Cota de Financiamento Calculada') || '0,00',
-              recursos_proprios: getContent(text, 'Valor Recursos Próprios Aportados:', 'Valor Recursos Próprios') || '0,00',
-              FGTS: getContent(text, 'Valor Total Utilizado FGTS:', 'Valor FMP:') || '0,00',
-              subsidio: getContent(text, 'Subsídio Complemento Capacidade Financeira:', 'Valor Operação') || '0,00',
-              taxas_de_cartorio: getContent(text, 'Valor das Taxas Financiadas:', 'Taxas à vista') || '0,00',
+              compra_e_venda: getContent(text, 'Valor Compra e Venda ou Orçamento Proposto pelo Cliente:', 'Valor Financiamento Negociado', 0) || '0,00',
+              finaciamento: getContent(text, 'Valor Financiamento Negociado:', 'Cota de Financiamento Calculada', 0) || '0,00',
+              recursos_proprios: getContent(text, 'Valor Recursos Próprios Aportados:', 'Valor Recursos Próprios', 0) || '0,00',
+              FGTS: getContent(text, 'Valor Total Utilizado FGTS:', 'Valor FMP:', 0) || '0,00',
+              subsidio: getContent(text, 'Subsídio Complemento Capacidade Financeira:', 'Valor Operação', 0) || '0,00',
+              taxas_de_cartorio: getContent(text, 'Valor das Taxas Financiadas:', 'Taxas à vista', 0) || '0,00',
             },
             // Conta para débito das parcelas
             conta_debito: {
@@ -158,7 +159,7 @@ const getData = (fileData) => {
               digito: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 4),
             },
           };
-          return JSON.stringify(data, null, 2);
+          return data;
         } catch (e) {
           console.error(e);
           return [];
