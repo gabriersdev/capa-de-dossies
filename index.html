@@ -333,28 +333,30 @@
               <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade active show" id="nav-pass-1" role="tabpanel">
                   <p class="fw-bold">Quais os produtos comerciais contratados nessa operação?</p>
-                  <ul class="mt-3 list-group">
-                    <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1" data-e-target="#comercial_conta_corrente">
-                      <label for="prod-1">Conta corrente</label>
-                    </li>
-                    <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2" data-e-target="#comercial_cheque_especial">
-                      <label for="prod-2">Cheque Especial</label>
-                    </li>
-                    <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3" data-e-target="#comercial_conta_poupanca">
-                      <label for="prod-3">Conta poupança</label>
-                    </li>
-                    <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-4" id="prod-4" data-e-target="#comercial_cartao_de_credito">
-                      <label for="prod-4">Cartão de crédito</label>
-                    </li>
-                    <li class="info list-group-item">
-                      <input type="checkbox" class="form-check-input" name="prod-5" id="prod-5" data-e-target="#comercial_credito_consignado">
-                      <label for="prod-5">Crédito Consignado</label>
-                    </li>
-                  </ul>
+                  <form action="#" data-element="form-confirm-produtos-comercial" method="post">
+                    <ul class="mt-3 list-group">
+                      <li class="info list-group-item">
+                        <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1" data-e-target="#comercial_conta_corrente">
+                        <label for="prod-1">Conta corrente</label>
+                      </li>
+                      <li class="info list-group-item">
+                        <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2" data-e-target="#comercial_cheque_especial">
+                        <label for="prod-2">Cheque Especial</label>
+                      </li>
+                      <li class="info list-group-item">
+                        <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3" data-e-target="#comercial_conta_poupanca">
+                        <label for="prod-3">Conta poupança</label>
+                      </li>
+                      <li class="info list-group-item">
+                        <input type="checkbox" class="form-check-input" name="prod-4" id="prod-4" data-e-target="#comercial_cartao_de_credito">
+                        <label for="prod-4">Cartão de crédito</label>
+                      </li>
+                      <li class="info list-group-item">
+                        <input type="checkbox" class="form-check-input" name="prod-5" id="prod-5" data-e-target="#comercial_credito_consignado">
+                        <label for="prod-5">Crédito Consignado</label>
+                      </li>
+                    </ul>
+                  </form>
                 </div>
                 
                 <div class="tab-pane fade" id="nav-pass-2" role="tabpanel">
@@ -396,7 +398,7 @@
                   </ul>
                 </div>
                 
-                <div class="tab-pane fade" id="nav-pass-3" "="" role="tabpanel" data-element="not-nao-recuperado">
+                <div class="tab-pane fade" id="nav-pass-3" role="tabpanel" data-element="not-nao-recuperado">
                   <p class="fw-bold">Não foi possível recuperar alguns dados. Confira o que ficou pendente:</p>
                   <ul class="mt-2 mb-2 list-group list-group-numbered">
                     <li class="list-group-item">Identificação dos proponentes</li>
@@ -404,7 +406,7 @@
                     <li class="list-group-item">Valores da operação</li>
                     <li class="list-group-item">Dados bancários</li>
                   </ul>
-                  <button class="btn btn-secondary mt-1"><i class="bi bi-pencil-square"></i>Editar informações</button>
+                  <button class="btn btn-secondary mt-1" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
                 </div>
               </div>
             </div>
@@ -439,9 +441,23 @@
           e.classList.value = 'btn btn-success';
           e.textContent = 'Finalizar';
 
-          $('[data-confirm-rec]').on('click', function(){
+          $('[data-confirm-rec]').on('click', function(e){
+            e.preventDefault();
+
+            // Atualizar produtos comerciais selecionados
+            Array.from($('[data-element="form-confirm-produtos-comercial"]').find('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).forEach((input) => {
+              $(input.getAttribute('data-e-target')).prop('checked', true);
+            })
+
+            // Atualizar nome dos proponentes selecionados
+            // ... 
+            
+            // Atualizar CPF dos proponentes selecionados
+            // ... 
+
             $('#modal-confirm-rec').modal('hide');
-            alert('Dados confirmados com sucesso!');
+            document.querySelector('[data-action="editar-informacoes"]').click();
+            // alert('Dados confirmados com sucesso!');
           });
         }
       }

@@ -135,12 +135,12 @@ const getData = (fileData) => {
             endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
             empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
             valores: {
-              compra_e_venda: getContent(text, 'Valor Compra e Venda ou Orçamento Proposto pelo Cliente:', 'Valor Financiamento Negociado', 0) || '0,00',
-              finaciamento: getContent(text, 'Valor Financiamento Negociado:', 'Cota de Financiamento Calculada', 0) || '0,00',
-              recursos_proprios: getContent(text, 'Valor Recursos Próprios Aportados:', 'Valor Recursos Próprios', 0) || '0,00',
-              FGTS: getContent(text, 'Valor Total Utilizado FGTS:', 'Valor FMP:', 0) || '0,00',
-              subsidio: getContent(text, 'Subsídio Complemento Capacidade Financeira:', 'Valor Operação', 0) || '0,00',
-              taxas_de_cartorio: getContent(text, 'Valor das Taxas Financiadas:', 'Taxas à vista', 0) || '0,00',
+              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || '0,00',
+              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || '0,00',
+              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || '0,00',
+              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || '0,00',
+              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || '0,00',
+              taxas_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || '0,00',
             },
             // Conta para débito das parcelas
             conta_debito: {
