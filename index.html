@@ -439,11 +439,16 @@
         
         $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
 
-        if(parseInt(index) === 1){
+        if(parseInt(index) === tabContents.length - 2){
           e.removeAttribute('onclick');
-          e.setAttribute('data-bs-dismiss', 'modal');
+          e.setAttribute('data-confirm-rec', 'confirmed');
           e.classList.value = 'btn btn-success';
           e.textContent = 'Finalizar';
+
+          $('[data-confirm-rec]').on('click', function(){
+            $('#modal-confirm-rec').modal('hide');
+            alert('Dados confirmados com sucesso!');
+          });
         }
       }
     </script>
@@ -496,6 +501,7 @@
       </div>
     </div>
     
+    <script src="./assets/js/frameworks/pdf.mjs" type="module" crossorigin="anonymous"></script>
     <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
     <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
   </body>

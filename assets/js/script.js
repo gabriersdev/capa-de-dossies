@@ -3,6 +3,7 @@
 import { conteudos } from './modulos/conteudos.js';
 import { Settings } from './classes/Settings.js';
 import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range, verificarFuncionalidadeAteste } from './modulos/utilitarios.js';
+import { getData } from './modulos/funcoes.js';
 let form_alt = false;
 let CPF_ok = new Array();
 let configs = {};
@@ -328,12 +329,6 @@ let configs = {};
         })
         break;
         
-        case 'carregar-espelho':
-        $(acao).on('click', () => {
-          SwalAlert('aviso', 'error', 'Desculpe, essa função ainda não foi implementada!');
-        })
-        break;
-        
         case 'exportar-dados':
         $(acao).on('click', () => {
           try{
@@ -593,6 +588,29 @@ let configs = {};
         $(acao).click((evento) => {
           $(evento.target.closest('div.modo-visualizacao')).hide();
         })
+        break;
+
+        case 'importar-com-espelho':
+          $(acao).click((evento) => {
+            evento.preventDefault();
+          });
+        break;
+
+        case 'input-import-arquivo-espelho':
+          $(acao).on('change', (evento) => {
+            const arquivo = evento.target.files[0];
+            const reader = new FileReader();
+            reader.readAsBinaryString(arquivo);
+            reader.onload = (e) => {
+              const fileData = e.target.result;
+              getData((fileData)).then((data) => {
+                console.log(data);
+              });
+            }
+            reader.onerror = (e) => {
+              // console.log(e);
+            }
+          })
         break;
         
         default:
@@ -1252,7 +1270,7 @@ let configs = {};
     if(true){
       window.onbeforeunload = (evento) => {
         if(Array.from($('input:not([type=checkbox], [type=radio], [type=number], #config-codigo-cca)')).filter(e => e.value !== "R$ 0,00" && e.value.trim().length > 0).length > 0){
-          evento.preventDefault();
+          // evento.preventDefault();
         }
       }
     }
