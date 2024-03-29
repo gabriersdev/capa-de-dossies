@@ -243,222 +243,260 @@
             <nav class="nav-pagination" aria-label="Page navigation example">
               <ul class="pagination">
                 <!-- <li class="page-item"><a class="page-link">Próximo</a></li>
-                <li class="page-item"><a class="page-link">1</a></li>
-                <li class="page-item"><a class="page-link">2</a></li>
-                <li class="page-item"><a class="page-link">3</a></li>
-                <li class="page-item"><a class="page-link">Anterior</a></li> -->
-              </ul>
-            </nav>
-            <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>
+                  <li class="page-item"><a class="page-link">1</a></li>
+                  <li class="page-item"><a class="page-link">2</a></li>
+                  <li class="page-item"><a class="page-link">3</a></li>
+                  <li class="page-item"><a class="page-link">Anterior</a></li> -->
+                </ul>
+              </nav>
+              <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  
-    <div class="modal fade" id="modal-configuracoes" aria-hidden="true" aria-labelledby="modal-configuracoes-Label" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modal-configuracoes-Label">Editar configurações</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form action="#" data-action="form-logo-cca" method="POST">
-              <div data-element="logo-cca-selection">
+      
+      <div class="modal fade" id="modal-configuracoes" aria-hidden="true" aria-labelledby="modal-configuracoes-Label" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="modal-configuracoes-Label">Editar configurações</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="#" data-action="form-logo-cca" method="POST">
+                <div data-element="logo-cca-selection">
+                  <div class="form-group">
+                    <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
+                    <span class="text-muted">200x150 px</span>
+                    <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*" required>
+                  </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-3">Alterar logo</button>
+                <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
+                <button type="button" data-action="ver-primeiro-logo-cca" class="btn btn-light mt-3">Ver primeiro</button>
+              </form>
+              <hr class="mt-3">
+              <form action="#" data-action="form-outras-configs" method="POST" class="mt-2">
+                <div class="form-group mb-2">
+                  <label for="config-codigo-cca">Código do Correspondente</label>
+                  <input type="text" name="config-codigo-cca" id="config-codigo-cca" class="form-control mt-2 " minlength="9" maxlength="9" placeholder="000000000" data-mascara="codigo-cca" required>
+                </div>
                 <div class="form-group">
-                  <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
-                  <span class="text-muted">200x150 px</span>
-                  <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*" required>
+                  <input type="checkbox" name="config-autocomplete" id="config-autocomplete" name="config-autocomplete" class="form-check-input">
+                  <label for="config-autocomplete">Autocomplete para os campos&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Autocomplete para os campos" data-bs-content="Permite que sejam exibidas sugestões de preenchimento com dados já usados no campo de input anteriormente."></i></label>
+                </div>
+                <div class="form-group">
+                  <input type="checkbox" name="config-exibir-opt-link" id="config-exibir-opt-link" name="config-exibir-opt-link" class="form-check-input">
+                  <label for="config-exibir-opt-link">Permitir link para registros&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Permitir link para registros" data-bs-content="A opção de gerar link de compartilhamento da capa é habilitada."></i></label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Alterar configurações</button>
+                <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        .list-group-item{
+          display: flex;
+          gap: 0.5rem;
+          
+          /* Expandindo espaço do label para que o click seja mais fácil */
+          [for]{
+            flex-grow: 2;
+          }
+        }
+      </style>
+      
+      <div class="modal fade" id="modal-confirm-rec" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" aria-hidden="true" aria-labelledby="Modal estático de confirmação dos dados recuperados do arquivo" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="modal-confirm-rec-Label">Recuperação de dados</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-2">
+              <ul class="nav nav-tabs d-none" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-1" role="tab" aria-selected="true">Pass.1</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-2" role="tab" aria-selected="false" tabindex="-1">Pass.2</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-3" role="tab" aria-selected="false" tabindex="-1">Pass.3</a>
+                </li>
+              </ul>
+              
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade active show" id="nav-pass-1" role="tabpanel">
+                  <p class="fw-bold">Quais os produtos comerciais contratados nessa operação?</p>
+                  <ul class="mt-3 list-group">
+                    <li class="info list-group-item">
+                      <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1">
+                      <label for="prod-1">Produto 1</label>
+                    </li>
+                    <li class="info list-group-item">
+                      <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2">
+                      <label for="prod-2">Produto 2</label>
+                    </li>
+                    <li class="info list-group-item">
+                      <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3">
+                      <label for="prod-3">Produto 3</label>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div class="tab-pane fade" id="nav-pass-2" role="tabpanel">
+                  <p class="fw-bold">Tivemos dificuldades em confirmar alguns dados. Poderia verificar por favor?</p>
+                  <ul class="mt-3">
+                    <li>
+                      <span class="fw-semibold">A operação é um processo de imóvel individual?</span>
+                      <ul class="mt-2 list-group">
+                        <li class="list-group-item">
+                          <input type="radio" class="form-check-input" name="op-tipo" id="op-nao-individual" required checked>
+                          <label for="op-nao-individual">Não</label>
+                        </li>
+                        <li class="list-group-item">
+                          <input type="radio" class="form-check-input" name="op-tipo" id="op-sim-individual" required>
+                          <label for="op-sim-individual">Sim</label>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="mt-3">
+                      <span class="fw-semibold">Nome dos proponentes</span>
+                      <ul class="mt-2 list-group">
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="n-prop-1" id="n-prop-1">
+                          <label for="n-prop-1">José da Silva</label>
+                        </li>
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="n-prop-2" id="n-prop-2">
+                          <label for="n-prop-2">José da Silva</label>
+                        </li>
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="n-prop-3" id="n-prop-3">
+                          <label for="n-prop-3">José da Silva</label>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="mt-3">
+                      <span class="fw-semibold">CPF dos proponentes</span>
+                      <ul class="mt-2 list-group">
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="CPF-prop-1" id="CPF-prop-1">
+                          <label for="CPF-prop-1">123.456.789-09</label>
+                        </li>
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="CPF-prop-2" id="CPF-prop-2">
+                          <label for="CPF-prop-2">123.456.789-09</label>
+                        </li>
+                        <li class="list-group-item">
+                          <input type="checkbox" class="form-check-input" name="CPF-prop-3" id="CPF-prop-3">
+                          <label for="CPF-prop-3">123.456.789-09</label>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div class="tab-pane fade" id="nav-pass-3" "="" role="tabpanel">
+                  <p class="fw-bold">Não foi possível recuperar alguns dados. Confira o que ficou pendente:</p>
+                  <ul class="mt-2 mb-2 list-group list-group-numbered">
+                    <li class="list-group-item">Identificação dos proponentes</li>
+                    <li class="list-group-item">Identificação da unidade e proposta</li>
+                    <li class="list-group-item">Valores da operação</li>
+                    <li class="list-group-item">Dados bancários</li>
+                  </ul>
+                  <button class="btn btn-secondary mt-1"><i class="bi bi-pencil-square"></i>Editar informações</button>
                 </div>
               </div>
-  
-              <button type="submit" class="btn btn-primary mt-3">Alterar logo</button>
-              <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
-              <button type="button" data-action="ver-primeiro-logo-cca" class="btn btn-light mt-3">Ver primeiro</button>
-            </form>
-            <hr class="mt-3">
-            <form action="#" data-action="form-outras-configs" method="POST" class="mt-2">
-              <div class="form-group mb-2">
-                <label for="config-codigo-cca">Código do Correspondente</label>
-                <input type="text" name="config-codigo-cca" id="config-codigo-cca" class="form-control mt-2 " minlength="9" maxlength="9" placeholder="000000000" data-mascara="codigo-cca" required>
-              </div>
-              <div class="form-group">
-                <input type="checkbox" name="config-autocomplete" id="config-autocomplete" name="config-autocomplete" class="form-check-input">
-                <label for="config-autocomplete">Autocomplete para os campos&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Autocomplete para os campos" data-bs-content="Permite que sejam exibidas sugestões de preenchimento com dados já usados no campo de input anteriormente."></i></label>
-              </div>
-              <div class="form-group">
-                <input type="checkbox" name="config-exibir-opt-link" id="config-exibir-opt-link" name="config-exibir-opt-link" class="form-check-input">
-                <label for="config-exibir-opt-link">Permitir link para registros&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Permitir link para registros" data-bs-content="A opção de gerar link de compartilhamento da capa é habilitada."></i></label>
-              </div>
-              <button type="submit" class="btn btn-primary mt-3">Alterar configurações</button>
-              <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
-            </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+              <button class="btn btn-primary" onclick="proxContent(0, this)">Continuar</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <script>
+      window.proxContent = (index, e) => {
+        const tabs = document.querySelectorAll('.nav-tabs .nav-link');
+        const tabContents = document.querySelectorAll('.tab-pane');
+        e.setAttribute('onclick', 'proxContent(' + (index + 1) + ', this)');
+        
+        // tabs[index].classList.remove('active');
+        // tabs[index].setAttribute('aria-selected', false);
+        // tabContents[index].classList.remove('active', 'show');
+        
+        // tabs[index + 1].classList.add('active');
+        // tabs[index + 1].setAttribute('aria-selected', true);
+        // tabContents[index + 1].classList.add('active', 'show');
+        
+        $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
 
-    <div class="modal fade" id="modal-confirm-rec" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" aria-hidden="true" aria-labelledby="Modal estático de confirmação dos dados recuperados do arquivo" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modal-confirm-rec-Label">Recuperação de dados</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p class="fw-bold">Não foi possível recuperar alguns dados. Confira o que ficou pendente:</p>
+        if(parseInt(index) === 1){
+          e.removeAttribute('onclick');
+          e.setAttribute('data-bs-dismiss', 'modal');
+          e.classList.value = 'btn btn-success';
+          e.textContent = 'Finalizar';
+        }
+      }
+    </script>
 
-            <style>
-              .list-group-item{
-                display: flex;
-                gap: 0.5rem;
-
-                /* Expandindo espaço do label para que o click seja mais fácil */
-                [for]{
-                  flex-grow: 2;
-                }
-              }
-            </style>
-
-            <ul class="mt-2 mb-2 list-group list-group-numbered">
-              <li class="list-group-item">Identificação dos proponentes</li>
-              <li class="list-group-item">Identificação da unidade e proposta</li>
-              <li class="list-group-item">Valores da operação</li>
-              <li class="list-group-item">Dados bancários</li>
-            </ul>
-            <button class="btn btn-secondary mt-1"><i class="bi bi-pencil-square"></i>Editar informações</button>
-            <br>
-            <br>
-
-            <p class="fw-bold">Tivemos dificuldades em confirmar alguns dados. Poderia verificar por favor?</p>
-
-            <ul class="mt-3">
-              <li>
-                <span class="fw-semibold">A operação é um processo de imóvel individual?</span>
-                <ul class="mt-2 list-group">
-                  <li class="list-group-item">
-                    <input type="radio" class="form-check-input" name="op-tipo" id="op-nao-individual" required checked>
-                    <label for="op-nao-individual">Não</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="radio" class="form-check-input" name="op-tipo" id="op-sim-individual" required>
-                    <label for="op-sim-individual">Sim</label>
-                  </li>
-                </ul>
-              </li>
-              <li class="mt-3">
-                <span class="fw-semibold">Nome dos proponentes</span>
-                <ul class="mt-2 list-group">
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="n-prop-1" id="n-prop-1">
-                    <label for="n-prop-1">José da Silva</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="n-prop-2" id="n-prop-2">
-                    <label for="n-prop-2">José da Silva</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="n-prop-3" id="n-prop-3">
-                    <label for="n-prop-3">José da Silva</label>
-                  </li>
-                </ul>
-              </li>
-              <li class="mt-3">
-                <span class="fw-semibold">CPF dos proponentes</span>
-                <ul class="mt-2 list-group">
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="CPF-prop-1" id="CPF-prop-1">
-                    <label for="CPF-prop-1">123.456.789-09</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="CPF-prop-2" id="CPF-prop-2">
-                    <label for="CPF-prop-2">123.456.789-09</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="checkbox" class="form-check-input" name="CPF-prop-3" id="CPF-prop-3">
-                    <label for="CPF-prop-3">123.456.789-09</label>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <br>
-            <br>
-
-            <p class="fw-bold">Quais os produtos comerciais contratados nessa operação?</p>
-            <ul class="mt-3 list-group">
-              <li class="info list-group-item">
-                <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1">
-                <label for="prod-1">Produto 1</label>
-              </li>
-              <li class="info list-group-item">
-                <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2">
-                <label for="prod-2">Produto 2</label>
-              </li>
-              <li class="info list-group-item">
-                <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3">
-                <label for="prod-3">Produto 3</label>
-              </li>
-            </ul>
-          </div>
-          <div class="modal-footer d-flex justify-content-between">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
-            <button class="btn btn-primary">Continuar</button>
-            <button class="btn btn-success">Finalizar</button>
+    <noscript>
+      <div class="box-no-script">         
+        <div class="texto-pagina-centralizado-alt">
+          <h2 class="titulo-texto-pagina-centralizado">
+            Este site não funciona com o 
+            <span class="destaque-pagina-centralizado">Javascript desabilitado</span>
+          </h2>
+          <br>
+          <p class="label-texto-pagina-centralizado">Muitos dos recursos usados funcionam através do Javascript e sem ele a navegabilidade e o próprio funcionamento do site são comprometidos.</p>
+          <p class="label-texto-pagina-centralizado">Portanto, habilite o Javascript e navegue pelo site.</p><br>
+          <button data-recarrega-pagina class="btn-principal-no-script" id="btn-redirecionar-inicio" name="btn-redirecionar-inicio">Recarregar</button>
+        </div>
+      </div>
+    </noscript>
+    
+    <div class="div-flutuante">
+      <div class="card">
+        <div class="card-header">
+          <b>Copiado!</b>
+          <button type="button" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-div-flutuante"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="card-body">
+          <label for="div-flutuante--dado">Título do processo</label>
+          <input type="text" class="form-control mt-1" id="div-flutuante--dado">
+          <div class="mt-1 none">
+            <span class="text-muted">CCA + CPF 1º proponente + Contrato + Status conformidade</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  <noscript>
-    <div class="box-no-script">         
-      <div class="texto-pagina-centralizado-alt">
-        <h2 class="titulo-texto-pagina-centralizado">
-          Este site não funciona com o 
-          <span class="destaque-pagina-centralizado">Javascript desabilitado</span>
-        </h2>
-        <br>
-        <p class="label-texto-pagina-centralizado">Muitos dos recursos usados funcionam através do Javascript e sem ele a navegabilidade e o próprio funcionamento do site são comprometidos.</p>
-        <p class="label-texto-pagina-centralizado">Portanto, habilite o Javascript e navegue pelo site.</p><br>
-        <button data-recarrega-pagina class="btn-principal-no-script" id="btn-redirecionar-inicio" name="btn-redirecionar-inicio">Recarregar</button>
-      </div>
-    </div>
-  </noscript>
-
-  <div class="div-flutuante">
-    <div class="card">
-      <div class="card-header">
-        <b>Copiado!</b>
-        <button type="button" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-div-flutuante"><i class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="card-body">
-        <label for="div-flutuante--dado">Título do processo</label>
-        <input type="text" class="form-control mt-1" id="div-flutuante--dado">
-        <div class="mt-1 none">
-          <span class="text-muted">CCA + CPF 1º proponente + Contrato + Status conformidade</span>
+    
+    <div class="modo-visualizacao">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
+          <b>Atenção!</b>
+          <button type="button" style="margin: 0;" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-modo-visualizacao"><i style="margin: 0;" class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="card-body">
+          Você está no modo de visualização da capa
+          
+          <div class="mt-3">
+            <button type="button" data-sub-action="confirmar" class="btn btn-primary">Confirmar alteração</button>
+            <button type="button" data-sub-action="desfazer" class="btn btn-secondary">Desfazer</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="modo-visualizacao">
-    <div class="card">
-      <div class="card-header" style="display: flex; justify-content: space-between;">
-        <b>Atenção!</b>
-        <button type="button" style="margin: 0;" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-modo-visualizacao"><i style="margin: 0;" class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="card-body">
-        Você está no modo de visualização da capa
-
-        <div class="mt-3">
-          <button type="button" data-sub-action="confirmar" class="btn btn-primary">Confirmar alteração</button>
-          <button type="button" data-sub-action="desfazer" class="btn btn-secondary">Desfazer</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
-  <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
-</body>
-</html>
+    
+    <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
+    <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
+  </body>
+  </html>

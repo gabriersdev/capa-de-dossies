@@ -7,6 +7,8 @@ let form_alt = false;
 let CPF_ok = new Array();
 let configs = {};
 
+// setTimeout(() => $('#modal-confirm-rec').modal('show'), 500);
+
 (() => {  
   document.querySelectorAll('[data-recarrega-pagina]').forEach(botao => {
     botao.addEventListener('click', () => {
