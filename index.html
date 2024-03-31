@@ -436,6 +436,7 @@
         $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
 
         if(parseInt(index) === tabContents.length - 2){
+          // TODO - Tab de confirmação de produtos não aparece no modal após a 1ª vez
           e.removeAttribute('onclick');
           e.setAttribute('data-confirm-rec', 'confirmed');
           e.classList.value = 'btn btn-success';

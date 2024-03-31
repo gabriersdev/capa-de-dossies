@@ -661,6 +661,7 @@ let configs = {};
                   SwalAlert('aviso', 'warning', 'Não foi possível recuperar dados do arquivo', 'O arquivo pode não ser um PDF legível ou pode estar corrompido. Retire o espelho outra vez e tente novamente.');
                 } else if (Object.getOwnPropertyNames(data).length > 0){
                   // console.log(data);
+                  console.log('Here!');
                   
                   const modal = $('#modal-confirm-rec')[0];
 
