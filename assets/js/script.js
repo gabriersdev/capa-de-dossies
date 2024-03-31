@@ -788,8 +788,8 @@ let configs = {};
                       // Criar seleção para proponentes
                       $(area).show();
                       $(area).find('.list-group').empty();
-                      data.proponentes.nome.toSpliced(5).forEach((nome, index) => {
-                        $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="nome-prop-${index}" id="nome-prop-${index}"><label for="nome-prop-${index}">${nome}</label></li>`);
+                      data.proponentes.nome.toSpliced(5).filter((e, i) => data.proponentes.nome.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((nome, index) => {
+                        $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="nome-prop-${index}" id="nome-prop-${index}" data-e-target="${nome}"><label for="nome-prop-${index}">${nome}</label></li>`);
                       });
                     } else if (data.proponentes.nome.length == 0) {
                       $(area).hide();
@@ -812,8 +812,8 @@ let configs = {};
                       // Criar seleção para CPF
                       $(area).show();
                       $(area).find('.list-group').empty();
-                      data.proponentes.CPF.toSpliced(5).forEach((CPF, index) => {
-                        $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="CPF-prop-${index}" id="CPF-prop-${index}"><label for="CPF-prop-${index}">${CPF}</label></li>`);
+                      data.proponentes.CPF.toSpliced(5).filter((e, i) => data.proponentes.CPF.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((CPF, index) => {
+                        $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="CPF-prop-${index}" id="CPF-prop-${index}" data-e-target="${CPF}"><label for="CPF-prop-${index}">${CPF}</label></li>`);
                       });
                     } else if (data.proponentes.CPF.length == 0) {
                       $(area).hide();
@@ -857,6 +857,7 @@ let configs = {};
               })
               .catch((error) => {
                 SwalAlert('aviso', 'error', 'Erro ao importar arquivo', `Verifique o console.`);
+                console.log(error);
                 console.info(error.message);
               });
             }
