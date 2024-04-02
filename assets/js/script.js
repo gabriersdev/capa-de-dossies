@@ -651,7 +651,9 @@ let configs = {};
         $(acao).on('change', (evento) => {
           const arquivo = evento.target.files[0];
           const reader = new FileReader();
-          
+          const btn = $('[for="import-arquivo-espelho"]');
+          $(btn).addClass('disabled');
+
           try{
             reader.readAsBinaryString(arquivo);
             reader.onload = (e) => {
@@ -792,6 +794,7 @@ let configs = {};
                       data.proponentes.nome.toSpliced(5).filter((e, i) => data.proponentes.nome.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((nome, index) => {
                         $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="nome-prop-${index}" id="nome-prop-${index}" data-e-target="${nome}"><label for="nome-prop-${index}">${nome}</label></li>`);
                       });
+                      naoRecuperado.push('Identificação dos proponentes');
                     } else if (data.proponentes.nome.length == 0) {
                       $(area).hide();
                       naoRecuperado.push('Identificação dos proponentes');
@@ -816,6 +819,7 @@ let configs = {};
                       data.proponentes.CPF.toSpliced(5).filter((e, i) => data.proponentes.CPF.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((CPF, index) => {
                         $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="CPF-prop-${index}" id="CPF-prop-${index}" data-e-target="${CPF}"><label for="CPF-prop-${index}">${CPF}</label></li>`);
                       });
+                      naoRecuperado.push('Identificação dos proponentes');
                     } else if (data.proponentes.CPF.length == 0) {
                       $(area).hide();
                       naoRecuperado.push('Identificação dos proponentes');
@@ -850,24 +854,29 @@ let configs = {};
                     // $(areaNaoRecuperado).hide();
                   }
                   
+                  $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-1"]`).tab('show');
                   $(modal).find('.modal-footer [data-confirm-rec]').remove();
                   $(modal).find('.modal-footer [onclick]').remove();
                   $(modal).find('.modal-footer').append(`<button class="btn btn-primary" onclick="proxContent(0, this)">Continuar</button>`);
                   $(modal).modal('show');
                 }
+
+                $(btn).removeClass('disabled');
               })
               .catch((error) => {
+                $(btn).removeClass('disabled');
                 SwalAlert('aviso', 'error', 'Erro ao importar arquivo', `Verifique o console.`);
-                console.log(error);
                 console.info(error.message);
               });
             }
             reader.onerror = (e) => {
+              $(btn).removeClass('disabled');
               SwalAlert('aviso', 'error', 'Erro ao importar arquivo', `Verifique o console.`);
               console.info(e.message);
             }
           }catch(error){
             // 
+            $(btn).removeClass('disabled');
           }
         })
         break;
