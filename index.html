@@ -406,7 +406,7 @@
                     <li class="list-group-item">Valores da operação</li>
                     <li class="list-group-item">Dados bancários</li>
                   </ul>
-                  <button class="btn btn-secondary mt-1" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
+                  <button type="button" class="btn btn-secondary mt-1" data-toggle="tooltip" data-bs-target="top" title="Clique em Finalizar para editar as informações"><i class="bi bi-pencil-square"></i>Editar informações</button>
                 </div>
               </div>
             </div>
@@ -418,75 +418,7 @@
         </div>
       </div>
     </div>
-    
-    <script>
-      setTimeout(() => {
-        $('#modal-confirm-rec [data-bs-dismiss="modal"]').on('click', function(e){
-          console.log('Closing!');
-          // TODO - Clear inputs and checkboxes of modal-editar-informacoes
-          e.preventDefault();
-          $('#modal-confirm-rec').modal('hide');
-        });
-      }, 500);
-      
-      window.proxContent = (index, e) => {
-        const tabs = document.querySelectorAll('.nav-tabs .nav-link');
-        const tabContents = document.querySelectorAll('.tab-pane');
-        e.setAttribute('onclick', 'proxContent(' + (index + 1) + ', this)');
-        
-        // tabs[index].classList.remove('active');
-        // tabs[index].setAttribute('aria-selected', false);
-        // tabContents[index].classList.remove('active', 'show');
-        
-        // tabs[index + 1].classList.add('active');
-        // tabs[index + 1].setAttribute('aria-selected', true);
-        // tabContents[index + 1].classList.add('active', 'show');
-        
-        $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
-        
-        if(parseInt(index) === tabContents.length - 2){
-          // TODO - Tab de confirmação de produtos não aparece no modal após a 1ª vez
-          e.removeAttribute('onclick');
-          e.setAttribute('data-confirm-rec', 'confirmed');
-          e.classList.value = 'btn btn-success';
-          e.textContent = 'Finalizar';
-          
-          $('[data-confirm-rec]').on('click', function(e){
-            e.preventDefault();
-            
-            // Atualizar produtos comerciais selecionados
-            Array.from($('[data-element="form-confirm-produtos-comercial"]').find('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).forEach((input) => {
-              $(input.getAttribute('data-e-target')).prop('checked', true);
-            })
-            
-            // Atualizar nome dos proponentes selecionados
-            const confirmNomeProps = document.querySelector('[data-element="confirm-nome-prop"]');
-            if (confirmNomeProps.style.display !== 'none') {
-              const selectedsNames = Array.from(confirmNomeProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
-              // Preenchendo os campos com os nomes
-              selectedsNames.forEach((name, index) => {
-                document.querySelector(`#nome_${index + 1}`).value = name.toUpperCase();
-              });
-            }
-            
-            // Atualizar CPF dos proponentes selecionados
-            const confirmCPFProps = document.querySelector('[data-element="confirm-CPF-prop"]');
-            if (confirmCPFProps.style.display !== 'none') {
-              const selectedsCPF = Array.from(confirmCPFProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
-              // Preenchendo os campos com os CPFs
-              selectedsCPF.forEach((cpf, index) => {
-                document.querySelector(`#CPF_${index + 1}`).value = cpf;
-              });
-            }
-            
-            $('#modal-confirm-rec').modal('hide');
-            document.querySelector('[data-action="editar-informacoes"]').click();
-            // alert('Dados confirmados com sucesso!');
-          });
-        }
-      }
-    </script>
-    
+
     <noscript>
       <div class="box-no-script">         
         <div class="texto-pagina-centralizado-alt">

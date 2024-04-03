@@ -29,7 +29,7 @@ const principal = `
 <section class="header-principal">
   <div>
     <button class="btn btn-secondary" data-action="editar-informacoes"><i class="bi bi-pencil-square"></i>Editar informações</button>
-    <label class="btn btn-secondary" for="import-arquivo-espelho" onclick="$('#import-arquivo-espelho').click()" data-action="importar-com-espelho" data-toggle="tooltip" data-placement="bottom" title="Criar capa com espelho da proposta SIOPI"><i class="bi bi-file-earmark-arrow-up"></i>&nbsp;Criar com espelho</label>
+    <label class="btn btn-secondary" for="import-arquivo-espelho" data-action="importar-com-espelho" data-toggle="tooltip" data-placement="bottom" title="Criar capa com espelho da proposta SIOPI"><i class="bi bi-file-earmark-arrow-up"></i>&nbsp;Criar com espelho</label>
     <input type="file" id="import-arquivo-espelho" class="d-none" data-action="input-import-arquivo-espelho" accept=".pdf"></input>
     <button class="btn btn-primary" data-action="imprimir-capa"><i class="bi bi-printer-fill"></i>Imprimir capa</button>
     </div>

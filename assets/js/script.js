@@ -593,10 +593,19 @@ let configs = {};
         case 'importar-com-espelho':
         $(acao).click((evento) => {
           evento.preventDefault();
+          const input = document.querySelector('#import-arquivo-espelho');
+          // Por padrão, se o input já estiver preenchido o mesmo arquivo não será importado novamente, por isso essa verificação e limpeza para permitir a importação do mesmo arquivo
+          if (input.files.length === 0) {
+            input.click();
+          } else {
+            input.value = '';
+            input.click();
+          }
         });
         break;
         
         case 'input-import-arquivo-espelho':
+        // Dados de exemplo - para teste
         const data = {
           "proponentes": {
             "nome": [
@@ -662,7 +671,6 @@ let configs = {};
                 if(Array.isArray(data) || Object.getOwnPropertyNames(data).length === 0){
                   SwalAlert('aviso', 'warning', 'Não foi possível recuperar dados do arquivo', 'O arquivo pode não ser um PDF legível ou pode estar corrompido. Retire o espelho outra vez e tente novamente.');
                 } else if (Object.getOwnPropertyNames(data).length > 0){
-                  // console.log(data);
                   console.log('Here!');
                   
                   const modal = $('#modal-confirm-rec')[0];
@@ -675,12 +683,13 @@ let configs = {};
                   // $('#modal-confirm-rec').modal('show');
                   
                   if (data.valores && Object.getOwnPropertyNames(data.valores).length > 0) {
-                    const osvalores = ['valor_compra_e_venda', 'valor_financiamento', 'recursos_proprios', 'FGTS', 'subsidio', 'taxas_de_cartorio']
+                    const osvalores = ['valor_compra_e_venda', 'valor_financiamento', 'recursos_proprios', 'FGTS', 'subsidio', 'taxa_de_cartorio']
                     
                     if (JSON.stringify(osvalores.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.valores).sort())) naoRecuperado.push('Valores da operação');
                     
                     for (let i = 0; i < Object.getOwnPropertyNames(data.valores).length; i++){
-                      $(`#${Object.getOwnPropertyNames(data.valores)[i]}`).val(data.valores[Object.getOwnPropertyNames(data.valores)[i] || 'R$ 0,00']);
+                      const val = data.valores[Object.getOwnPropertyNames(data.valores)[i]];
+                      $(`#${Object.getOwnPropertyNames(data.valores)[i]}`).val(val.length > 0 ? `R$ ${val}` : 'R$ 0,00');
                     }
                   } else {
                     naoRecuperado.push('Valores da operação');
@@ -1519,6 +1528,15 @@ let configs = {};
     }catch(error){
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
+
+    $('#modal-confirm-rec [data-bs-dismiss="modal"]').on('click', function(e){
+      console.log('Closing!');
+      // Clear inputs and checkboxes of modal-editar-informacoes
+      // TODO - Melhorar reset dos inputs
+      document.querySelector('#modal-editar-informacoes [type="reset"]').click();
+      e.preventDefault();
+      $('#modal-confirm-rec').modal('hide');
+    });
     
     // Atualizar configurações da capa
     atualizarConfiguracoes();
@@ -1596,6 +1614,63 @@ let configs = {};
           tooltips();
         }
       };
+    }
+  }
+
+  window.proxContent = (index, e) => {
+    const tabs = document.querySelectorAll('.nav-tabs .nav-link');
+    const tabContents = document.querySelectorAll('.tab-pane');
+    e.setAttribute('onclick', 'proxContent(' + (index + 1) + ', this)');
+    
+    // tabs[index].classList.remove('active');
+    // tabs[index].setAttribute('aria-selected', false);
+    // tabContents[index].classList.remove('active', 'show');
+    
+    // tabs[index + 1].classList.add('active');
+    // tabs[index + 1].setAttribute('aria-selected', true);
+    // tabContents[index + 1].classList.add('active', 'show');
+    
+    $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
+    
+    if(parseInt(index) === tabContents.length - 2){
+      // TODO - Tab de confirmação de produtos não aparece no modal após a 1ª vez
+      e.removeAttribute('onclick');
+      e.setAttribute('data-confirm-rec', 'confirmed');
+      e.classList.value = 'btn btn-success';
+      e.textContent = 'Finalizar';
+      
+      $('[data-confirm-rec]').on('click', function(e){
+        e.preventDefault();
+        
+        // Atualizar produtos comerciais selecionados
+        Array.from($('[data-element="form-confirm-produtos-comercial"]').find('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).forEach((input) => {
+          $(input.getAttribute('data-e-target')).prop('checked', true);
+        })
+        
+        // Atualizar nome dos proponentes selecionados
+        const confirmNomeProps = document.querySelector('[data-element="confirm-nome-prop"]');
+        if (confirmNomeProps.style.display !== 'none') {
+          const selectedsNames = Array.from(confirmNomeProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
+          // Preenchendo os campos com os nomes
+          selectedsNames.forEach((name, index) => {
+            document.querySelector(`#nome_${index + 1}`).value = name.toUpperCase();
+          });
+        }
+        
+        // Atualizar CPF dos proponentes selecionados
+        const confirmCPFProps = document.querySelector('[data-element="confirm-CPF-prop"]');
+        if (confirmCPFProps.style.display !== 'none') {
+          const selectedsCPF = Array.from(confirmCPFProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
+          // Preenchendo os campos com os CPFs
+          selectedsCPF.forEach((cpf, index) => {
+            document.querySelector(`#CPF_${index + 1}`).value = cpf;
+          });
+        }
+        
+        $('#modal-confirm-rec').modal('hide');
+        document.querySelector('[data-action="editar-informacoes"]').click();
+        // alert('Dados confirmados com sucesso!');
+      });
     }
   }
   

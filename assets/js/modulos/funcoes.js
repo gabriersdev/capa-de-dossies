@@ -123,6 +123,7 @@ const getData = (fileData) => {
         }
         
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
+        console.log('Here!');
 
         try{
           const data = {
@@ -135,16 +136,17 @@ const getData = (fileData) => {
             endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
             empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
             valores: {
-              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || '0,00',
-              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || '0,00',
-              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || '0,00',
-              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || '0,00',
-              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || '0,00',
-              taxas_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || '0,00',
+              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || 'R$ 0,00',
+              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || 'R$ 0,00',
+              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || 'R$ 0,00',
+              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || 'R$ 0,00',
+              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || 'R$ 0,00',
+              taxa_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || 'R$ 0,00',
             },
             // Conta para débito das parcelas
             conta_debito: {
-              banco: '104',
+              // Código da Caixa Econômica Federal 
+              banco: '104', 
               agencia: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 0),
               operacao: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 1),
               conta: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 2),
@@ -161,6 +163,7 @@ const getData = (fileData) => {
           };
           return data;
         } catch (e) {
+          SwalAlert('aviso', 'error', 'Ocorreu um erro ao ler o arquivo. Tente novamente', `Verifique o console.`);
           console.error(e);
           return [];
         } 
@@ -168,6 +171,7 @@ const getData = (fileData) => {
     });
   }, function (reason) {
     // PDF loading error
+    SwalAlert('aviso', 'error', 'Não foi possível carregar o arquivo. Tente novamente', `Verifique o console.`);
     console.error(reason);
     return [];
   });
