@@ -357,4 +357,9 @@ a:is(:hover, :focus, :active), address a b{
   .div-flutuante, .modo-visualizacao-logo-cca{
     display: none !important;
   }
+
+  /* Se a logo padrão estiver na capa, no momento da impressão ela é ocultada */
+  [src="./assets/img/logo-padrao.png"]{
+    visibility: hidden;
+  }
 }

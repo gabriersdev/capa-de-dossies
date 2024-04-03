@@ -924,7 +924,7 @@ let configs = {};
               if(sendOptionValue(send, input)){
                 $('#logo-cca').prop('src', evento.target.result);
               }else{
-                $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+                $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
               };
             })
             
@@ -1600,7 +1600,7 @@ let configs = {};
           // Exibir o input file para enviar um arquivo
           $('[data-element="logo-cca-selection"]').html(conteudos.preencher_logo_cca);
           
-          $('#logo-cca').prop('src', './assets/img/logo-teste.png');
+          $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
           $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
           $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
         }else{
