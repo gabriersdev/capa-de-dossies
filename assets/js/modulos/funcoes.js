@@ -122,8 +122,8 @@ const getData = (fileData) => {
           }
         }
         
+        // console.log('Here!');
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
-        console.log('Here!');
         const scapeValue = null;
 
         try{

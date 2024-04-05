@@ -685,7 +685,7 @@ let configs = {};
                 if(Array.isArray(data) || Object.getOwnPropertyNames(data).length === 0){
                   SwalAlert('aviso', 'warning', 'Não foi possível recuperar dados do arquivo', 'O arquivo pode não ser um PDF legível ou pode estar corrompido. Retire o espelho outra vez e tente novamente.');
                 } else if (Object.getOwnPropertyNames(data).length > 0){
-                  console.log('Here!');
+                  // console.log('Here!');
                   
                   const modal = $('#modal-confirm-rec')[0];
 
@@ -1536,7 +1536,7 @@ let configs = {};
     }
 
     $('#modal-confirm-rec [data-bs-dismiss="modal"]').on('click', function(e){
-      console.log('Closing!');
+      // console.log('Closing!');
       // Clear inputs and checkboxes of modal-editar-informacoes
       resetFormFields(document.querySelector('[data-action="formulario-informacoes"]'));
       e.preventDefault();
