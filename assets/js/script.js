@@ -689,27 +689,27 @@ let configs = {};
                   
                   const modal = $('#modal-confirm-rec')[0];
 
-                  resetFormFields(modal.querySelector('[data-action="formulario-informacoes"]'));
+                  resetFormFields(document.querySelector('[data-action="formulario-informacoes"]'));
                   modal.querySelectorAll('input').forEach(input => ['checkbox', 'radio'].includes(input.type) ? input.checked = false : input.value = '');
 
                   const naoRecuperado = [];
                   // Exibindo modal de confirmação dos dados de importação
                   // $('#modal-confirm-rec').modal('show');
                   
-                  if (data.valores && Object.getOwnPropertyNames(data.valores).length > 0) {
+                  if (data.valores && Object.getOwnPropertyNames(data.valores).length > 0 && !Array.from(Object.values(data.valores)).every(e => e === null)) {
                     const osvalores = ['valor_compra_e_venda', 'valor_financiamento', 'recursos_proprios', 'FGTS', 'subsidio', 'taxa_de_cartorio']
                     
                     if (JSON.stringify(osvalores.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.valores).sort())) naoRecuperado.push('Valores da operação');
                     
                     for (let i = 0; i < Object.getOwnPropertyNames(data.valores).length; i++){
-                      const val = data.valores[Object.getOwnPropertyNames(data.valores)[i]];
+                      const val = data.valores[Object.getOwnPropertyNames(data.valores)[i]] || [];
                       $(`#${Object.getOwnPropertyNames(data.valores)[i]}`).val(val.length > 0 ? `R$ ${val}` : 'R$ 0,00');
                     }
                   } else {
                     naoRecuperado.push('Valores da operação');
                   }
                   
-                  if (data.conta_debito && Object.getOwnPropertyNames(data.conta_debito).length > 0) {
+                  if (data.conta_debito && Object.getOwnPropertyNames(data.conta_debito).length > 0 && !Array.from(Object.values(data.conta_debito)).every(e => e === null || e === '104' /* 104 é o código do Banco definido por padrão na recuperação dos dados */)) {
                     const osdados = ['banco', 'agencia', 'operacao', 'conta', 'digito'];
                     
                     if (JSON.stringify(osdados.sort()) !== JSON.stringify(Object.getOwnPropertyNames(data.conta_debito).sort())) naoRecuperado.push('Dados bancários');
@@ -856,7 +856,7 @@ let configs = {};
                   }
                   
                   // Verificando o que não foi possível recuperar e exibindo em tela
-                  const resNaoRecuperado = naoRecuperado.filter((el, e) => naoRecuperado.indexOf(el) === e);
+                  const resNaoRecuperado = naoRecuperado.filter((el, e) => naoRecuperado.indexOf(el) === e).toSorted((a, b) => a.localeCompare(b));
                   const areaNaoRecuperado = $('[data-element="not-nao-recuperado"]');
                   if (resNaoRecuperado.length > 0) {
                     $(areaNaoRecuperado).attr('class', 'tab-pane fade');
@@ -882,7 +882,7 @@ let configs = {};
               .catch((error) => {
                 $(btn).removeClass('disabled');
                 SwalAlert('aviso', 'error', 'Erro ao importar arquivo', `Verifique o console.`);
-                console.info(error.message);
+                console.info(error);
               });
             }
             reader.onerror = (e) => {

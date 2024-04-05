@@ -80,7 +80,7 @@ const getData = (fileData) => {
           try { 
             if (!index && index !== 0) return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null
             else return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim())[index] : null;
-          } catch (e) { return []; }
+          } catch (e) { return null; }
         }
         
         /** 
@@ -94,11 +94,11 @@ const getData = (fileData) => {
         **/
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
           try{
-            if (!new RegExp(regex).test(text)) return [];
+            if (!new RegExp(regex).test(text)) return null;
             if (!index && index !== 0) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
             else return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim())[index];
           } catch (e) {
-            return [];
+            return null;
           }
         }
         
@@ -115,7 +115,7 @@ const getData = (fileData) => {
               const account = Array.isArray(ret) ? ret[0].split('-') : ret.split('-');
               return account[index];
             } else {
-              return [];
+              return null;
             }
           }catch (e) {
             return '';
@@ -124,6 +124,7 @@ const getData = (fileData) => {
         
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
         console.log('Here!');
+        const scapeValue = null;
 
         try{
           const data = {
@@ -136,12 +137,12 @@ const getData = (fileData) => {
             endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
             empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
             valores: {
-              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || 'R$ 0,00',
-              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || 'R$ 0,00',
-              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || 'R$ 0,00',
-              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || 'R$ 0,00',
-              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || 'R$ 0,00',
-              taxa_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || 'R$ 0,00',
+              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || scapeValue,
+              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || scapeValue,
+              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || scapeValue,
+              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || scapeValue,
+              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || scapeValue,
+              taxa_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || scapeValue,
             },
             // Conta para débito das parcelas
             conta_debito: {
@@ -164,7 +165,7 @@ const getData = (fileData) => {
           return data;
         } catch (e) {
           SwalAlert('aviso', 'error', 'Ocorreu um erro ao ler o arquivo. Tente novamente', `Verifique o console.`);
-          console.error(e);
+          console.info(e.message);
           return [];
         } 
       }
@@ -172,7 +173,7 @@ const getData = (fileData) => {
   }, function (reason) {
     // PDF loading error
     SwalAlert('aviso', 'error', 'Não foi possível carregar o arquivo. Tente novamente', `Verifique o console.`);
-    console.error(reason);
+    console.info(reason);
     return [];
   });
 }
