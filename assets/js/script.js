@@ -229,6 +229,20 @@ let configs = {};
       document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
     }, 500)
   }
+
+  /**
+   * Reset all form fields. Input with dataset 'mascara' === 'money' will be reset to 'R$ 0,00'
+   * @param {HTMLElement} form - Form element
+   * @returns {void}
+   * 
+  **/
+    const resetFormFields = (form) => {
+      Array.from(form.querySelectorAll('input')).forEach((input) => {
+        if (input.type == 'checkbox' || input.type == 'radio') input.checked = false;
+        else if (input.dataset.mascara === 'money') input.value = 'R$ 0,00';
+        else input.value = '';
+      })
+    } 
   
   function atribuirAcoes(acao, evento_acao){
     const acoes = document.querySelectorAll('[data-action]');
@@ -269,7 +283,6 @@ let configs = {};
           }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
-            // TODO : Adicionar configuração para informar número do CCA
             const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\d/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\d/g, ''))}_PR`;
             
             copiar(nome).then(retorno => {
@@ -547,6 +560,7 @@ let configs = {};
                 e.preventDefault();
                 atualizarConfiguracoes();
                 closeVisualization();
+                $('#modal-configuracoes').modal('show');
               });
               
               $('[data-sub-action="confirmar"]').click((e) =>{
@@ -675,7 +689,7 @@ let configs = {};
                   
                   const modal = $('#modal-confirm-rec')[0];
 
-                  document.querySelector('#modal-editar-informacoes [type=reset]').click();
+                  resetFormFields(modal.querySelector('[data-action="formulario-informacoes"]'));
                   modal.querySelectorAll('input').forEach(input => ['checkbox', 'radio'].includes(input.type) ? input.checked = false : input.value = '');
 
                   const naoRecuperado = [];
@@ -713,21 +727,18 @@ let configs = {};
                   
                   if (data.conta_deposito && Object.getOwnPropertyNames(data.conta_deposito).length > 0) {
                     const osdados = ['banco', 'agencia', 'operacao', 'conta', 'digito'];
+                    const [ naoIndividual, simIndividual ] = Array.from(document.querySelectorAll("[name='op-tipo']")).map((e) => e.closest('li.list-group-item').querySelector('label'));
                     
                     // Verificando se os dados bancários são iguais e se as propriedades obtidas são as mesmas que deveriam
                     if (JSON.stringify(osdados.sort()) === JSON.stringify(Object.getOwnPropertyNames(data.conta_deposito).sort())){
                       if (JSON.stringify(data.conta_deposito) === JSON.stringify(data.conta_debito)){
                         // Se os dados bancários de débito e depósito são iguais, então não é um processo individual
-                        document.querySelector('label[for="op-nao-individual"]').click();
-                        // TODO - Separar variáveis pra evitar múltiplas chamadas
-                        document.querySelector('label[for="op-nao-individual"]').click(); 
+                        naoIndividual.click();
                         // Marcando operação conta corrente
                         document.querySelector('label[for="prod-1"]').click(); 
                       } else {
                         // Se os dados bancários de débito e depósito são diferentes, então é um processo individual
-                        document.querySelector('label[for="op-sim-individual"]').click();
-                        // TODO - Separar variáveis pra evitar múltiplas chamadas
-                        document.querySelector('label[for="op-sim-individual"]').click();
+                        simIndividual.click();
                         // Marcando operação conta corrente
                         document.querySelector('label[for="prod-1"]').click(); 
                         
@@ -848,19 +859,15 @@ let configs = {};
                   const resNaoRecuperado = naoRecuperado.filter((el, e) => naoRecuperado.indexOf(el) === e);
                   const areaNaoRecuperado = $('[data-element="not-nao-recuperado"]');
                   if (resNaoRecuperado.length > 0) {
-                    // Preencher
-                    // TODO - Exibir de forma mais elegante
-                    // $(areaNaoRecuperado).show();
                     $(areaNaoRecuperado).attr('class', 'tab-pane fade');
                     $(areaNaoRecuperado).find('.list-group').empty();
                     resNaoRecuperado.forEach((item, index) => {
+                      // Preencher
                       $(areaNaoRecuperado).find('.list-group').append(`<li class="list-group-item">${item}</li>`);
                     });
                   } else {
                     $(areaNaoRecuperado).find('.list-group').empty();
                     $(areaNaoRecuperado).attr('class', 'none');
-                    // TODO - Ocultar de forma mais elegante
-                    // $(areaNaoRecuperado).hide();
                   }
                   
                   $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-1"]`).tab('show');
@@ -945,7 +952,6 @@ let configs = {};
       })
       
       arraySend.length > 0 ? sendOptionValue(null, null, arraySend) : "";
-      //TODO: em caso de erro, limpar o registro
       
       function sendOptionValue(send, input, array){
         if(array){
@@ -1089,7 +1095,7 @@ let configs = {};
       localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
     }
   }
-  
+
   function verificarInputsCPFValidos(){
     let ok = new Array();
     
@@ -1532,8 +1538,7 @@ let configs = {};
     $('#modal-confirm-rec [data-bs-dismiss="modal"]').on('click', function(e){
       console.log('Closing!');
       // Clear inputs and checkboxes of modal-editar-informacoes
-      // TODO - Melhorar reset dos inputs
-      document.querySelector('#modal-editar-informacoes [type="reset"]').click();
+      resetFormFields(document.querySelector('[data-action="formulario-informacoes"]'));
       e.preventDefault();
       $('#modal-confirm-rec').modal('hide');
     });
@@ -1578,8 +1583,6 @@ let configs = {};
     const settings = new Settings();
     const options = settings.getOptionsValues();
     
-    //TODO: alterar a funcionalidade, além da visualização
-    
     for(let option of Object.entries(options)){
       if(option[0] !== "logo-cca"){
         $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
@@ -1589,7 +1592,7 @@ let configs = {};
           $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
           break;
           case "exibir-opt-link":
-          // TODO: Implementar
+          // Implementando no carregamento dos registros armazenados
           break;
           case "codigo-cca":  
           configs["codigo-cca"] = option[1]["values"];
@@ -1633,7 +1636,6 @@ let configs = {};
     $(`.nav-tabs .nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
     
     if(parseInt(index) === tabContents.length - 2){
-      // TODO - Tab de confirmação de produtos não aparece no modal após a 1ª vez
       e.removeAttribute('onclick');
       e.setAttribute('data-confirm-rec', 'confirmed');
       e.classList.value = 'btn btn-success';
