@@ -229,20 +229,20 @@ let configs = {};
       document.querySelector('#modal-editar-informacoes').querySelectorAll('input')[0].focus();
     }, 500)
   }
-
+  
   /**
-   * Reset all form fields. Input with dataset 'mascara' === 'money' will be reset to 'R$ 0,00'
-   * @param {HTMLElement} form - Form element
-   * @returns {void}
-   * 
+  * Reset all form fields. Input with dataset 'mascara' === 'money' will be reset to 'R$ 0,00'
+  * @param {HTMLElement} form - Form element
+  * @returns {void}
+  * 
   **/
-    const resetFormFields = (form) => {
-      Array.from(form.querySelectorAll('input')).forEach((input) => {
-        if (input.type == 'checkbox' || input.type == 'radio') input.checked = false;
-        else if (input.dataset.mascara === 'money') input.value = 'R$ 0,00';
-        else input.value = '';
-      })
-    } 
+  const resetFormFields = (form) => {
+    Array.from(form.querySelectorAll('input')).forEach((input) => {
+      if (input.type == 'checkbox' || input.type == 'radio') input.checked = false;
+      else if (input.dataset.mascara === 'money') input.value = 'R$ 0,00';
+      else input.value = '';
+    })
+  } 
   
   function atribuirAcoes(acao, evento_acao){
     const acoes = document.querySelectorAll('[data-action]');
@@ -676,7 +676,7 @@ let configs = {};
           const reader = new FileReader();
           const btn = $('[for="import-arquivo-espelho"]');
           $(btn).addClass('disabled');
-
+          
           try{
             reader.readAsBinaryString(arquivo);
             reader.onload = (e) => {
@@ -688,10 +688,10 @@ let configs = {};
                   // console.log('Here!');
                   
                   const modal = $('#modal-confirm-rec')[0];
-
+                  
                   resetFormFields(document.querySelector('[data-action="formulario-informacoes"]'));
                   modal.querySelectorAll('input').forEach(input => ['checkbox', 'radio'].includes(input.type) ? input.checked = false : input.value = '');
-
+                  
                   const naoRecuperado = [];
                   // Exibindo modal de confirmação dos dados de importação
                   // $('#modal-confirm-rec').modal('show');
@@ -876,7 +876,7 @@ let configs = {};
                   $(modal).find('.modal-footer').append(`<button class="btn btn-primary" onclick="proxContent(0, this)">Continuar</button>`);
                   $(modal).modal('show');
                 }
-
+                
                 $(btn).removeClass('disabled');
               })
               .catch((error) => {
@@ -1095,7 +1095,7 @@ let configs = {};
       localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
     }
   }
-
+  
   function verificarInputsCPFValidos(){
     let ok = new Array();
     
@@ -1371,6 +1371,7 @@ let configs = {};
                   break;
                   
                   case 'n_contrato':
+                  
                   input.value = new StringMask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask, {reverse: true}).apply(sanitizarNumero(dados_recuperados[key]));
                   break;
                   
@@ -1534,7 +1535,7 @@ let configs = {};
     }catch(error){
       console.warn('Erro ao verificar variável armazenada', 'Error: 4988XC', error)
     }
-
+    
     $('#modal-confirm-rec [data-bs-dismiss="modal"]').on('click', function(e){
       // console.log('Closing!');
       // Clear inputs and checkboxes of modal-editar-informacoes
@@ -1619,7 +1620,7 @@ let configs = {};
       };
     }
   }
-
+  
   window.proxContent = (index, e) => {
     const tabs = document.querySelectorAll('.nav-tabs .nav-link');
     const tabContents = document.querySelectorAll('.tab-pane');

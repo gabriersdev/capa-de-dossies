@@ -70,6 +70,8 @@ function sanitizarString(string){
 }
 
 const sanitizarNumero = (valor) => {
+  if (Array.isArray(valor)) valor = valor.join('');
+  else if (!valor) return null;
   return !isEmpty(valor) ? valor.replace(/\D/g, '') : valor;
 }
 
