@@ -260,6 +260,20 @@ const verificarFuncionalidadeAteste = (motivo) => {
   return false;
 }
 
+const verificarInputsRecarregamento = () => {
+  const modal = document.querySelector('#modal-editar-informacoes')
+  if(true){
+    window.onbeforeunload = (evento) => {
+      // Há o que preservar
+      if(Array.from(modal.querySelectorAll('input')).filter((i) => ['radio', 'checkbox'].includes(i.type) ? i.checked : i.value.trim().length > 0 && i.value !== 'R$ 0,00').length > 0){
+        evento.preventDefault();
+      }else{
+        // Não há o que preservar
+      }
+    }
+  }
+}
+
 export{
   isEmpty,
   capitalize,
@@ -277,5 +291,6 @@ export{
   sanitizarNumero,
   criarEBaixarArquivo,
   range,
-  verificarFuncionalidadeAteste
+  verificarFuncionalidadeAteste,
+  verificarInputsRecarregamento
 }

@@ -2,8 +2,10 @@
 
 import { conteudos } from './modulos/conteudos.js';
 import { Settings } from './classes/Settings.js';
-import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range, verificarFuncionalidadeAteste } from './modulos/utilitarios.js';
+import { SwalAlert, isEmpty, sanitizarString, tooltips, popovers, zeroEsquerda, verificarCPF, copiar, sanitizarNumero, criarEBaixarArquivo, range, verificarFuncionalidadeAteste, verificarInputsRecarregamento } from './modulos/utilitarios.js';
 import { getData } from './modulos/funcoes.js';
+import exibirDadosProjeto from './modulos/sobre.js';
+
 let form_alt = false;
 let CPF_ok = new Array();
 let configs = {};
@@ -1554,8 +1556,15 @@ let configs = {};
     atribuirLinks();
     atribuirAcoes();
     atribuirMascaras();
+    
+    // Exibir dados do projeto
+    exibirDadosProjeto();
+    
     tooltips();
     popovers();
+    
+    // Monitorar recarregamento da página
+    verificarInputsRecarregamento();
   });
   
   window.addEventListener('DOMContentLoaded', () => {
@@ -1676,5 +1685,4 @@ let configs = {};
       });
     }
   }
-  
 })();

@@ -1,0 +1,46 @@
+{
+  "name": "Capa de Dôssies",
+  "description": "",
+  "short_name": "Carta de Dôssies",
+  "developer": "Gabriel Ribeiro",
+  "version": "3.0.0",
+  "release_date": "06-04-2024 00:00:00",
+  "background": "#F6F6F6",
+  "icons": [
+    {
+      "src": "/assets/img/checkbox-checked.png",
+      "size": "100x100",
+      "type": "png"
+    },
+    {
+      "src": "/assets/img/checkbox-checked.svg",
+      "size": "100x100",
+      "type": "svg"
+    },
+    {
+      "src": "/assets/img/checkbox-nochecked.png",
+      "size": "100x100",
+      "type": "png"
+    },
+    {
+      "src": "/assets/img/checkbox-nochecked.svg",
+      "size": "100x100",
+      "type": "svg"
+    },
+    {
+      "src": "/assets/img/logo-caixa.png",
+      "size": "100x100",
+      "type": "png"
+    },
+    {
+      "src": "/assets/img/logo-padrao.png",
+      "size": "100x100",
+      "type": "png"
+    },
+    {
+      "src": "/assets/img/favicon.svg",
+      "size": "100x100",
+      "type": "svg"
+    }
+  ]
+}
