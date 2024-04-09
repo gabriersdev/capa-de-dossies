@@ -42,6 +42,10 @@ const principal = `
     <button class="btn btn-primary" data-action="exibir-ultimos-registros" data-toggle="tooltip" data-placement="bottom" title="Exibir últimos registros"><i class="bi bi-card-list"></i></button>
   </div>
 </section>
+<div class="alert alert-secondary mt-3">
+  <span>Os dados das capas criadas são armazenados localmente e não são enviados para um servidor.</span>
+  <i class="bi bi-hand-thumbs-up-fill d-none"></i>
+</div>
 </header>
 
 <main id="capa">

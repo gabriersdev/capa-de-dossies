@@ -21,6 +21,11 @@ class Settings{
       "type": "string",
       "default": "000000000",
       "propertie": "value"
+    },
+    "armazena-dados": { // TODO - Implementar a funcionalidade de confirmar armazenar os dados
+      "type": "boolean",
+      "default": true,
+      "propertie": "checked"
     }
   }
 
@@ -45,6 +50,11 @@ class Settings{
         "type": "string",
         "default": "000000000",
         "propertie": "value"
+      },
+      "armazena-dados": { 
+        "type": "boolean",
+        "default": true,
+        "propertie": "checked"
       }
     }
   }
@@ -74,7 +84,11 @@ class Settings{
       }
 
     }catch(error){
-      this.createSettingsObject(JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "");
+      try{
+        this.createSettingsObject(JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "");
+      } catch (error){
+        this.createSettingsObject("");
+      }
     }
   }
   
@@ -129,18 +143,26 @@ class Settings{
   }
 
   getOptionsValues(){
-    const ret = new Object();
-    for(let item of Object.entries(this.options)){
-      const values = this.CRUDoption("read", item[0]);
-
-      if(isEmpty(values)){
-        this.setOption(item[0]);
+    try{
+      const ret = new Object();
+      for(let item of Object.entries(this.options)){
+        const values = this.CRUDoption("read", item[0]);
+  
+        if(isEmpty(values)){
+          this.setOption(item[0]);
+        }
+  
+        ret[item[0]] = {values: this.CRUDoption("read", item[0]), propertie: item[1]["propertie"]};
       }
-
-      ret[item[0]] = {values: this.CRUDoption("read", item[0]), propertie: item[1]["propertie"]};
+  
+      return ret;
+    }catch(error){
+      console.log("Um erro ocorreu ao obter as configurações. Erro: %s", error);
     }
+  }
 
-    return ret;
+  getVarSettingArmazenaDados(){
+    return [true, false].includes(this.getOption("armazena-dados")) ? this.getOption("armazena-dados") : this.options["armazena-dados"]["default"];
   }
 }
 

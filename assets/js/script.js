@@ -718,7 +718,7 @@ let configs = {};
                     
                     for (let i = 0; i < Object.getOwnPropertyNames(data.conta_debito).length; i++){
                       if (['conta', 'digito'].includes(Object.getOwnPropertyNames(data.conta_debito)[i])){
-                        $(`#conta_comprador_numero`).val(`${data.conta_debito['conta']}-${data.conta_debito['digito']}`);
+                        data.conta_debito['conta'] && data.conta_debito['digito'] ? $(`#conta_comprador_numero`).val(`${data.conta_debito['conta']}-${data.conta_debito['digito']}`) : '';
                       } else {
                         $(`#conta_comprador_${Object.getOwnPropertyNames(data.conta_debito)[i]}`).val(data.conta_debito[Object.getOwnPropertyNames(data.conta_debito)[i]]);
                       }
@@ -746,7 +746,7 @@ let configs = {};
                         
                         for (let i = 0; i < Object.getOwnPropertyNames(data.conta_deposito).length; i++){
                           if (['conta', 'digito'].includes(Object.getOwnPropertyNames(data.conta_deposito)[i])){
-                            $(`#conta_vendedor_numero`).val(`${data.conta_deposito['conta']}-${data.conta_deposito['digito']}`);
+                            data.conta_deposito['conta'] && data.conta_deposito['digito'] ? $(`#conta_vendedor_numero`).val(`${data.conta_deposito['conta']}-${data.conta_deposito['digito']}`) : '';
                           } else {
                             $(`#conta_vendedor_${Object.getOwnPropertyNames(data.conta_deposito)[i]}`).val(data.conta_deposito[Object.getOwnPropertyNames(data.conta_deposito)[i]]);
                           }
@@ -1078,6 +1078,11 @@ let configs = {};
   }
   
   function salvarRegistro(registro){
+    // Verificando se a opção de armazenar dados está ativa
+    if(!new Settings().getVarSettingArmazenaDados()){
+      return;
+    }
+    
     const ultimos_registros = localStorage.getItem('ultimos-registros');
     registro['datetime'] = Date.now();
     
@@ -1238,6 +1243,12 @@ let configs = {};
   function atualizarRegistros(){
     const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
     $(modal_ultimos).modal('show');
+    
+    if (!new Settings().getVarSettingArmazenaDados()) {
+      modal_ultimos.querySelector('.modal-body').innerHTML = '<b class="mb-2 d-block">Armazenamento de dados desabilitado</b> O armazenamento de dados está desativado. Portanto, não é possível exibir os registros salvos ou salvar novos registros. Ative o armazenamento de dados clicando no botão de configurações <i class="bi bi-gear-fill"></i> no fim da página.';
+      return;
+    }
+    
     // Variável de controle de indexação dos elementos
     index_registro = 0;
     
@@ -1311,6 +1322,12 @@ let configs = {};
     evento.preventDefault();
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
     
+    // Verificando se a opção de armazenar dados está ativa
+    if(!new Settings().getVarSettingArmazenaDados()){
+      SwalAlert('aviso', 'warning', 'Armazenamento de dados desativado', 'Ative o armazenamento de dados para poder apagar registros salvos.');
+      return;
+    }
+    
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
       
       SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar o registro?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
@@ -1351,6 +1368,12 @@ let configs = {};
     evento.preventDefault();
     const modal = $('#modal-ultimos-registros-salvos');
     const id = evento.target.closest('[data-identificacao]').dataset.identificacao;
+    
+    // Verificando se a opção de armazenar dados está ativa
+    if(!new Settings().getVarSettingArmazenaDados()){
+      SwalAlert('aviso', 'warning', 'Armazenamento de dados desativado', 'Ative o armazenamento de dados para poder recuperar os registros salvos.');
+      return;
+    }
     
     if(!isEmpty(id) && typeof parseInt(id) == 'number'){
       try{
@@ -1593,43 +1616,51 @@ let configs = {};
     const settings = new Settings();
     const options = settings.getOptionsValues();
     
-    for(let option of Object.entries(options)){
-      if(option[0] !== "logo-cca"){
-        $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
-        
-        switch(option[0]){
-          case "autocomplete":
-          $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
-          break;
-          case "exibir-opt-link":
-          // Implementando no carregamento dos registros armazenados
-          break;
-          case "codigo-cca":  
-          configs["codigo-cca"] = option[1]["values"];
-          break;
-        }
-      }else{
-        if(isEmpty(option[1]["values"])){
-          // Exibir o input file para enviar um arquivo
-          $('[data-element="logo-cca-selection"]').html(conteudos.preencher_logo_cca);
+    try{
+      for(let option of Object.entries(options)){
+        if(option[0] !== "logo-cca"){
+          $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
           
-          $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
-          $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
-          $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
+          switch(option[0]){
+            case "autocomplete":
+            $('input').prop('autocomplete', option[1]["values"] ? "on" : "off");
+            break;
+            case "exibir-opt-link":
+            // Implementando no carregamento dos registros armazenados
+            break;
+            case "codigo-cca":  
+            configs["codigo-cca"] = option[1]["values"];
+            break;
+            case "armazena-dados":
+            // Ao salvar uma capa ou carregar as capas salvas, é verificado se a opção está habilitada
+            break;
+          }
         }else{
-          const values = JSON.parse(option[1].values);
-          // Informar que já existe um arquivo
-          $('[data-element="logo-cca-selection"]').html(`<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label><span class="text-muted">200x150 px</span><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
-          $('#logo-cca').prop('src', values.file);
-          $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
-          $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
-          atribuirAcoes("remover-logo-cca", "click");
-          tooltips();
-        }
-      };
+          if(isEmpty(option[1]["values"])){
+            // Exibir o input file para enviar um arquivo
+            $('[data-element="logo-cca-selection"]').html(conteudos.preencher_logo_cca);
+            
+            $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
+            $('[data-action="ver-primeiro-logo-cca"]').removeClass('button-disabled');
+            $('[data-action="form-logo-cca"] button[type="submit"]').removeClass('button-disabled');
+          }else{
+            const values = JSON.parse(option[1].values);
+            // Informar que já existe um arquivo
+            $('[data-element="logo-cca-selection"]').html(`<label for="config-logo-cca-exists" class="form-label">Logo do Correspondente</label><span class="text-muted">200x150 px</span><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
+            $('#logo-cca').prop('src', values.file);
+            $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
+            $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
+            atribuirAcoes("remover-logo-cca", "click");
+            tooltips();
+          }
+        };
+      }
+    }catch (error){
+      
     }
   }
   
+  // Tab de confirmação de dados - função de criar capa a partir do espelho SIOPI
   window.proxContent = (index, e) => {
     const tabs = document.querySelectorAll('.nav-tabs .nav-link');
     const tabContents = document.querySelectorAll('.tab-pane');
