@@ -285,7 +285,7 @@ let configs = {};
           }else if(!verificarCPF(document.querySelector('#CPF_1').value)){
             SwalAlert('aviso', 'error', 'O CPF informado para o 1º proponente está inválido');
           }else{
-            const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\d/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\d/g, ''))}_PR`;
+            const nome = `${configs["codigo-cca"]}_${(document.querySelector('#modal-editar-informacoes').querySelectorAll('[data-mascara="CPF"]')[0].value.replace(/\D/g, ''))}_${(document.querySelector('#modal-editar-informacoes').querySelector('[data-mascara="numero-contrato"]').value.replace(/\D/g, ''))}_PR`;
             
             copiar(nome).then(retorno => {
               const botao = $('[data-action="copiar-titulo-processo"]');
