@@ -79,7 +79,8 @@ const principal = `
         <b><span>Recursos Próprios</span></b><span data-element-paste="recursos_proprios">R$ 0.000,00</span><br>
         <b><span>Taxas de cartório</span></b><span data-element-paste="taxa_de_cartorio">R$ 0.000,00</span><br>
         <b><span>FGTS</span></b><span data-element-paste="FGTS">R$ 0,00</span><br>
-        <b><span>Subsídio</span></b><span data-element-paste="subsidio">R$ 0,00</span><br><br>
+        <b><span>Subsídio</span></b><span data-element-paste="subsidio">R$ 0,00</span><br>
+        <div class="none"><b><span>FGTS Futuro</span></b><span data-element-paste="FGTS_futuro">R$ 0,00</span></div><br>
       </div>
       
       <table class="tabela-propostas-comerciais">

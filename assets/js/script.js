@@ -32,6 +32,7 @@ let configs = {};
     'valor_financiamento', 
     'recursos_proprios', 
     'FGTS', 
+    'FGTS_futuro', 
     'subsidio', 
     'taxa_de_cartorio',
     'comercial_conta_corrente', 
@@ -1019,11 +1020,11 @@ let configs = {};
     
     try{
       inputs_form.forEach(input => {
-        acao.closest('form').querySelector(`#${input}`).value
+        acao.closest('form').querySelector(`#${input}`).value;
         const capa = document.querySelector('#capa');
         
         const elemento_modal = acao.closest('form').querySelector(`#${input}`);
-        const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`)
+        const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`);
         
         if(['comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado'].includes(input)){
           elemento_capa.setAttribute('checked', elemento_modal.checked);
@@ -1063,6 +1064,14 @@ let configs = {};
           registro[input] = input_value;
         }else{
           registro[input] = elemento_modal.value;
+        }
+
+        if(input == 'FGTS_futuro'){
+          if(!isEmpty(elemento_modal.value) && elemento_modal.value.trim() !== 'R$ 0,00'){
+            $(document.querySelector('[data-element-paste="FGTS_futuro"]').parentElement).show();
+          }else{
+            $(document.querySelector('[data-element-paste="FGTS_futuro"]').parentElement).hide();
+          }
         }
       });
       
