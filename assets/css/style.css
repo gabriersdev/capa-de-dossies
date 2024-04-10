@@ -326,6 +326,13 @@ a:is(:hover, :focus, :active), address a b{
   --bs-tooltip-margin: 1rem;
 }
 
+ul.pagination{
+  flex-wrap: wrap;
+  .page-item{
+    margin: 0.25rem 0;
+  }
+}
+
 @media screen and (max-width: 600px) {
   #modal-editar-informacoes .modal-body form > .row{
     display: block;
