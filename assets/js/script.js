@@ -1099,7 +1099,26 @@ let configs = {};
       if(ultimos_registros !== null && !isEmpty(ultimos_registros)){
         if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
           const array = JSON.parse(ultimos_registros);
-          array.push(registro);
+
+          // Verificando se o registro atual já existe no array
+          if(array.some(e => {
+            const reg = JSON.parse(JSON.stringify(registro));
+            const arm = JSON.parse(JSON.stringify(e));
+
+            // Zerando o datetime, para que não haja conflito na comparação
+            reg['datetime'] = 0;
+            arm['datetime'] = 0;
+
+            // Comparando os objetos
+            return JSON.stringify(arm) === JSON.stringify(reg)
+          })){
+            // Existe um registro idêntico ao atual
+            return;
+          }else{
+            // Não existe um registro idêntico ao atual
+            array.push(registro);
+          }
+
           localStorage.setItem('ultimos-registros', JSON.stringify(array));
         }else{
           localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
