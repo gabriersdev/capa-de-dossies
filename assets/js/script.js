@@ -681,7 +681,7 @@ let configs = {};
           $(btn).addClass('disabled');
           
           try{
-            reader.readAsBinaryString(arquivo);
+            reader.readAsArrayBuffer(arquivo);
             reader.onload = (e) => {
               const fileData = e.target.result;
               getData((fileData)).then((data) => {
