@@ -199,9 +199,9 @@ const copiar = async (valor) => {
   await navigator.clipboard.writeText(valor);
 }
 
-function primeiroNome(nome){
-  const nome_separado = nome.split(' ');
-  return nome_separado[0];
+function nomeResumido(nome){
+  const nomeSeparado = nome.split(' ');
+  return nomeSeparado.length > 2 ? `${nomeSeparado[0]} ${nomeSeparado.splice(1, nomeSeparado.length - 2).map(nome => nome.charAt(0)).join(' ')} ${nomeSeparado.splice(-1)}` : nomeSeparado.length === 2 ? `${nomeSeparado[0]} ${nomeSeparado[1]}` : nomeSeparado[0];
 }
 
 const criarEBaixarArquivo = (conteudo, nome_arquivo, ext) => {
@@ -287,7 +287,7 @@ export{
   zeroEsquerda,
   verificarCPF,
   copiar,
-  primeiroNome,
+  nomeResumido,
   sanitizarNumero,
   criarEBaixarArquivo,
   range,

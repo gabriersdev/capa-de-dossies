@@ -1316,7 +1316,7 @@ let configs = {};
             modal_ultimos.querySelector('.modal-body').innerHTML += conteudos.tabela_ultimos_registros(index);
             
             JSON.parse(ultimos_registros).toSorted((a, b) => b.datetime - a.datetime).splice(index * itens, itens).forEach((registro) => {
-              modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: registro.nome_1, data_hora: registro.datetime});
+              modal_ultimos.querySelector(`.modal-body .table-page-${index} tbody`).innerHTML += conteudos.registro({id: index_registro, nome: [registro["nome_1"], registro["nome_2"]], data_hora: registro.datetime});
               // Incrementando variável de controle
               index_registro++;
             })
