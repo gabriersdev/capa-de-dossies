@@ -201,7 +201,7 @@ const copiar = async (valor) => {
 
 function nomeResumido(nome){
   const nomeSeparado = nome.split(' ');
-  return nomeSeparado.length > 2 ? `${nomeSeparado[0]} ${nomeSeparado.splice(1, nomeSeparado.length - 2).map(nome => nome.charAt(0)).join(' ')} ${nomeSeparado.splice(-1)}` : nomeSeparado.length === 2 ? `${nomeSeparado[0]} ${nomeSeparado[1]}` : nomeSeparado[0];
+  return nomeSeparado.length > 2 ? `${nomeSeparado[0]} ${nomeSeparado.splice(1, nomeSeparado.length - 2).map(nome => !['de', 'da'].includes(nome.toLowerCase()) ? nome.charAt(0) : nome).join(' ')} ${nomeSeparado.splice(-1)}` : nomeSeparado.length === 2 ? `${nomeSeparado[0]} ${nomeSeparado[1]}` : nomeSeparado[0];
 }
 
 const criarEBaixarArquivo = (conteudo, nome_arquivo, ext) => {
