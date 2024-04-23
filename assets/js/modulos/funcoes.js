@@ -129,28 +129,16 @@ const getData = (fileData) => {
         // TODO - Validação dos dados com Regex
         const regex = {
           cpf: /\d{3}\.\d{3}\.\d{3}-\d{2}/gi,
+          // Valores
+          // [números, vírgulas e ponto]
+          valores: /(R$)?\s*[\d,\.]+/gi,
+          // Dados das contas
+          // [números e traços]
           conta: /\d{4}-\d{3,4}-\d{12}-\d{1}/gi,
           conta_deposito: /\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1}/gi,
-          // Valores
-          valor: "",
-          valor_compra_e_venda: "",
-          valor_financiamento: "",
-          recursos_proprios: "",
-          fgts: "",
-          subsidio: "",
-          taxa_de_cartorio: "",
-          // [números, vírgulas e ponto]
-          // Dados das contas
-          conta_debito: "",
-          conta_deposito: "",
-          // [números]
           // Outros dados
-          proponentes: "",
-          modalidade: "",
-          contrato: "",
-          endereco: "",
-          empreendimento: "",
-          // [números e letras]
+          // [números, espaços e letras]
+          geral: /[\w\s]+/gi,
         }
 
         try{
