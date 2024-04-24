@@ -131,14 +131,14 @@ const getData = (fileData) => {
           cpf: /\d{3}\.\d{3}\.\d{3}-\d{2}/gi,
           // Valores
           // [números, vírgulas e ponto]
-          valores: /(R$)?\s*[\d,\.]+/gi,
+          valores: /(R\$\s)?[\d\.,]+/gi,
           // Dados das contas
           // [números e traços]
           conta: /\d{4}-\d{3,4}-\d{12}-\d{1}/gi,
           conta_deposito: /\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1}/gi,
           // Outros dados
           // [números, espaços e letras]
-          geral: /[\w\s]+/gi,
+          geral: /[\d\D]+/gi,
         }
 
         try{
