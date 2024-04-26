@@ -761,7 +761,8 @@ let configs = {};
                   if (data.modalidade) {
                     if (data.modalidade.length !== 0){
                       // Preencher
-                      $('#modalidade').val(Array.isArray(data.modalidade) ? data.modalidade[0] : data.modalidade);
+                      const substrModalidade = (inicial) => inicial.includes('MCMV') ? 'CCNPMCMV' : inicial.includes('SBPE') ? 'CCSBPE' : inicial;
+                      $('#modalidade').val(Array.isArray(data.modalidade) ? substrModalidade(data.modalidade[0]) : substrModalidade(data.modalidade));
                     } else if (data.modalidade.length == 0){
                       naoRecuperado.push('Identificação da unidade e proposta');
                     }
