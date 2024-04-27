@@ -30,8 +30,11 @@ const novas_funcionalidades = {
     'Adicionado campo para FGTS futuro',
     'Adicionado controle de exibição para FGTS futuro',
     'Implementada verificação de registro duplicados no salvamento das capas',
+  ],
+  "3.2.0": [
+    'Melhorias na validação das informações capturas do espelho de proposta',
+    'Implementada correção da modalidade dos processos (NPMCMV para CCNPMCMV e SBPE para CCSBPE)',
   ]
-
 };
 
 // Carregando dados do arquivo de manifest.json
