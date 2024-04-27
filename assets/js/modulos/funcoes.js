@@ -1,3 +1,5 @@
+import { SwalAlert } from "./utilitarios.js";
+
 /**
 * Retrieves the text of a specif page within a PDF Document obtained through pdf.js 
 * 
@@ -141,23 +143,31 @@ const getData = (fileData) => {
           geral: /[\d\D]+/gi,
         }
 
+        const sanitizarRetornoRegex = (str, regex) => {
+          try{
+            return str.match(regex)[0];
+          }catch (e) {
+            return null;
+          }
+        }
+
         try{
           const data = {
             proponentes: {
               nome: getContextUsingRegex(text, /(Nome:)\s[\w\s]*\s(Sexo)/gi, /Nome:|Sexo/gi, ''),
-              CPF: getContextUsingRegex(text, /(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi, /(CPF:)|Nome/gi)
-            },
+              CPF: getContextUsingRegex(text, /(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi, /(CPF:)|Nome/gi),
+          },
             modalidade: getContextUsingRegex(text, /(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi, /(Negociada Item de Produto: \d{1,} -)|\s/gi, 0),
             contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi, 0),
             endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
             empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
             valores: {
-              valor_compra_e_venda: getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0) || scapeValue,
-              valor_financiamento: getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0) || scapeValue,
-              recursos_proprios: getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0) || scapeValue,
-              FGTS: getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0) || scapeValue,
-              subsidio: getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0) || scapeValue,
-              taxa_de_cartorio: getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0) || scapeValue,
+              valor_compra_e_venda: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0), regex.valores) || scapeValue,
+              valor_financiamento: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0), regex.valores) || scapeValue,
+              recursos_proprios: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Recursos Próprios Aportados:).*(Valor Recursos Próprios)/gi, /(Valor Recursos Próprios Aportados:)|Valor Recursos Próprios/gi, 0), regex.valores) || scapeValue,
+              FGTS: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Total Utilizado FGTS:).*(Valor FMP)/gi, /(Valor Total Utilizado FGTS:)|Valor FMP/gi, 0), regex.valores) || scapeValue,
+              subsidio: sanitizarRetornoRegex(getContextUsingRegex(text, /(Subsídio Complemento Capacidade Financeira:).*(Valor Operação)/gi, /(Subsídio Complemento Capacidade Financeira:)|Valor Operação/gi, 0), regex.valores) || scapeValue,
+              taxa_de_cartorio: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor das Taxas Financiadas:).*(Taxas à vista)/gi, /(Valor das Taxas Financiadas:)|Taxas à vista/gi, 0), regex.valores) || scapeValue,
             },
             // Conta para débito das parcelas
             conta_debito: {
