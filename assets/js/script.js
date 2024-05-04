@@ -463,6 +463,11 @@ let configs = {};
         case 'limpar-registros-salvos':
         const modal_utlimos = document.querySelector('#modal-ultimos-registros-salvos');
         $(acao).on('click', (evento) => {
+          if(!new Settings().getOption('armazena-dados')){
+            SwalAlert('aviso', 'warning', 'Armazenamento de dados desativado', 'Ative o armazenamento de dados para poder apagar registros salvos.');
+            return '';
+          }
+
           SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar os registros?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
             if(retorno.isConfirmed){
               try{
@@ -1278,9 +1283,12 @@ let configs = {};
     
     if (!new Settings().getVarSettingArmazenaDados()) {
       modal_ultimos.querySelector('.modal-body').innerHTML = '<b class="mb-2 d-block">Armazenamento de dados desabilitado</b> O armazenamento de dados está desativado. Portanto, não é possível exibir os registros salvos ou salvar novos registros. Ative o armazenamento de dados clicando no botão de configurações <i class="bi bi-gear-fill"></i> no fim da página.';
+      modal_ultimos.querySelector('[data-action="limpar-registros-salvos"]').disabled = true;
       return;
     }
     
+    modal_ultimos.querySelector('[data-action="limpar-registros-salvos"]').disabled = false;
+
     // Variável de controle de indexação dos elementos
     index_registro = 0;
     
