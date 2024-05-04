@@ -414,9 +414,9 @@ let configs = {};
                     saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
                     if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
                       const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
-                      saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val())}`)
-                      saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val())}`)
-                      saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val())}`)
+                      saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val()) || ''}`)
+                      saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val()) || ''}`)
+                      saida.push(`${prefixo + '_agencia'}=${sanitizarNumero($('#conta_comprador_agencia').val()) || ''}`)
                     }
                   }
                   break;
