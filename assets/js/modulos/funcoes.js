@@ -157,7 +157,7 @@ const getData = (fileData) => {
               nome: getContextUsingRegex(text, /(Nome:)\s[\w\s]*\s(Sexo)/gi, /Nome:|Sexo/gi, ''),
               CPF: getContextUsingRegex(text, /(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi, /(CPF:)|Nome/gi),
           },
-            modalidade: getContextUsingRegex(text, /(Negociada Item de Produto: \d{1,} -)(\s\w+\s)/gi, /(Negociada Item de Produto: \d{1,} -)|\s/gi, 0),
+            modalidade: getContextUsingRegex(text, /((Negociada|Negociação) Item de Produto: \d{1,} -)(\s\w+\s)/gi, /((Negociada|Negociação) Item de Produto: \d{1,} -)|\s/gi, 0),
             contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi, 0),
             endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
             empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
