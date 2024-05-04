@@ -492,7 +492,10 @@ let configs = {};
           if(ok.every(e => e == true)){
             const registro = enviarFormulario(acao);
             if(!isEmpty(registro)){
-              salvarRegistro(registro)
+              // Click no botão de copiar nome da capa para o clipboard
+              document.querySelector('[data-action="copiar-nome-capa"]').click();
+              // Armazenamento do registro
+              salvarRegistro(registro);
             };
           }else{
             SwalAlert('aviso', 'error', 'Um ou mais CPF informado está inválido');
@@ -1158,19 +1161,7 @@ let configs = {};
     
     return ok;
   }
-  
-  const dados_bancarios = document.querySelectorAll('[data-element="dados-bancarios"]');
-  dados_bancarios.forEach(dados => {
-    dados.querySelectorAll('input').forEach(inputx => {
-      $(inputx).on('keypress', (evento) => {
-        evento.target.setAttribute('data-mascara', inputx.getAttribute('data-param'));
-        try{
-          atribuirMascaras(inputx.getAttribute('data-param'), inputx)
-        }catch{}
-      })
-    })
-  })
-  
+    
   document.querySelectorAll('input[type=checkbox]').forEach(elemento => {
     elemento.setAttribute('value', elemento.checked);
     elemento.addEventListener('change', () => {
@@ -1189,34 +1180,51 @@ let configs = {};
   let i = 0;
   
   while(i < inputs.length){
+    inputs[i].setAttribute('pattern', '\d{4}');
+    inputs[i].setAttribute('title', 'O n.º da agência deve conter 4 dígitos');
+
     inputs[i].addEventListener('paste', (evento) => {
       setTimeout(() => {
         const input = evento.target;
         const valor = input.value;
-        const split = (valor.trim().split('.'));
+        console.log(valor);
+        const split = (valor.trim().split('.')).map(e => e.replace(/\D/g, ''));
         
         const input_agencia = input.closest('.input-group').querySelector('input[placeholder="0000"]');
         const input_operacao = input.closest('.input-group').querySelector('input[data-mascara="operacao"]');
         const input_conta = input.closest('.input-group').querySelector('input[data-mascara="conta"]') || input.closest('.input-group').querySelector('input[data-mascara="conta-vendedor"]');
         
         if(Array.isArray(split) && split.length > 1){
-          if(split[0].trim().length >= 4){
-            input_agencia.value = split[0].trim();
-            // input_agencia.focus();
+          console.log('Aqui L1206');
+          if(split[0]){
+            if(split[0].trim().length >= 4){
+              input_agencia.value = split[0].trim();
+              // input_agencia.focus();
+            }
           }
-          if(split[1].length >= 3){
-            input_operacao.value = split[1].trim();
-            // input_operacao.focus();
+          if(split[1]){
+            if(split[1].length >= 3){
+              input_operacao.value = split[1].trim();
+              // input_operacao.focus();
+            }
           }
-          if(split[2].length >= 5){
-            input_conta.value = split[2].trim();
-            // input_conta.focus();
+          if(split[2]){
+            if(split[2].length >= 5){
+              input_conta.value = split[2].trim();
+              // input_conta.focus();
+            }
           }
         }else{
-          const valor_tratado = valor.match(/\d/g);
+          console.log('Aqui L1219');
+          const valor_tratado = valor.match(/\d/g).join('');
           
           if(valor_tratado.length >= 13){
-            const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 3), conta: valor_tratado.substr(7, valor.length)};
+            console.log(valor_tratado);
+            console.log(valor_tratado.substr(0, 4));
+            console.log(valor_tratado.substr(4, 3));
+            console.log(valor_tratado.substr(7, valor.length));
+
+            const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 4), conta: valor_tratado.substr(8, valor.length)};
             
             if(!isEmpty(dados.agencia)){
               input_agencia.value = dados.agencia;
@@ -1233,16 +1241,14 @@ let configs = {};
           }
         }
         
-        evento.target.setAttribute('data-mascara', input.getAttribute('data-param'));
-        atribuirMascaras(input.getAttribute('data-param'));
-        
         input_agencia.focus();
       }, 0);
     })
     
-    inputs[i].addEventListener('keypress', (evento) => {
-      evento.target.setAttribute('data-mascara', evento.target.getAttribute('data-param'));
-      atribuirMascaras(evento.target.getAttribute('data-param'), inputs[i]);
+    inputs[i].addEventListener('keyup', (evento) => {
+      evento.target.value = evento.target.value.replace(/\D/g, '');
+      // evento.target.setAttribute('data-mascara', evento.target.getAttribute('data-param'));
+      // atribuirMascaras(evento.target.getAttribute('data-param'), inputs[i]);
     })
     
     i++;
