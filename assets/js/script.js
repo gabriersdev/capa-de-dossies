@@ -1180,7 +1180,7 @@ let configs = {};
   let i = 0;
   
   while(i < inputs.length){
-    inputs[i].setAttribute('pattern', '\d{4}');
+    inputs[i].setAttribute('pattern', '\\d{4}');
     inputs[i].setAttribute('title', 'O n.º da agência deve conter 4 dígitos');
 
     inputs[i].addEventListener('paste', (evento) => {
