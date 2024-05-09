@@ -1426,7 +1426,7 @@ let configs = {};
             const input = modal_informacoes.querySelector(`#${key}`);
             if(input !== null){
               if(key == 'comercial_conta_corrente' || key == 'comercial_cheque_especial' || key == 'comercial_conta_poupanca' || key == 'comercial_cartao_de_credito' || key == 'comercial_credito_consignado' /* key == 'conta_agencia' || key == 'conta_operacao' || key == 'conta_numero' */ ){
-                input.checked = dados_recuperados[key] == 'false' || dados_recuperados[key] == false ? false : true;
+                input.checked = (dados_recuperados[key] == 'false' || dados_recuperados[key] == false) ? false : true;
               }else{
                 switch(key){
                   case 'CPF_1':
@@ -1435,7 +1435,6 @@ let configs = {};
                   break;
                   
                   case 'n_contrato':
-                  
                   input.value = new StringMask(masks.filter(e => e.input_id == 'numero-contrato')[0].mask, {reverse: true}).apply(sanitizarNumero(dados_recuperados[key]));
                   break;
                   
