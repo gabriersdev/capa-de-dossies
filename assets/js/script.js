@@ -1187,7 +1187,6 @@ let configs = {};
       setTimeout(() => {
         const input = evento.target;
         const valor = input.value;
-        console.log(valor);
         const split = (valor.trim().split('.')).map(e => e.replace(/\D/g, ''));
         
         const input_agencia = input.closest('.input-group').querySelector('input[placeholder="0000"]');
@@ -1195,7 +1194,6 @@ let configs = {};
         const input_conta = input.closest('.input-group').querySelector('input[data-mascara="conta"]') || input.closest('.input-group').querySelector('input[data-mascara="conta-vendedor"]');
         
         if(Array.isArray(split) && split.length > 1){
-          console.log('Aqui L1206');
           if(split[0]){
             if(split[0].trim().length >= 4){
               input_agencia.value = split[0].trim();
@@ -1210,20 +1208,15 @@ let configs = {};
           }
           if(split[2]){
             if(split[2].length >= 5){
-              input_conta.value = split[2].trim();
+              StringMask()
+              input_conta.value = new StringMask('000000000000-0').apply(('0000000000000' + split[2].trim()).substr(-13));
               // input_conta.focus();
             }
           }
         }else{
-          console.log('Aqui L1219');
           const valor_tratado = valor.match(/\d/g).join('');
           
           if(valor_tratado.length >= 13){
-            console.log(valor_tratado);
-            console.log(valor_tratado.substr(0, 4));
-            console.log(valor_tratado.substr(4, 3));
-            console.log(valor_tratado.substr(7, valor.length));
-
             const dados = {agencia: valor_tratado.substr(0, 4), operacao: valor_tratado.substr(4, 4), conta: valor_tratado.substr(8, valor.length)};
             
             if(!isEmpty(dados.agencia)){
@@ -1235,7 +1228,7 @@ let configs = {};
               // input_operacao.focus();
             }
             if(!isEmpty(dados.conta)){
-              input_conta.value = dados.conta;
+              input_conta.value = new StringMask('000000000000-0').apply(('0000000000000' + dados.conta).substr(-13));
               // input_conta.focus();
             }
           }
