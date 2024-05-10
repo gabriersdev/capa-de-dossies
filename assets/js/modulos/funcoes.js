@@ -141,10 +141,16 @@ const getData = (fileData) => {
           // Outros dados
           // [números, espaços e letras]
           geral: /[\d\D]+/gi,
+          // Endereco - Inicia regex com tudo de informação e para quando localizar uma / seguida de 2 letras maiúsculas
+          // Encerrando exatamente onde deve estar a sigla do estado no endereço retornado pelo sistema
+          endereco: /[\D\d]*\/[A-Z]{2}/g,
+          // Captura endereço de URL que comece com HTTP ou HTTPs
+          capturaURL: /(https|http):[\w-\.\/?!&=]*/gi
         }
 
-        const sanitizarRetornoRegex = (str, regex) => {
+        const sanitizarRetornoRegex = (str, regex, action, replaceValue) => {
           try{
+            if (action === 'replace') return str.replace(regex, replaceValue);
             return str.match(regex)[0];
           }catch (e) {
             return null;
@@ -159,8 +165,8 @@ const getData = (fileData) => {
           },
             modalidade: getContextUsingRegex(text, /((Negociada|Negociação) Item de Produto: \d{1,} -)(\s\w+\s)/gi, /((Negociada|Negociação) Item de Produto: \d{1,} -)|\s/gi, 0),
             contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi, 0),
-            endereco: getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0),
-            empreendimento: getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0),
+            endereco: sanitizarRetornoRegex(getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0), regex.endereco),
+            empreendimento: sanitizarRetornoRegex(getContextUsingRegex(text, /(Nome do Empreendimento:).*(Tipo de Unidade)/gi, /(Nome do Empreendimento:)|Tipo de Unidade/gi, 0), regex.capturaURL, 'replace', ''),
             valores: {
               valor_compra_e_venda: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:).*(Valor Financiamento Negociado)/gi, /(Valor Compra e Venda ou Orçamento Proposto pelo Cliente:)|Valor Financiamento Negociado/gi, 0), regex.valores) || scapeValue,
               valor_financiamento: sanitizarRetornoRegex(getContextUsingRegex(text, /(Valor Financiamento Negociado:).*(Cota de Financiamento Calculada)/gi, /(Valor Financiamento Negociado:)|Cota de Financiamento Calculada/gi, 0), regex.valores) || scapeValue,
