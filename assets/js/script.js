@@ -99,15 +99,15 @@ let configs = {};
     linkElementos.forEach(link => {
       switch(link.dataset.link.toLowerCase().trim()){        
         case 'github-dev':
-        link.href = 'https://github.com/gabrieszin';
+        link.href = 'https://github.com/gabriersdev';
         break;
         
         case 'github-projeto':
-        link.href = 'https://github.com/gabrieszin/[nome-repositorio]';
+        link.href = 'https://github.com/gabriersdev/capa-de-dossies';
         break;
         
         case 'link-outros-projetos':
-        link.href = 'https://github.com/gabrieszin?tab=repositories';
+        link.href = 'https://github.com/gabriersdev?tab=repositories';
         break;
         
         default:
@@ -452,7 +452,7 @@ let configs = {};
             })
             
             if(!isEmpty(saida)){
-              window.open(`https://gabrieszin.github.io/ateste-processo?${saida.join('&')}`)
+              window.open(`https://gabriersdev.github.io/ateste-processo?${saida.join('&')}`)
             }else{
               SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
             }
