@@ -925,41 +925,43 @@ let configs = {};
       const arraySend = new Array();
       
       inputs.forEach((input) => {
-        switch(input.type.toLowerCase()){
-          case 'checkbox':
-          case 'radio':
-          send = input.checked;
-          arraySend.push({send: send, input: input});
-          break;
-          case 'file':
-          
-          if(input.files[0]){
-            const image = new FileReader();
-            image.readAsDataURL(input.files[0]);
+        if (input.type){
+          switch(input.type.toLowerCase()){
+            case 'checkbox':
+            case 'radio':
+            send = input.checked;
+            arraySend.push({send: send, input: input});
+            break;
+            case 'file':
             
-            image.addEventListener('loadend', (evento) => {
-              send = JSON.stringify({value: input.files[0].name, file: evento.target.result});
+            if(input.files[0]){
+              const image = new FileReader();
+              image.readAsDataURL(input.files[0]);
               
-              if(sendOptionValue(send, input)){
-                $('#logo-cca').prop('src', evento.target.result);
-              }else{
-                $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
-              };
-            })
+              image.addEventListener('loadend', (evento) => {
+                send = JSON.stringify({value: input.files[0].name, file: evento.target.result});
+                
+                if(sendOptionValue(send, input)){
+                  $('#logo-cca').prop('src', evento.target.result);
+                }else{
+                  $('#logo-cca').prop('src', './assets/img/logo-padrao.png');
+                };
+              })
+              
+              return send;
+            }
+            break;
             
-            return send;
+            case 'text':
+            send = input.value;
+            arraySend.push({send: send, input: input});
+            break;
+            
+            default:
+            // send = input.value;
+            // arraySend.push({send: send, input: input});
+            break;
           }
-          break;
-          
-          case 'text':
-          send = input.value;
-          arraySend.push({send: send, input: input});
-          break;
-          
-          default:
-          // send = input.value;
-          // arraySend.push({send: send, input: input});
-          break;
         }
       })
       
@@ -969,9 +971,10 @@ let configs = {};
         if(array){
           if(array.length > 0){
             array.forEach((option) => {
-              const ret = new Settings().setOption(option.input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], option.send);
-              
-              returns.push(!isEmpty(ret) && ret === option.send);
+              if (option.input.name.length > 0) {
+                const ret = new Settings().setOption(option.input.name.toLowerCase().match("(?<config>[a-z]+)\-(?<name>[a-z-\-]+)").groups["name"], option.send);
+                returns.push(!isEmpty(ret) && ret === option.send);
+              } 
             })
           }
         }else{
