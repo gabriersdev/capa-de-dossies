@@ -104,13 +104,19 @@ const principal = `
           </tr>
           <tr>
             <td><span class="checkbox-proposta" checked="false" data-element-paste="comercial_cartao_de_credito"></span></td>
-            <td colspan="3">Cartão de Crédito</td>
+            <td colspan="3">
+              <span>Cartão de Crédito</span>
+            </td>
           </tr>
           <tr>
             <td><span class="checkbox-proposta" checked="false" data-element-paste="comercial_cheque_especial"></span></td>
-            <td>Cheque Especial</td>
+            <td>
+              <span>Cheque Especial</span>
+            </td>
             <td><span type="checkbox" class="checkbox-proposta" checked="false" data-element-paste="comercial_credito_consignado"></span></td>
-            <td>Crédito Consignado</td>
+            <td>
+              <span>Crédito Consignado</span>
+            </td>
           </tr>
         </tbody>
       </table><br>
