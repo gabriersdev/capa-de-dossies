@@ -1041,7 +1041,7 @@ let configs = {};
         
         if(produtos.includes(input)){
           const linhas_tabela_prod_com = document.querySelectorAll('.tabela-propostas-comerciais tr');
-
+'';
           if(!elemento_modal.checked){
             // linhas_tabela_prod_com[produtos.indexOf(input) + 1].setAttribute('hidden', 'on');
           }else{
