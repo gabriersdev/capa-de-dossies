@@ -1037,8 +1037,17 @@ let configs = {};
         
         const elemento_modal = acao.closest('form').querySelector(`#${input}`);
         const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`);
+        const produtos = ['comercial_conta_corrente', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_cheque_especial', 'comercial_credito_consignado'];
         
-        if(['comercial_conta_corrente', 'comercial_cheque_especial', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_credito_consignado'].includes(input)){
+        if(produtos.includes(input)){
+          const linhas_tabela_prod_com = document.querySelectorAll('.tabela-propostas-comerciais tr');
+
+          if(!elemento_modal.checked){
+            // linhas_tabela_prod_com[produtos.indexOf(input) + 1].setAttribute('hidden', 'on');
+          }else{
+            // linhas_tabela_prod_com[produtos.indexOf(input) + 1].removeAttribute('hidden');
+          }
+
           elemento_capa.setAttribute('checked', elemento_modal.checked);
         }else if(input == 'nome_2' || input == 'CPF_2'){
           if(isEmpty(elemento_modal.value)){
@@ -1674,6 +1683,9 @@ let configs = {};
             break;
             case "armazena-dados":
             // Ao salvar uma capa ou carregar as capas salvas, é verificado se a opção está habilitada
+            break;
+            case "exibir-prod-com":
+            //  TODO - Exibir ou ocultar os produtos comerciais não contratados na operação
             break;
           }
         }else{

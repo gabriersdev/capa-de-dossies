@@ -26,9 +26,14 @@ class Settings{
       "type": "boolean",
       "default": true,
       "propertie": "checked"
+    },
+    "exibir-prod-com": {
+      "type": "boolean",
+      "default": true,
+      "propertie": "checked"
     }
   }
-
+  
   constructor(){
     this.options = {
       "autocomplete": {
@@ -51,14 +56,19 @@ class Settings{
         "default": "000000000",
         "propertie": "value"
       },
-      "armazena-dados": { 
+      "armazena-dados": { // TODO - Implementar a funcionalidade de confirmar armazenar os dados
+        "type": "boolean",
+        "default": true,
+        "propertie": "checked"
+      },
+      "exibir-prod-com": {
         "type": "boolean",
         "default": true,
         "propertie": "checked"
       }
     }
   }
-
+  
   CRUDoption(action, config_name, config_value){
     try{
       const settings_saved = JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "";
@@ -66,7 +76,7 @@ class Settings{
       if(isEmpty(settings_saved)){
         this.createSettingsObject(settings_saved);
       }
-
+      
       switch(action.toLowerCase()){
         case "update":
         try{
@@ -82,7 +92,7 @@ class Settings{
         return settings_saved[config_name] == "#" ? "" : settings_saved[config_name] ?? "";
         break;
       }
-
+      
     }catch(error){
       try{
         this.createSettingsObject(JSON.parse(localStorage.getItem("capa-dossie-html-configs")) || "");
@@ -107,11 +117,11 @@ class Settings{
       }
     }
   }
-
+  
   optionIsValid(config_name){
     return (Object.keys(this.options).includes(config_name));
   }
-
+  
   setOption(config_name, config_value){
     if(this.optionIsValid(config_name)){
       if(!isEmpty(config_value)){
@@ -129,38 +139,38 @@ class Settings{
       return this.CRUDoption("read", config_name);
     }
   }
-
+  
   getOption(config_name){
     if(this.optionIsValid(config_name)){
       return this.CRUDoption("read", config_name)
     }
-
+    
     return null;
   }
-
+  
   getOptions(){
     return Object.keys(this.options);
   }
-
+  
   getOptionsValues(){
     try{
       const ret = new Object();
       for(let item of Object.entries(this.options)){
         const values = this.CRUDoption("read", item[0]);
-  
+        
         if(isEmpty(values)){
           this.setOption(item[0]);
         }
-  
+        
         ret[item[0]] = {values: this.CRUDoption("read", item[0]), propertie: item[1]["propertie"]};
       }
-  
+      
       return ret;
     }catch(error){
       console.log("Um erro ocorreu ao obter as configurações. Erro: %s", error);
     }
   }
-
+  
   getVarSettingArmazenaDados(){
     return [true, false].includes(this.getOption("armazena-dados")) ? this.getOption("armazena-dados") : this.options["armazena-dados"]["default"];
   }
