@@ -412,7 +412,7 @@ let configs = {};
                   case 'comercial_credito_consignado':
                   if(input.checked){
                     saida.push(`${elementos_substituicao[elemento]}=${!isEmpty(sanitizarNumero(input.value)) ? sanitizarNumero(input.value) : input.checked}`)
-                    if(elemento == 'comercial_conta_corrente' || elemento == 'comercial_conta_poupanca'){
+                    if((elemento == 'comercial_conta_corrente' && document.querySelector('#comercial_conta_corrente').checked) || (elemento == 'comercial_conta_poupanca' && document.querySelector('#comercial_conta_poupanca').checked)){
                       const prefixo = elemento == 'comercial_conta_corrente' ? 'cc' : 'cp';
                       saida.push(`${prefixo + '_numero'}=${sanitizarNumero($('#conta_comprador_numero').val()) || ''}`)
                       saida.push(`${prefixo + '_operacao'}=${sanitizarNumero($('#conta_comprador_operacao').val()) || ''}`)
@@ -438,11 +438,13 @@ let configs = {};
                   break;
                   
                   default:
-                  if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
-                  input.getAttribute('type') == 'checkbox' && !input.checked == false ||
-                  input.getAttribute('type') == 'radio' && !input.checked == false){
-                    if(!isEmpty(input.value)){
-                      saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                  if(!elemento.includes('conta_comprador') && !elemento.includes('conta_vendedor')){
+                    if(input.getAttribute('type') == 'text' && !isEmpty(input.value) || 
+                    input.getAttribute('type') == 'checkbox' && !input.checked == false ||
+                    input.getAttribute('type') == 'radio' && !input.checked == false){
+                      if(!isEmpty(input.value)){
+                        saida.push(`${elemento}=${input.getAttribute('type') == 'text' ? input.value.replaceAll(' ', '-') : input.getAttribute('type') == 'checkbox' || input.getAttribute('type') == 'radio' ? input.checked : ''}`)
+                      }
                     }
                   }
                   break;
@@ -453,6 +455,7 @@ let configs = {};
             
             if(!isEmpty(saida)){
               window.open(`https://gabriersdev.github.io/ateste-processo?${saida.join('&')}`)
+              console.log(saida.join('&'));
             }else{
               SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
             }
@@ -467,7 +470,7 @@ let configs = {};
             SwalAlert('aviso', 'warning', 'Armazenamento de dados desativado', 'Ative o armazenamento de dados para poder apagar registros salvos.');
             return '';
           }
-
+          
           SwalAlert('confirmacao', 'question', 'Tem certeza que deseja apagar os registros?', 'Isso é irreversível', null, 'Sim', true, null).then((retorno) => {
             if(retorno.isConfirmed){
               try{
@@ -1041,13 +1044,13 @@ let configs = {};
         
         if(produtos.includes(input)){
           const linhas_tabela_prod_com = document.querySelectorAll('.tabela-propostas-comerciais tr');
-'';
+          
           if(!elemento_modal.checked){
             // linhas_tabela_prod_com[produtos.indexOf(input) + 1].setAttribute('hidden', 'on');
           }else{
             // linhas_tabela_prod_com[produtos.indexOf(input) + 1].removeAttribute('hidden');
           }
-
+          
           elemento_capa.setAttribute('checked', elemento_modal.checked);
         }else if(input == 'nome_2' || input == 'CPF_2'){
           if(isEmpty(elemento_modal.value)){
@@ -1086,7 +1089,7 @@ let configs = {};
         }else{
           registro[input] = elemento_modal.value;
         }
-
+        
         if(input == 'FGTS_futuro'){
           if(!isEmpty(elemento_modal.value) && elemento_modal.value.trim() !== 'R$ 0,00'){
             $(document.querySelector('[data-element-paste="FGTS_futuro"]').parentElement).show();
@@ -1120,16 +1123,16 @@ let configs = {};
       if(ultimos_registros !== null && !isEmpty(ultimos_registros)){
         if(!isEmpty(JSON.parse(ultimos_registros)) && Array.isArray(JSON.parse(ultimos_registros))){
           const array = JSON.parse(ultimos_registros);
-
+          
           // Verificando se o registro atual já existe no array
           if(array.some(e => {
             const reg = JSON.parse(JSON.stringify(registro));
             const arm = JSON.parse(JSON.stringify(e));
-
+            
             // Zerando o datetime, para que não haja conflito na comparação
             reg['datetime'] = 0;
             arm['datetime'] = 0;
-
+            
             // Comparando os objetos
             return JSON.stringify(arm) === JSON.stringify(reg)
           })){
@@ -1139,7 +1142,7 @@ let configs = {};
             // Não existe um registro idêntico ao atual
             array.push(registro);
           }
-
+          
           localStorage.setItem('ultimos-registros', JSON.stringify(array));
         }else{
           localStorage.setItem('ultimos-registros', JSON.stringify([registro]));
@@ -1173,7 +1176,7 @@ let configs = {};
     
     return ok;
   }
-    
+  
   document.querySelectorAll('input[type=checkbox]').forEach(elemento => {
     elemento.setAttribute('value', elemento.checked);
     elemento.addEventListener('change', () => {
@@ -1194,7 +1197,7 @@ let configs = {};
   while(i < inputs.length){
     inputs[i].setAttribute('pattern', '\\d{4}');
     inputs[i].setAttribute('title', 'O n.º da agência deve conter 4 dígitos');
-
+    
     inputs[i].addEventListener('paste', (evento) => {
       setTimeout(() => {
         const input = evento.target;
@@ -1288,7 +1291,7 @@ let configs = {};
   function atualizarRegistros(){
     // TODO - Alterar a exibição do nome do proponente na tabela de registros salvos
     // TODO - Exibir nome do primeiro proponente abreviado e popover (ou tooltip - verificar o que fica melhor) com os dados dos outros proponentes
-
+    
     const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
     $(modal_ultimos).modal('show');
     
@@ -1299,7 +1302,7 @@ let configs = {};
     }
     
     modal_ultimos.querySelector('[data-action="limpar-registros-salvos"]').disabled = false;
-
+    
     // Variável de controle de indexação dos elementos
     index_registro = 0;
     
