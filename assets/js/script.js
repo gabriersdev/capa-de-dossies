@@ -1034,23 +1034,27 @@ let configs = {};
     const modal = acao.closest('.modal');
     
     try{
+      const produtos = ['comercial_conta_corrente', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_cheque_especial', 'comercial_credito_consignado'];
+      const linhas_tabela_prod_com = document.querySelectorAll('.tabela-propostas-comerciais tr');
+      linhas_tabela_prod_com[0].removeAttribute('hidden'); // Exibindo título da tabela de produtos contratados
+      
       inputs_form.forEach(input => {
         acao.closest('form').querySelector(`#${input}`).value;
         const capa = document.querySelector('#capa');
         
         const elemento_modal = acao.closest('form').querySelector(`#${input}`);
         const elemento_capa = capa.querySelector(`[data-element-paste="${input}"]`);
-        const produtos = ['comercial_conta_corrente', 'comercial_conta_poupanca', 'comercial_cartao_de_credito', 'comercial_cheque_especial', 'comercial_credito_consignado'];
         
         if(produtos.includes(input)){
-          const linhas_tabela_prod_com = document.querySelectorAll('.tabela-propostas-comerciais tr');
-          
-          if(!elemento_modal.checked){
-            // linhas_tabela_prod_com[produtos.indexOf(input) + 1].setAttribute('hidden', 'on');
-          }else{
-            // linhas_tabela_prod_com[produtos.indexOf(input) + 1].removeAttribute('hidden');
+          // Oculta ou mostra as linhas da tabela de produtos contratados
+          if(!new Settings().getOption('exibir-prod-com')){
+            if(!elemento_modal.checked){
+              linhas_tabela_prod_com[produtos.indexOf(input) + 1].setAttribute('hidden', 'on');
+            }else{
+              linhas_tabela_prod_com[produtos.indexOf(input) + 1].removeAttribute('hidden');
+            }
           }
-          
+
           elemento_capa.setAttribute('checked', elemento_modal.checked);
         }else if(input == 'nome_2' || input == 'CPF_2'){
           if(isEmpty(elemento_modal.value)){
@@ -1073,8 +1077,7 @@ let configs = {};
             $('#dados-bancarios-vendedor').show();
             elemento_capa.textContent = elemento_modal.value.trim();
           }
-        }
-        else{
+        }else{
           if(elemento_modal.value.trim() !== 'R$ 0,00'){
             elemento_capa.textContent = elemento_modal.value.trim();
           }else{
@@ -1098,6 +1101,17 @@ let configs = {};
           }
         }
       });
+      
+      // Oculta título "Propostas Comerciais" caso não tenha produtos contratados
+      if(!new Settings().getOption('exibir-prod-com')){
+        if(Array.from(linhas_tabela_prod_com).filter((linha) => linha.getAttribute('hidden') === 'on').length == Array.from(linhas_tabela_prod_com).length - 1){
+          linhas_tabela_prod_com[0].setAttribute('hidden', 'on');
+        }else{
+          linhas_tabela_prod_com[0].removeAttribute('hidden');
+        }
+      }else{
+        linhas_tabela_prod_com.forEach((linha) => linha.removeAttribute('hidden'));
+      }
       
       $(modal).modal('hide');
       form_alt = true;
@@ -1772,4 +1786,9 @@ let configs = {};
       });
     }
   }
+
+  // Set content type in popover
+  $(document).ready(() => {
+    $('[data-ref-popover="config-exibir-prod-com"]').popover({html: true});
+  })
 })();

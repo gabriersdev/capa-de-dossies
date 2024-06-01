@@ -113,6 +113,8 @@ const principal = `
             <td>
               <span>Cheque Especial</span>
             </td>
+          </tr>
+          <tr>
             <td><span type="checkbox" class="checkbox-proposta" checked="false" data-element-paste="comercial_credito_consignado"></span></td>
             <td>
               <span>Crédito Consignado</span>
