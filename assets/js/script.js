@@ -518,6 +518,7 @@ let configs = {};
         
         case 'limpar-tudo':
         $(acao).click(() => {
+          document.querySelector('#modal-editar-informacoes form').reset();
           window.location.reload();
         })
         break;
