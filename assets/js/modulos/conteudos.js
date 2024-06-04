@@ -159,7 +159,7 @@ const principal = `
       </div>
       <div class="grupo-footer">
         <span></span>
-        <img src="./assets/img/logo-teste.png" alt="Logo do Correspondente" id="logo-cca">
+        <img src="./assets/img/logo-padrao.png" alt="Logo do Correspondente" id="logo-cca">
       </div>
     </section>
   </div>
