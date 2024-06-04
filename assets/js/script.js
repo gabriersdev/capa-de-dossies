@@ -526,7 +526,7 @@ let configs = {};
         case 'form-logo-cca':
         case 'form-outras-configs':
         $(acao).on('submit', (evento) => {
-          evento.preventDefault();
+          evento.preventDefault();                
           alterarConfiguracoes(evento.target);
         })
         break;
@@ -924,6 +924,14 @@ let configs = {};
     try{
       const button = {class: form.querySelector('button[type=submit]').classList.value, text: form.querySelector('button[type=submit]').innerText}
       const inputs = Array.from(form.querySelectorAll('input'));
+      
+      // Se form. de informações for enviado, verificar se img foi preenchida e submeter também   
+      if (document.querySelector('#config-logo-cca')){
+        if (document.querySelector('#config-logo-cca').files[0]){
+          inputs.push(document.querySelector('#config-logo-cca'));
+        }
+      }
+
       let send = null;
       const returns = new Array();
       const arraySend = new Array();
@@ -1055,7 +1063,7 @@ let configs = {};
               linhas_tabela_prod_com[produtos.indexOf(input) + 1].removeAttribute('hidden');
             }
           }
-
+          
           elemento_capa.setAttribute('checked', elemento_modal.checked);
         }else if(input == 'nome_2' || input == 'CPF_2'){
           if(isEmpty(elemento_modal.value)){
@@ -1703,7 +1711,7 @@ let configs = {};
             // Ao salvar uma capa ou carregar as capas salvas, é verificado se a opção está habilitada
             break;
             case "exibir-prod-com":
-            //  TODO - Exibir ou ocultar os produtos comerciais não contratados na operação
+            //  Ao enviar capa é verificado se a opção está habilitada. O que ela faz? exibe ou oculta os produtos comerciais não contratados na operação
             break;
           }
         }else{
@@ -1787,7 +1795,7 @@ let configs = {};
       });
     }
   }
-
+  
   // Set content type in popover
   $(document).ready(() => {
     $('[data-ref-popover="config-exibir-prod-com"]').popover({html: true});
