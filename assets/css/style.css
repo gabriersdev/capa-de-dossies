@@ -327,6 +327,12 @@ a:is(:hover, :focus, :active), address a b{
   --bs-tooltip-margin: 1rem;
 }
 
+.nome-props{
+  --bs-tooltip-bg: #0A58CA;
+  --bs-tooltip-opacity: 1;
+  font-size: 14px !important;
+}
+
 ul.pagination{
   flex-wrap: wrap;
   .page-item{
