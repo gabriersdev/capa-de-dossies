@@ -827,7 +827,7 @@ let configs = {};
                       // Criar seleção para proponentes
                       $(area).show();
                       $(area).find('.list-group').empty();
-                      data.proponentes.nome.toSpliced(5).filter((e, i) => data.proponentes.nome.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((nome, index) => {
+                      data.proponentes.nome.toSpliced(10).filter((e, i) => data.proponentes.nome.indexOf(e) === i).toSorted((a, b) => a.localeCompare(b)) .forEach((nome, index) => {
                         $(area).find('.list-group').append(`<li class="list-group-item"><input type="checkbox" class="form-check-input" name="nome-prop-${index}" id="nome-prop-${index}" data-e-target="${nome}"><label for="nome-prop-${index}">${nome}</label></li>`);
                       });
                       naoRecuperado.push('Identificação dos proponentes');
