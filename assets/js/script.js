@@ -1311,10 +1311,7 @@ let configs = {};
   
   let index_registro = 0;
   
-  function atualizarRegistros(){
-    // TODO - Alterar a exibição do nome do proponente na tabela de registros salvos
-    // TODO - Exibir nome do primeiro proponente abreviado e popover (ou tooltip - verificar o que fica melhor) com os dados dos outros proponentes
-    
+  function atualizarRegistros(){    
     const modal_ultimos = document.querySelector('#modal-ultimos-registros-salvos');
     $(modal_ultimos).modal('show');
     

@@ -128,7 +128,6 @@ const getData = (fileData) => {
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
         const scapeValue = null;
 
-        // TODO - Validação dos dados com Regex
         const regex = {
           cpf: /\d{3}\.\d{3}\.\d{3}-\d{2}/gi,
           // Valores
