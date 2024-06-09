@@ -1584,9 +1584,13 @@ let configs = {};
             const parametro_split = parametro.split('=');
             if(parametros_alteracao.includes(parametro_split[0])){
               if(['nome_1', 'nome_2', 'modalidade'].includes(parametro_split[0])){
-                $(`#${parametro_split[0]}`).val(desanitizarStringURL(parametro_split[1]));
+                try {
+                  $(`#${parametro_split[0]}`).val(desanitizarStringURL(parametro_split[1].toUpperCase()));
+                } catch (error) { }
               }else{
-                $(`#${parametro_split[0]}`).val(parametro_split[1]);
+                try {
+                  $(`#${parametro_split[0]}`).val(parametro_split[1].toUpperCase());
+                } catch (error) { }
               }
             }
           })
