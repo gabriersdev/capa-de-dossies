@@ -126,6 +126,12 @@ const getData = (fileData) => {
         
         // console.log('Here!');
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
+
+        // Imprime o texto do PDF no console para auditoria
+        console.groupCollapsed('Texto do PDF - Auditoria' + ' - ' + new Date().toLocaleString());
+        console.log(text);
+        console.groupEnd();
+
         const scapeValue = null;
 
         const regex = {
@@ -192,6 +198,16 @@ const getData = (fileData) => {
               digito: getAccount(getContextUsingRegex(text, /(Conta para Crédito:)\s(\d{3}-\d{4}-\d{3,4}-\d{12}-\d{1})\s(Conta para Débito)/gi, /(Conta para Crédito:)|(Conta para Débito)/gi), 4),
             },
           };
+
+          // Imprime dados sanitizados no console
+          console.groupCollapsed('Dados obtidos e sanitizados - Auditoria' + ' - ' + new Date().toLocaleString());
+          const saidaConsole = {};
+          for (const [key, value] of Object.entries(data)) {
+            saidaConsole[key] = value;
+          }
+          console.log(saidaConsole)
+          console.groupEnd();
+
           return data;
         } catch (e) {
           SwalAlert('aviso', 'error', 'Ocorreu um erro ao ler o arquivo. Tente novamente', `Verifique o console.`);
