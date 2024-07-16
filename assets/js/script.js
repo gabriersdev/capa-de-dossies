@@ -623,12 +623,32 @@ let configs = {};
         $(acao).click((evento) => {
           evento.preventDefault();
           const input = document.querySelector('#import-arquivo-espelho');
+
           // Por padrão, se o input já estiver preenchido o mesmo arquivo não será importado novamente, por isso essa verificação e limpeza para permitir a importação do mesmo arquivo
-          if (input.files.length === 0) {
-            input.click();
+          const clickInput = () => {
+            if (input.files.length === 0) {
+              input.click();
+            } else {
+              input.value = '';
+              input.click();
+            }
+          }
+
+          // Verificando se o navegador é o Firefox, pois pode ocorrer erros com a importação de arquivos de espelho do SIOPI impressos usando o Firefox - Issue #3 - https://github.com/gabriersdev/capa-de-dossies/issues/3
+          if (navigator.userAgent.toLowerCase().search('firefox') !== -1) {
+            Swal.fire({
+              title: 'Podem ocorrer erros com espelhos impressos através do Firefox',
+              text: 'Para evitar problemas, utilize o Google Chrome ou Opera para imprimir e salvar o espelho.',
+              icon: 'warning',
+              confirmButtonText: 'Entendi'
+            }).then((ret) => {
+              if (ret.isConfirmed) {
+                clickInput();
+              }
+              return;
+            })
           } else {
-            input.value = '';
-            input.click();
+            clickInput();
           }
         });
         break;
