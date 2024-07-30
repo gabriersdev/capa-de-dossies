@@ -95,6 +95,19 @@ const getData = (fileData) => {
         * @returns {Array} The content between the two strings or an empty array
         **/
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
+          // Verificação e tratamento para textos obtidos no Firefox
+          if (window.navigator.userAgent.indexOf('Firefox') !== -1) {
+            const new_regex = regex.toString().replace('/', '').replace(/\/gi/g, '');
+            // Percorre o texto e adiciona \s* após cada caractere exceto os caracteres especiais
+            new_regex.split('').map((e, i) => {
+              if (e === '\\') return e;
+              if (['w', 's', 'i', 'g', 'b', 'd'].includes(e.toLowerCase()) && this[i - 1] === '\\') return e;
+              if (['*', '?', '+', ']', '[', '(', ')'].includes(e)) return e;
+              return e + '\\s*';
+            }).join('');
+            // TODO - Testar
+          }
+
           try{
             if (!new RegExp(regex).test(text)) return null;
             if (!index && index !== 0) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
