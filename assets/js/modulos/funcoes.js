@@ -96,16 +96,32 @@ const getData = (fileData) => {
         **/
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
           // Verificação e tratamento para textos obtidos no Firefox
-          if (window.navigator.userAgent.indexOf('Firefox') !== -1) {
-            const new_regex = regex.toString().replace('/', '').replace(/\/gi/g, '');
-            // Percorre o texto e adiciona \s* após cada caractere exceto os caracteres especiais
-            new_regex.split('').map((e, i) => {
-              if (e === '\\') return e;
-              if (['w', 's', 'i', 'g', 'b', 'd'].includes(e.toLowerCase()) && this[i - 1] === '\\') return e;
-              if (['*', '?', '+', ']', '[', '(', ')'].includes(e)) return e;
-              return e + '\\s*';
-            }).join('');
-            // TODO - Testar
+          // if (window.navigator.userAgent.indexOf('Firefox') !== -1) {
+          
+          // TODO - Implementar verificação se algo foi obtido. Falha ocorre para arquivos de espelhos obtidos do Firefox e que podem ser lidos em outro navegador. ## Solução encontrada aumentando o tempo de espera para carregamento do PDF com a complexidade do regex
+          if (true) { 
+            // Percorre os textos (do regex para captura e do regex para sanitização) e adiciona \s* após cada caractere exceto os caracteres especiais
+            try {
+              [regex, regexSanit].forEach((r, index) => {
+                let new_regex = r.toString().replace('/', '').replace(/\/gi/g, '');
+                new_regex = new_regex.split('').map((e, i) => {
+                  const this_ = new_regex.split('');
+                  if (e === '\\' || e === '/') return e;
+                  if (['w', 's', 'i', 'g', 'b', 'd', 'r'].includes(e.toLowerCase()) && this_[i - 1] === '\\') return e;
+                  if (['*', '?', '+', ']', '[', '(', ')', '{', '}', '^'].includes(e)) return e;
+                  if (e.match(/\d/g) !== null && this_[i - 1] === '{' && this_[i + 1] === '}') return e;
+                  if (['*', '?', '^', '+'].includes(this_[i + 1])) return e;
+                  return e + '\\s*';
+                }).join('');
+                index === 0 ? regex = new RegExp(new_regex, 'gi') : regexSanit = new RegExp(new_regex, 'gi');
+              });
+            } catch (error) {
+              console.groupCollapsed(`Erro: ${error.message}`);
+              console.info(`${error.message}`);
+              console.info(error.stack);
+              console.groupEnd();
+              return null;
+            }
           }
 
           try{
