@@ -36,7 +36,7 @@ function getPageText(pageNum, PDFDocumentInstance) {
 * @param {String} fileData The file data
 * @returns {Promise} The data from the file
 **/
-const getData = (fileData) => {
+const getData = (fileData, mode) => {
   // Loaded via <script> tag, create shortcut to access PDF.js exports.
   const { pdfjsLib } = globalThis;
   
@@ -96,10 +96,9 @@ const getData = (fileData) => {
         **/
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
           // Verificação e tratamento para textos obtidos no Firefox
-          // if (window.navigator.userAgent.indexOf('Firefox') !== -1) {
           
           // TODO - Implementar verificação se algo foi obtido. Falha ocorre para arquivos de espelhos obtidos do Firefox e que podem ser lidos em outro navegador. ## Solução encontrada aumentando o tempo de espera para carregamento do PDF com a complexidade do regex
-          if (true) { 
+          if (window.navigator.userAgent.indexOf('Firefox') !== -1 || mode === 'hard') {
             // Percorre os textos (do regex para captura e do regex para sanitização) e adiciona \s* após cada caractere exceto os caracteres especiais
             try {
               [regex, regexSanit].forEach((r, index) => {
