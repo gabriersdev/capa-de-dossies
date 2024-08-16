@@ -4,7 +4,7 @@ Este é um projeto para fazer capas de dossiês de processos habitacionais. Dese
 
 Acesse o projeto [clicando aqui](https://gabriersdev.github.io/capa-de-dossies/).
 
-![Captura de tela do projeto](https://raw.githubusercontent.com/gabriersdev/capa-de-dossies/master/assets/example.png)
+![Captura de tela do projeto](https://raw.githubusercontent.com/gabriersdev/capa-de-dossies/master/assets/img/example.png)
 
 ## Tecnologias utilizadas
 
