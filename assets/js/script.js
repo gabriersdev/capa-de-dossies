@@ -1543,7 +1543,7 @@ let configs = {};
       if ([null, undefined, ''].includes(dados_recuperados[key])) return
       else if (['n_contrato', 'CPF_1', 'CPF_2'].includes(key)) params += `${key}=${dados_recuperados[key].join('')}&`;
       // TODO - Melhorar validação e regex
-      else params += `${key}=${new String(dados_recuperados[key]).replace(/\s/g, '+').replace(/[\/|º|ª]/g, '#')}&`;
+      else params += `${key}=${new String(dados_recuperados[key]).replace(/\s/g, '+').replace(/[\/|º|ª]/g, '@')}&`;
     })
 
     if (params.endsWith('&')) params = params.slice(0, -1);
@@ -1616,20 +1616,34 @@ let configs = {};
 
       if (!isEmpty(url.search)) {
         const parametros = url.search.replace('?', '').split('&');
-        const parametros_alteracao = ['CPF_1', 'nome_1', 'CPF_2', 'nome_2', 'modalidade', 'n_contrato'];
+        // const parametros_alteracao = ['CPF_1', 'nome_1', 'CPF_2', 'nome_2', 'modalidade', 'n_contrato'];
+        const parametros_alteracao = [...Array.from(document.querySelectorAll('#modal-editar-informacoes input')).map(e => e.id)];
 
         // TODO - Add. recuperação de mais parâmetros
         if (Array.isArray(parametros)) {
+          console.log(parametros);
           parametros.forEach((parametro) => {
             const parametro_split = parametro.split('=');
             if (parametros_alteracao.includes(parametro_split[0])) {
               if (['nome_1', 'nome_2', 'modalidade'].includes(parametro_split[0])) {
                 try {
-                  $(`#${parametro_split[0]} `).val(desanitizarStringURL(parametro_split[1].toUpperCase().replace(/\+/g, ' ')));
+                  $(`#${parametro_split[0]}`).val(desanitizarStringURL(parametro_split[1].toUpperCase().replace(/\+/g, ' ')));
                 } catch (error) { }
               } else {
                 try {
-                  $(`#${parametro_split[0]} `).val(parametro_split[1].toUpperCase());
+                  // TODO - Implementar máscara nos campos de dados bancários
+                  if (parametro_split[0] === 'endereco') {
+                    if (parametro_split[1].match(/n@/gi)) parametro_split[1] = parametro_split[1].replace(/n@/gi, 'nº');
+                    if (parametro_split[1].match(/@(?=\w{2})/g)) parametro_split[1] = parametro_split[1].replace(/@(?=\w{2})/g, '/');
+                  } else if ($(`#${parametro_split[0]}`).is('[data-mascara="money"]')) {
+                    // TEST - Conferir funcionamento
+                    $(`#${parametro_split[0]}`).val(new StringMask('R$ ###.###.##0,00', { reverse: true }).apply(parametro_split[1].replace(/\D/g, '')));
+                    return;
+                  } else if ($(`#${parametro_split[0]}`).attr('type') == 'checkbox') {
+                    $(`#${parametro_split[0]}`).prop('checked', parametro_split[1] == 'true');
+                    return;
+                  }
+                  $(`#${parametro_split[0]}`).val(parametro_split[1].toUpperCase().replace(/\+/g, ' '));
                 } catch (error) { }
               }
             }
