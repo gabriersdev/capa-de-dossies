@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,13 +13,13 @@
     <meta property="og:description" content="Crie capas de processos habitacionais com facilidade">
     <meta property="og:url" content="https://gabriersdev.github.io/capa-de-dossies/">
     <meta property="og:image" content="https://gabriersdev.github.io/capa-de-dossies/assets/img/banner-externo.png">
-    <meta property="og:image:secure_url" content="https://gabriersdev.github.io/capa-de-dossies/assets/img/banner-externo.png">
+    <meta property="og:image:secure_url"
+      content="https://gabriersdev.github.io/capa-de-dossies/assets/img/banner-externo.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="400">
     <meta property="og:image:height" content="300">
     <meta name="twitter:title" content="Capa de dossiês">
-    <meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self' 'unsafe-inline'; 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; 
       style-src 'self' 'unsafe-inline'; 
       style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' 'unsafe-inline' data:; 
@@ -40,9 +41,11 @@
     <script src="./assets/js/frameworks/string-mask.js" defer crossorigin="anonymous"></script>
     <script type="module" src="./assets/js/script.js" defer crossorigin="anonymous"></script>
   </head>
+
   <body>
     <div id="modais">
-      <div class="modal modal-xl fade" id="modal-editar-informacoes" aria-hidden="true" aria-labelledby="modal-editar-informacoes-Label" tabindex="-1">
+      <div class="modal modal-xl fade" id="modal-editar-informacoes" aria-hidden="true"
+        aria-labelledby="modal-editar-informacoes-Label" tabindex="-1">
         <div class="modal-dialog modal-fullscreen">
           <div class="modal-content">
             <div class="modal-header">
@@ -56,31 +59,38 @@
                     <span class="d-block"><b>1º proponente</b></span>
                     <div class="form-group mt-3 mb-2">
                       <label for="nome_1">Nome do proponente</label>
-                      <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente" required>
+                      <input type="text" class="form-control mt-1" id="nome_1" placeholder="Nome do proponente"
+                        required>
                     </div>
                     <div class="form-group mt-2 mb-2">
                       <label for="CPF_1">CPF</label>
                       <div class="area-validation-CPF">
-                        <input type="text" class="form-control mt-1" id="CPF_1" placeholder="123.456.789-09" data-mascara="CPF" required valuex="123.123.123-00">
-                        <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
+                        <input type="text" class="form-control mt-1" id="CPF_1" placeholder="123.456.789-09"
+                          data-mascara="CPF" required valuex="123.123.123-00">
+                        <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top"
+                          title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
                       </div>
                     </div>
                     <span class="d-block mt-4"><b>2º proponente</b></span>
                     <div class="form-group mt-3 mb-2">
                       <label for="nome_2">Nome do proponente</label>
-                      <input type="text" class="form-control mt-1" id="nome_2" placeholder="Nome do proponente" valuex="Mateus">
+                      <input type="text" class="form-control mt-1" id="nome_2" placeholder="Nome do proponente"
+                        valuex="Mateus">
                     </div>
                     <div class="form-group mt-2 mb-2">
                       <label for="CPF_2">CPF</label>
                       <div class="area-validation-CPF">
-                        <input type="text" class="form-control mt-1" id="CPF_2" placeholder="123.456.789-09" data-mascara="CPF" valuex="123.123.123-00">
-                        <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top" title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
+                        <input type="text" class="form-control mt-1" id="CPF_2" placeholder="123.456.789-09"
+                          data-mascara="CPF" valuex="123.123.123-00">
+                        <i class="bi bi-x-lg icon-invalid-CPF" data-toggle="tooltip" data-placement="top"
+                          title="CPF inválido" data-bs-custom-class="tooltip-CPF-invalido"></i>
                       </div>
                     </div>
                     <div class="row mt-4">
                       <div class="col form-group">
                         <label for="modalidade">Modalidade</label>
-                        <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade" placeholder="Modalidade" autocomplete="off" required valuex="CCSBPE">
+                        <input type="text" list="lista-modalidades" class="form-control mt-1" id="modalidade"
+                          placeholder="Modalidade" autocomplete="off" required valuex="CCSBPE">
                         <datalist id="lista-modalidades">
                           <option value="CCSBPE"></option>
                           <option value="CCNPMCMV"></option>
@@ -89,16 +99,19 @@
                       </div>
                       <div class="col form-group">
                         <label for="n_contrato">N.º contrato</label>
-                        <input type="text" class="form-control mt-1" id="n_contrato" placeholder="Número do contrato" data-mascara="numero-contrato" autocomplete="off" valuex="1.1234.5678.970-1">
+                        <input type="text" class="form-control mt-1" id="n_contrato" placeholder="Número do contrato"
+                          data-mascara="numero-contrato" autocomplete="off" valuex="1.1234.5678.970-1">
                       </div>
                     </div>
                     <div class="form-group mt-3">
                       <label for="endereco">Endereço</label>
-                      <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço" autocomplete="off"  valuex="Rua A, N.º 1000">
+                      <input type="text" class="form-control mt-1" id="endereco" placeholder="Endereço"
+                        autocomplete="off" valuex="Rua A, N.º 1000">
                     </div>
                     <div class="form-group mt-3">
                       <label for="empreendimento">Empreendimento</label>
-                      <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento" autocomplete="off" valuex="Novo Empreendimento">
+                      <input type="text" class="form-control mt-1" id="empreendimento" placeholder="Empreendimento"
+                        autocomplete="off" valuex="Novo Empreendimento">
                     </div>
                   </div>
                   <div class="col">
@@ -106,37 +119,44 @@
                     <div class="row">
                       <div class="col form-group">
                         <label for="valor_compra_e_venda">Valor de compra e venda</label>
-                        <input type="text" class="form-control mt-1" id="valor_compra_e_venda" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                        <input type="text" class="form-control mt-1" id="valor_compra_e_venda" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off" required>
                       </div>
                       <div class="col form-group">
                         <label for="valor_financiamento">Valor de financiamento</label>
-                        <input type="text" class="form-control mt-1" id="valor_financiamento" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                        <input type="text" class="form-control mt-1" id="valor_financiamento" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off" required>
                       </div>
                     </div>
                     <div class="row mt-3">
                       <div class="col form-group">
                         <label for="recursos_proprios">Recursos próprios</label>
-                        <input type="text" class="form-control mt-1" id="recursos_proprios" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off" required>
+                        <input type="text" class="form-control mt-1" id="recursos_proprios" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off" required>
                       </div>
                       <div class="col form-group">
                         <label for="FGTS">FGTS</label>
-                        <input type="text" class="form-control mt-1" id="FGTS" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                        <input type="text" class="form-control mt-1" id="FGTS" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off">
                       </div>
                     </div>
                     <div class="row mt-3">
                       <div class="col form-group">
                         <label for="subsidio">Subsídio</label>
-                        <input type="text" class="form-control mt-1" id="subsidio" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                        <input type="text" class="form-control mt-1" id="subsidio" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off">
                       </div>
                       <div class="col form-group">
                         <label for="taxa_de_cartorio">Taxas de cartório</label>
-                        <input type="text" id="taxa_de_cartorio" class="form-control mt-1" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                        <input type="text" id="taxa_de_cartorio" class="form-control mt-1" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off">
                       </div>
                     </div>
                     <div class="rol mt-3">
                       <div class="col form-group">
                         <label for="FGTS_futuro">FGTS futuro</label>
-                        <input type="text" class="form-control mt-1" id="FGTS_futuro" data-mascara="money" placeholder="R$ 0.000,00" autocomplete="off">
+                        <input type="text" class="form-control mt-1" id="FGTS_futuro" data-mascara="money"
+                          placeholder="R$ 0.000,00" autocomplete="off">
                       </div>
                     </div>
                     <span class="mt-4 mb-2 d-block"><b>Produtos comerciais</b></span>
@@ -181,9 +201,12 @@
                         <label for="conta_comprador_agencia">Conta do Comprador</label>
                         <span class="text-black-50 d-block">(Agência - Produto ou operação - Conta)</span>
                         <div class="input-group" data-element="dados-bancarios">
-                          <input type="text" class="form-control mt-1" id="conta_comprador_agencia" data-param="agencia"  placeholder="0000" autocomplete="off">
-                          <input type="text" class="form-control mt-1" id="conta_comprador_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                          <input type="text" class="form-control mt-1" id="conta_comprador_numero" data-mascara="conta" placeholder="000000000000-0" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_comprador_agencia" data-param="agencia"
+                            placeholder="0000" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_comprador_operacao"
+                            data-mascara="operacao" placeholder="000" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_comprador_numero" data-mascara="conta"
+                            placeholder="000000000000-0" autocomplete="off">
                         </div>
                       </div>
                     </div>
@@ -192,14 +215,18 @@
                         <label for="conta_vendedor_agencia">Conta do Vendedor</label>
                         <span class="text-black-50 d-block">(Agência - Produto ou operação - Conta)</span>
                         <div class="form-group mt-1">
-                          <input type="text" id="conta_vendedor_banco" list="lista-bancos" class="form-control" placeholder="000 - Banco">
+                          <input type="text" id="conta_vendedor_banco" list="lista-bancos" class="form-control"
+                            placeholder="000 - Banco">
                           <datalist id="lista-bancos">
                           </datalist>
                         </div>
                         <div class="input-group" data-element="dados-bancarios">
-                          <input type="text" class="form-control mt-1" id="conta_vendedor_agencia" data-param="agencia" placeholder="0000" autocomplete="off">
-                          <input type="text" class="form-control mt-1" id="conta_vendedor_operacao" data-mascara="operacao" placeholder="000" autocomplete="off">
-                          <input type="text" class="form-control mt-1" id="conta_vendedor_numero" data-mascara="conta-vendedor" placeholder="0000000000000-0" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_vendedor_agencia" data-param="agencia"
+                            placeholder="0000" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_vendedor_operacao"
+                            data-mascara="operacao" placeholder="000" autocomplete="off">
+                          <input type="text" class="form-control mt-1" id="conta_vendedor_numero"
+                            data-mascara="conta-vendedor" placeholder="0000000000000-0" autocomplete="off">
                         </div>
                       </div>
                     </div>
@@ -213,7 +240,8 @@
         </div>
       </div>
 
-      <div class="modal fade" id="modal-ultimos-registros-salvos" aria-hidden="true" aria-labelledby="modal-ultimos-registros-salvos-Label" tabindex="-1">
+      <div class="modal fade" id="modal-ultimos-registros-salvos" aria-hidden="true"
+        aria-labelledby="modal-ultimos-registros-salvos-Label" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -224,7 +252,8 @@
               <!-- Pesquisa -->
               <form method="POST" action="#" class="row">
                 <div class="col-auto">
-                  <input type="text" class="form-control" id="pesquisar-registro" placeholder="Pesquisar por registro" aria-label="Pesquisar por registro" list="lista-registros">
+                  <input type="text" class="form-control" id="pesquisar-registro" placeholder="Pesquisar por registro"
+                    aria-label="Pesquisar por registro" list="lista-registros">
                   <datalist id="lista-registros">
                     <option value="Option 1"></option>
                     <option value="Option 2"></option>
@@ -247,13 +276,15 @@
                     <li class="page-item"><a class="page-link">Anterior</a></li> -->
                 </ul>
               </nav>
-              <button class="btn btn-light" data-action="limpar-registros-salvos"><i class="bi bi-trash-fill"></i>Limpar</button>
+              <button class="btn btn-light" data-action="limpar-registros-salvos"><i
+                  class="bi bi-trash-fill"></i>Limpar</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="modal fade" id="modal-configuracoes" aria-hidden="true" aria-labelledby="modal-configuracoes-Label" tabindex="-1">
+      <div class="modal fade" id="modal-configuracoes" aria-hidden="true" aria-labelledby="modal-configuracoes-Label"
+        tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -266,34 +297,54 @@
                   <div class="form-group">
                     <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
                     <span class="text-muted">200x150 px</span>
-                    <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*" required>
+                    <input class="form-control" type="file" id="config-logo-cca" name="config-logo-cca" accept="image/*"
+                      required>
                   </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Alterar logo</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
-                <button type="button" data-action="ver-primeiro-logo-cca" class="btn btn-light mt-3">Ver primeiro</button>
+                <button type="button" data-action="ver-primeiro-logo-cca" class="btn btn-light mt-3">Ver
+                  primeiro</button>
               </form>
               <hr class="mt-3">
               <form action="#" data-action="form-outras-configs" method="POST" class="mt-2">
                 <div class="form-group mb-3">
                   <label for="config-codigo-cca">Código do Correspondente</label>
-                  <input type="text" name="config-codigo-cca" id="config-codigo-cca" class="form-control mt-2 " minlength="9" maxlength="9" placeholder="000000000" data-mascara="codigo-cca" required>
+                  <input type="text" name="config-codigo-cca" id="config-codigo-cca" class="form-control mt-2 "
+                    minlength="9" maxlength="9" placeholder="000000000" data-mascara="codigo-cca" required>
                 </div>
                 <div class="form-check form-switch">
-                  <input type="checkbox" name="config-autocomplete" id="config-autocomplete" name="config-autocomplete" class="form-check-input">
-                  <label for="config-autocomplete">Autocomplete para os campos&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Autocomplete para os campos" data-bs-content="Permite que sejam exibidas sugestões de preenchimento com dados já usados no campo de input anteriormente."></i></label>
+                  <input type="checkbox" name="config-autocomplete" id="config-autocomplete" name="config-autocomplete"
+                    class="form-check-input">
+                  <label for="config-autocomplete">Autocomplete para os campos&nbsp;<i
+                      class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover"
+                      data-bs-trigger="hover focus" data-bs-title="Autocomplete para os campos"
+                      data-bs-content="Permite que sejam exibidas sugestões de preenchimento com dados já usados no campo de input anteriormente."></i></label>
                 </div>
                 <div class="form-check form-switch">
-                  <input type="checkbox" name="config-armazena-dados" id="config-armazena-dados" name="config-armazena-dados" class="form-check-input">
-                  <label for="config-armazena-dados">Armazena os dados&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Armazena os dados" data-bs-content="Os dados das capas criados serão salvos localmente no navegador"></i></label>
+                  <input type="checkbox" name="config-armazena-dados" id="config-armazena-dados"
+                    name="config-armazena-dados" class="form-check-input">
+                  <label for="config-armazena-dados">Armazena os dados&nbsp;<i
+                      class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover"
+                      data-bs-trigger="hover focus" data-bs-title="Armazena os dados"
+                      data-bs-content="Os dados das capas criados serão salvos localmente no navegador"></i></label>
                 </div>
                 <div class="form-check form-switch">
-                  <input type="checkbox" name="config-exibir-opt-link" id="config-exibir-opt-link" name="config-exibir-opt-link" class="form-check-input">
-                  <label for="config-exibir-opt-link">Permitir link para registros&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Permitir link para registros" data-bs-content="A opção de gerar link de compartilhamento da capa é habilitada."></i></label>
+                  <input type="checkbox" name="config-exibir-opt-link" id="config-exibir-opt-link"
+                    name="config-exibir-opt-link" class="form-check-input">
+                  <label for="config-exibir-opt-link">Permitir link para registros&nbsp;<i
+                      class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover"
+                      data-bs-trigger="hover focus" data-bs-title="Permitir link para registros"
+                      data-bs-content="A opção de gerar link de compartilhamento da capa é habilitada."></i></label>
                 </div>
                 <div class="form-check form-switch">
-                  <input type="checkbox" name="config-exibir-prod-com" id="config-exibir-prod-com" class="form-check-input">
-                  <label for="config-exibir-prod-com">Exibir todos os produtos comerciais disponíveis&nbsp;<i class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover" data-ref-popover="config-exibir-prod-com" data-bs-trigger="hover focus" data-bs-title="Exibir todos os produtos comerciais disponíveis" data-bs-content="Os produtos comerciais contratados na operação ou não são exibidos na capa. <br><br> <b>Atenção:</b> após alterar essa configuração é necessário enviar novamente a capa para que as modificações sejam aplicadas."></i></label></label>
+                  <input type="checkbox" name="config-exibir-prod-com" id="config-exibir-prod-com"
+                    class="form-check-input">
+                  <label for="config-exibir-prod-com">Exibir todos os produtos comerciais disponíveis&nbsp;<i
+                      class="bi bi-info-circle text-body-tertiary" data-bs-toggle="popover"
+                      data-ref-popover="config-exibir-prod-com" data-bs-trigger="hover focus"
+                      data-bs-title="Exibir todos os produtos comerciais disponíveis"
+                      data-bs-content="Os produtos comerciais contratados na operação ou não são exibidos na capa. <br><br> <b>Atenção:</b> após alterar essa configuração é necessário enviar novamente a capa para que as modificações sejam aplicadas."></i></label></label>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Alterar configurações</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
@@ -303,7 +354,9 @@
         </div>
       </div>
 
-      <div class="modal fade" id="modal-confirm-rec" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" aria-hidden="true" aria-labelledby="Modal estático de confirmação dos dados recuperados do arquivo" tabindex="-1">
+      <div class="modal fade" id="modal-confirm-rec" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true" aria-hidden="true"
+        aria-labelledby="Modal estático de confirmação dos dados recuperados do arquivo" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -313,13 +366,16 @@
             <div class="modal-body mb-2">
               <ul class="nav nav-tabs d-none" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-1" role="tab" aria-selected="true">Pass.1</a>
+                  <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-1"
+                    role="tab" aria-selected="true">Pass.1</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-2" role="tab" aria-selected="false" tabindex="-1">Pass.2</a>
+                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-2" role="tab"
+                    aria-selected="false" tabindex="-1">Pass.2</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-3" role="tab" aria-selected="false" tabindex="-1">Pass.3</a>
+                  <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#nav-pass-3" role="tab"
+                    aria-selected="false" tabindex="-1">Pass.3</a>
                 </li>
               </ul>
               <div class="tab-content" id="nav-tabContent">
@@ -328,23 +384,28 @@
                   <form action="#" data-element="form-confirm-produtos-comercial" method="post">
                     <ul class="mt-3 list-group">
                       <li class="info list-group-item">
-                        <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1" data-e-target="#comercial_conta_corrente">
+                        <input type="checkbox" class="form-check-input" name="prod-1" id="prod-1"
+                          data-e-target="#comercial_conta_corrente">
                         <label for="prod-1">Conta corrente</label>
                       </li>
                       <li class="info list-group-item">
-                        <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2" data-e-target="#comercial_cheque_especial">
+                        <input type="checkbox" class="form-check-input" name="prod-2" id="prod-2"
+                          data-e-target="#comercial_cheque_especial">
                         <label for="prod-2">Cheque Especial</label>
                       </li>
                       <li class="info list-group-item">
-                        <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3" data-e-target="#comercial_conta_poupanca">
+                        <input type="checkbox" class="form-check-input" name="prod-3" id="prod-3"
+                          data-e-target="#comercial_conta_poupanca">
                         <label for="prod-3">Conta poupança</label>
                       </li>
                       <li class="info list-group-item">
-                        <input type="checkbox" class="form-check-input" name="prod-4" id="prod-4" data-e-target="#comercial_cartao_de_credito">
+                        <input type="checkbox" class="form-check-input" name="prod-4" id="prod-4"
+                          data-e-target="#comercial_cartao_de_credito">
                         <label for="prod-4">Cartão de crédito</label>
                       </li>
                       <li class="info list-group-item">
-                        <input type="checkbox" class="form-check-input" name="prod-5" id="prod-5" data-e-target="#comercial_credito_consignado">
+                        <input type="checkbox" class="form-check-input" name="prod-5" id="prod-5"
+                          data-e-target="#comercial_credito_consignado">
                         <label for="prod-5">Crédito Consignado</label>
                       </li>
                     </ul>
@@ -357,7 +418,8 @@
                       <span class="fw-semibold">A operação é um processo de imóvel individual?</span>
                       <ul class="mt-2 list-group">
                         <li class="list-group-item">
-                          <input type="radio" class="form-check-input" name="op-tipo" id="op-nao-individual" required checked>
+                          <input type="radio" class="form-check-input" name="op-tipo" id="op-nao-individual" required
+                            checked>
                           <label for="op-nao-individual">Não</label>
                         </li>
                         <li class="list-group-item">
@@ -396,7 +458,9 @@
                     <li class="list-group-item">Valores da operação</li>
                     <li class="list-group-item">Dados bancários</li>
                   </ul>
-                  <button type="button" class="btn btn-secondary mt-1" data-toggle="tooltip" data-bs-target="top" title="Clique em Finalizar para editar as informações"><i class="bi bi-pencil-square"></i>Editar informações</button>
+                  <button type="button" class="btn btn-secondary mt-1" data-toggle="tooltip" data-bs-target="top"
+                    title="Clique em Finalizar para editar as informações"><i class="bi bi-pencil-square"></i>Editar
+                    informações</button>
                 </div>
               </div>
             </div>
@@ -412,7 +476,8 @@
         <div class="card">
           <div class="card-header">
             <b>Copiado!</b>
-            <button type="button" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-div-flutuante"><i class="bi bi-x-lg"></i></button>
+            <button type="button" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom"
+              title="Fechar" data-action="fechar-div-flutuante"><i class="bi bi-x-lg"></i></button>
           </div>
           <div class="card-body">
             <label for="div-flutuante--dado">Título do processo</label>
@@ -433,12 +498,14 @@
         </div>
       </div>
     </div>
-    
+
     <div class="modo-visualizacao">
       <div class="card">
         <div class="card-header" style="display: flex; justify-content: space-between;">
           <b>Atenção!</b>
-          <button type="button" style="margin: 0;" class="div-flutuante--fechar" data-toggle="tooltip" data-bs-placement="bottom" title="Fechar" data-action="fechar-modo-visualizacao"><i style="margin: 0;" class="bi bi-x-lg"></i></button>
+          <button type="button" style="margin: 0;" class="div-flutuante--fechar" data-toggle="tooltip"
+            data-bs-placement="bottom" title="Fechar" data-action="fechar-modo-visualizacao"><i style="margin: 0;"
+              class="bi bi-x-lg"></i></button>
         </div>
         <div class="card-body">
           Você está no modo de visualização da capa
@@ -454,14 +521,16 @@
       <div class="box-no-script">
         <div class="texto-pagina-centralizado-alt">
           <h2 class="titulo-texto-pagina-centralizado">
-            Este site não funciona com o 
+            Este site não funciona com o
             <span class="destaque-pagina-centralizado">Javascript desabilitado</span>
           </h2>
           <br>
-          <p class="label-texto-pagina-centralizado">Muitos dos recursos usados funcionam através do Javascript e sem ele a navegabilidade e o próprio funcionamento do site são comprometidos.</p>
+          <p class="label-texto-pagina-centralizado">Muitos dos recursos usados funcionam através do Javascript e sem
+            ele a navegabilidade e o próprio funcionamento do site são comprometidos.</p>
           <p class="label-texto-pagina-centralizado">Portanto, habilite o Javascript e navegue pelo site.</p>
           <br>
-          <button data-recarrega-pagina class="btn-principal-no-script" id="btn-redirecionar-inicio" name="btn-redirecionar-inicio">Recarregar</button>
+          <button data-recarrega-pagina class="btn-principal-no-script" id="btn-redirecionar-inicio"
+            name="btn-redirecionar-inicio">Recarregar</button>
         </div>
       </div>
     </noscript>
@@ -470,4 +539,5 @@
     <script src="./assets/js/frameworks/html5shivs.js" crossorigin="anonymous"></script>
     <script src="./assets/js/frameworks/print.min.js" crossorigin="anonymous"></script>
   </body>
+
 </html>
