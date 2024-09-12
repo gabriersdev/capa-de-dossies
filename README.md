@@ -11,5 +11,5 @@ Acesse o projeto [clicando aqui](https://gabriersdev.github.io/capa-de-dossies/)
 - jQuery
 - jQuery Mask
 - Bootstrap
-- SweetAlert 
+- SweetAlert
 - Simple Mask Money
