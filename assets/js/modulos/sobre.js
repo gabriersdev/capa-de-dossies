@@ -34,6 +34,11 @@ const novas_funcionalidades = {
   "3.2.0": [
     'Melhorias na validação das informações capturas do espelho de proposta',
     'Implementada correção da modalidade dos processos (NPMCMV para CCNPMCMV e SBPE para CCSBPE)',
+  ],
+  "3.3.0": [
+    'Implementada funcionalidade de compartilhamento e recebimento de dados de capas via GET',
+    'Implementado tratamento e sanitização de dados recebidos via GET',
+    'Correção de falhas no armazenamento das capas',
   ]
 };
 
@@ -41,27 +46,27 @@ const novas_funcionalidades = {
 export default async () => {
   // Import manifest.json no diretório raiz do projeto
   await fetch('manifest.json')
-  .then((response) => {
-    return response.json();
-  })
-  .then((manifest) => {
-    const dados_manifest = {
-      'Project name': manifest.name,
-      'Developer': manifest.developer,
-      'Version': manifest.version,
-      'Release Date': manifest.release_date
-    };
-    dados_do_projeto = (Object.assign({}, dados_manifest, dados_do_projeto));
+    .then((response) => {
+      return response.json();
+    })
+    .then((manifest) => {
+      const dados_manifest = {
+        'Project name': manifest.name,
+        'Developer': manifest.developer,
+        'Version': manifest.version,
+        'Release Date': manifest.release_date
+      };
+      dados_do_projeto = (Object.assign({}, dados_manifest, dados_do_projeto));
 
-    Object.freeze(novas_funcionalidades[manifest.version]);
-    Object.freeze(dados_do_projeto);
+      Object.freeze(novas_funcionalidades[manifest.version]);
+      Object.freeze(dados_do_projeto);
 
-    apresentarDadosProjeto(dados_do_projeto, novas_funcionalidades[manifest.version]);
-    return true;
-  })
-  .catch((error) => {
-    console.info('Não foi possível carregar o arquivo de manifest.json.');
-    console.error(error);
-    return false;
-  });
+      apresentarDadosProjeto(dados_do_projeto, novas_funcionalidades[manifest.version]);
+      return true;
+    })
+    .catch((error) => {
+      console.info('Não foi possível carregar o arquivo de manifest.json.');
+      console.error(error);
+      return false;
+    });
 };
