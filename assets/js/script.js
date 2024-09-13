@@ -1548,11 +1548,13 @@ let configs = {};
 
     if (params.endsWith('&')) params = params.slice(0, -1);
 
+    const link = new URL(window.location);
+
     Swal.fire({
       input: 'text',
       inputLabel: 'Link de compartilhamento',
-      // inputValue: `${ window.location.href }?id = ${ id } `,
-      inputValue: `${window.location.href}?${params} `,
+      // Exemplo: origin: https://github.com + pathname: /public/pages => https://github.com/public/pages
+      inputValue: `${link.origin + link.pathname}?${params} `,
       showCloseButton: true,
       showCancelButton: true,
       cancelButtonText: 'Fechar',
@@ -1621,7 +1623,7 @@ let configs = {};
 
         // TODO - Add. recuperação de mais parâmetros
         if (Array.isArray(parametros)) {
-          console.log(parametros);
+          // console.log(parametros);
           parametros.forEach((parametro) => {
             const parametro_split = parametro.split('=');
             if (parametros_alteracao.includes(parametro_split[0])) {
@@ -1631,7 +1633,6 @@ let configs = {};
                 } catch (error) { }
               } else {
                 try {
-                  // TODO - Implementar máscara nos campos de dados bancários
                   if (parametro_split[0] === 'endereco') {
                     if (parametro_split[1].match(/n@/gi)) parametro_split[1] = parametro_split[1].replace(/n@/gi, 'nº');
                     if (parametro_split[1].match(/@(?=\w{2})/g)) parametro_split[1] = parametro_split[1].replace(/@(?=\w{2})/g, '/');
@@ -1641,6 +1642,22 @@ let configs = {};
                     return;
                   } else if ($(`#${parametro_split[0]}`).attr('type') == 'checkbox') {
                     $(`#${parametro_split[0]}`).prop('checked', parametro_split[1] == 'true');
+                    return;
+                  } else if (
+                    $(`#${parametro_split[0]}`).is('[data-param="agencia"]') ||
+                    $(`#${parametro_split[0]}`).is('[data-mascara="operacao"]') ||
+                    $(`#${parametro_split[0]}`).is('[data-mascara="conta"]') ||
+                    $(`#${parametro_split[0]}`).is('[data-mascara="conta-vendedor"]')
+                  ) {
+                    // Implementando máscara nos campos de dados bancários
+                    let refMask = null;
+
+                    if ($(`#${parametro_split[0]}`).is('[data-param="agencia"]')) refMask = 'agencia';
+                    else if ($(`#${parametro_split[0]}`).is('[data-mascara="operacao"]')) refMask = 'operacao';
+                    else if ($(`#${parametro_split[0]}`).is('[data-mascara="conta"]')) refMask = 'conta';
+                    else if ($(`#${parametro_split[0]}`).is('[data-mascara="conta-vendedor"]')) refMask = 'conta-vendedor';
+
+                    $(`#${parametro_split[0]}`).val(new StringMask(masks.find(e => e.input_id == refMask).mask, { reverse: true }).apply(parametro_split[1].replace(/\D/g, '')));
                     return;
                   }
                   $(`#${parametro_split[0]}`).val(parametro_split[1].toUpperCase().replace(/\+/g, ' '));
