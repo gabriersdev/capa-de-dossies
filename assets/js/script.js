@@ -52,36 +52,6 @@ let configs = {};
     'conta_vendedor_numero'
   ]
 
-  const inputs_formulario = {
-    nome_1: '',
-    CPF_1: '',
-    nome_2: '',
-    CPF_2: '',
-    modalidade: '',
-    n_contrato: '',
-    endereco: '',
-    empreendimento: '',
-    valor_compra_e_venda: '',
-    valor_financiamento: '',
-    recursos_proprios: '',
-    FGTS: '',
-    subsidio: '',
-    comercial_conta_corrente: '',
-    comercial_cheque_especial: '',
-    comercial_conta_poupanca: '',
-    comercial_cartao_de_credito: '',
-    conta_agencia: '',
-    conta_operacao: '',
-    conta_numero: '',
-    conta_comprador_agencia: '',
-    conta_comprador_operacao: '',
-    conta_comprador_numero: '',
-    conta_vendedor_banco: '',
-    conta_vendedor_agencia: '',
-    conta_vendedor_operacao: '',
-    conta_vendedor_numero
-  }
-
   const masks = [
     { input_id: 'CPF', mask: '000.000.000-00' },
     { input_id: 'numero-contrato', mask: '0.0000.0000000-0' },
@@ -654,58 +624,6 @@ let configs = {};
           break;
 
         case 'input-import-arquivo-espelho':
-          // Dados de exemplo - para teste
-          const data = {
-            "proponentes": {
-              "nome": [
-                "JOSE DA SILVA",
-                "MARIA JOSE",
-              ],
-              "CPF": [
-                "123.456.789-09",
-                "123.456.789-09",
-              ]
-            },
-            "modalidade": "NPMCMV",
-            "contrato": "8.7857.0000138-0",
-            "endereco": "RUA X",
-            "empreendimento": "CONQUISTA ALVORADA"
-            ,
-            "valores": {
-              "valor_compra_e_venda":
-                "224.000,00"
-              ,
-              "valor_financiamento":
-                "175.200,00"
-              ,
-              "recursos_proprios":
-                "45.780,62"
-              ,
-              "FGTS":
-                "1.222,38"
-              ,
-              "subsidio":
-                "1.797,00"
-              ,
-              "taxas_de_cartorio":
-                "0,00"
-            },
-            "conta_debito": {
-              "banco": "104",
-              "agencia": "0001",
-              "operacao": "1234",
-              "conta": "000581752157",
-              "digito": "6"
-            },
-            "conta_deposito": {
-              "banco": "104",
-              "agencia": "0001",
-              "operacao": "1234",
-              "conta": "000581752157",
-              "digito": "6"
-            }
-          }
-
           $(acao).on('change', (evento) => {
             const arquivo = evento.target.files[0];
             const reader = new FileReader();
@@ -1554,7 +1472,7 @@ let configs = {};
       input: 'text',
       inputLabel: 'Link de compartilhamento',
       // Exemplo: origin: https://github.com + pathname: /public/pages => https://github.com/public/pages
-      inputValue: `${link.origin + link.pathname}?${params} `,
+      inputValue: `${link.origin + link.pathname}?${params}`,
       showCloseButton: true,
       showCancelButton: true,
       cancelButtonText: 'Fechar',
@@ -1573,7 +1491,7 @@ let configs = {};
         }
       }
     })
-    console.log(`${window.location.href}?${params} `);
+    // console.log(`${window.location.href}?${params}`);
   }
 
   window.addEventListener("load", function () {
@@ -1602,7 +1520,7 @@ let configs = {};
               const numero = zeroEsquerda(3, banco.code);
               if (!isNaN(parseInt(numero))) {
                 const option = document.createElement('option');
-                option.setAttribute('value', `${numero} - ${banco.name} `);
+                option.setAttribute('value', `${numero} - ${banco.name}`);
                 lista.appendChild(option);
               }
             }
@@ -1739,10 +1657,10 @@ let configs = {};
   });
 
   window.addEventListener('DOMContentLoaded', () => {
-    if (true) {
+    if (false) {
       window.onbeforeunload = (evento) => {
         if (Array.from($('input:not([type=checkbox], [type=radio], [type=number], #config-codigo-cca)')).filter(e => e.value !== "R$ 0,00" && e.value.trim().length > 0).length > 0) {
-          // evento.preventDefault();
+          evento.preventDefault();
         }
       }
     }
@@ -1763,11 +1681,14 @@ let configs = {};
   const atualizarConfiguracoes = () => {
     const settings = new Settings();
     const options = settings.getOptionsValues();
+    // console.log(options);
 
     try {
       for (let option of Object.entries(options)) {
         if (option[0] !== "logo-cca") {
-          $(`#config - ${option[0]} `).prop(`${option[1]["propertie"]} `, option[1]["values"]);
+          // console.log(option);
+          // Altera o valor dos inputs de configuração conforme as configurações
+          $(`#config-${option[0]}`).prop(`${option[1]["propertie"]}`, option[1]["values"]);
 
           switch (option[0]) {
             case "autocomplete":
@@ -1807,7 +1728,7 @@ let configs = {};
         };
       }
     } catch (error) {
-
+      console.log('Ocorreu um erro ao atualizar as configurações', 'Error: 1002AC', error);
     }
   }
 
@@ -1815,17 +1736,19 @@ let configs = {};
   window.proxContent = (index, e) => {
     const tabs = document.querySelectorAll('.nav-tabs .nav-link');
     const tabContents = document.querySelectorAll('.tab-pane');
-    e.setAttribute('onclick', 'proxContent(' + (index + 1) + ', this)');
+    e.setAttribute('onclick', 'proxContent(' + (index + 1) + ',this)');
 
-    // tabs[index].classList.remove('active');
-    // tabs[index].setAttribute('aria-selected', false);
-    // tabContents[index].classList.remove('active', 'show');
+    tabs[index].classList.remove('active');
+    tabs[index].setAttribute('aria-selected', false);
+    tabContents[index].classList.remove('active', 'show');
 
-    // tabs[index + 1].classList.add('active');
-    // tabs[index + 1].setAttribute('aria-selected', true);
-    // tabContents[index + 1].classList.add('active', 'show');
+    tabs[index + 1].classList.add('active');
+    tabs[index + 1].setAttribute('aria-selected', true);
+    tabContents[index + 1].classList.add('active', 'show');
 
-    $(`.nav - tabs.nav - link[data - bs - target="#nav-pass-${index + 2}"]`).tab('show');
+    // console.log(document.querySelector(`.nav-tabs.nav-link[data-bs-target="#nav-pass-${index + 2}"]`));
+
+    // $(`.nav-tabs.nav-link[data-bs-target="#nav-pass-${index + 2}"]`).tab('show');
 
     if (parseInt(index) === tabContents.length - 2) {
       e.removeAttribute('onclick');
@@ -1847,7 +1770,7 @@ let configs = {};
           const selectedsNames = Array.from(confirmNomeProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
           // Preenchendo os campos com os nomes
           selectedsNames.forEach((name, index) => {
-            document.querySelector(`#nome_${index + 1} `).value = name.toUpperCase();
+            document.querySelector(`#nome_${index + 1}`).value = name.toUpperCase();
           });
         }
 
@@ -1857,7 +1780,7 @@ let configs = {};
           const selectedsCPF = Array.from(confirmCPFProps.querySelectorAll('input[type="checkbox"]')).filter((e) => ['true', 'on', true].includes(e.checked)).map((input) => input.dataset.eTarget).toSpliced(2);
           // Preenchendo os campos com os CPFs
           selectedsCPF.forEach((cpf, index) => {
-            document.querySelector(`#CPF_${index + 1} `).value = cpf;
+            document.querySelector(`#CPF_${index + 1}`).value = cpf;
           });
         }
 

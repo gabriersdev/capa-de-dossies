@@ -14,41 +14,45 @@
 @import url(./elementos/div-flutuante.css);
 @import url(./elementos/modo-visualizacao.css);
 
-:root{
+:root {
   --bs-font-sans-serif: 'Inter', sans-serif;
 }
 
-html{
+html {
   scroll-behavior: smooth;
 }
 
-body{
+body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
 }
 
-header.container .header-principal{
+input::placeholder {
+  font-size: inherit;
+}
+
+header.container .header-principal {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-main{
+main {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-main#capa :where(p, span, b){
+main#capa :where(p, span, b) {
   font-size: 13pt !important;
 }
 
-div.principal{
+div.principal {
   font-family: 'Arial', sans-serif !important;
 }
 
-.principal{
+.principal {
   width: 21cm;
   max-width: 21cm;
   height: 26.5cm;
@@ -58,12 +62,12 @@ div.principal{
   grid-gap: 1rem;
 }
 
-.container-esquerda img{
+.container-esquerda img {
   width: 100%;
   width: 150px;
 }
 
-.container-direita{
+.container-direita {
   margin-top: calc(25px + 1rem);
   position: relative;
   display: flex;
@@ -71,12 +75,12 @@ div.principal{
   justify-content: space-between;
 }
 
-.grupo-footer{
+.grupo-footer {
   display: flex;
   justify-content: space-between;
 }
 
-.grupo-footer img{
+.grupo-footer img {
   margin-top: 1rem;
   width: 200px;
   height: 150px;
@@ -86,7 +90,7 @@ div.principal{
   right: 0;
 }
 
-.grupo{
+.grupo {
   border-left: 1px solid #000;
   border-bottom: 1px solid #000;
   padding-left: 1rem;
@@ -95,62 +99,63 @@ div.principal{
   line-height: 1.4;
 }
 
-main b{
+main b {
   font-weight: 600;
 }
 
-.grupo b:not(:first-child){
+.grupo b:not(:first-child) {
   margin-top: 0.25rem;
 }
 
-.grupo b span{
+.grupo b span {
   margin-right: 0.25rem;
 }
 
-.grupo b span:first-child::after{
+.grupo b span:first-child::after {
   content: ":";
 }
 
-.grupo:not(:first-child){
+.grupo:not(:first-child) {
   margin-top: 1rem;
 }
 
 .tabela-dados-bancarios,
-.modal-ultimos-registros-salvos table{
+.modal-ultimos-registros-salvos table {
   text-transform: none;
 }
 
-.tabela-dados-bancarios, .tabela-dados-bancarios tbody{
+.tabela-dados-bancarios,
+.tabela-dados-bancarios tbody {
   display: block;
 }
 
-.tabela-dados-bancarios th{
+.tabela-dados-bancarios th {
   text-align: left;
 }
 
-.tabela-dados-bancarios tbody tr{
+.tabela-dados-bancarios tbody tr {
   display: flex;
   justify-content: space-between;
 }
 
-#modal-ultimos-registros-salvos table:has(th, td){
+#modal-ultimos-registros-salvos table:has(th, td) {
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 #modal-ultimos-registros-salvos table,
-#modal-ultimos-registros-salvos .alert{
+#modal-ultimos-registros-salvos .alert {
   margin-bottom: 0;
 }
 
-:where(footer, div, .modal){
+:where(footer, div, .modal) {
   font-size: 16px;
 }
 
-:where(footer, .modal){
+:where(footer, .modal) {
   width: 100%;
 }
 
-button i{
+button i {
   margin-right: 0.5rem;
 }
 
@@ -162,68 +167,69 @@ button[data-action="limpar-tudo"] i,
 button[data-action="enviar-para-ateste"] i,
 button[data-action="copiar-nome-capa"] i,
 button[data-action="baixar-capas-armazenadas"] i,
-button i.no-margin, 
-.some-icon i{
+button i.no-margin,
+.some-icon i {
   margin: 0;
 }
 
-address{ 
+address {
   border-top: 1px solid #000;
   margin-top: 2rem;
   padding-top: 1rem;
-  font-style: normal; 
+  font-style: normal;
   margin-bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-} 
+}
 
-address > div{
+address>div {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-address div a i{
+address div a i {
   font-size: 1.5rem;
 }
 
-address div a:not(:first-child){
+address div a:not(:first-child) {
   margin-left: 0.5rem;
 }
 
-a{ 
-  text-decoration: none; 
-  outline: none; 
-  color: #000; 
-} 
-
-a:is(:hover, :focus, :active), address a b{ 
-  text-decoration: underline; 
-} 
-
-.text-gray{ 
-  color: #808080; 
-  font-weight: 600; 
+a {
+  text-decoration: none;
+  outline: none;
+  color: #000;
 }
 
-#valores-imovel{
+a:is(:hover, :focus, :active),
+address a b {
+  text-decoration: underline;
+}
+
+.text-gray {
+  color: #808080;
+  font-weight: 600;
+}
+
+#valores-imovel {
   text-transform: none;
 }
 
-.tabela-propostas-comerciais{
+.tabela-propostas-comerciais {
   /* width: 100%; */
   text-transform: none;
 }
 
-.tabela-propostas-comerciais input[type=checkbox]{
+.tabela-propostas-comerciais input[type=checkbox] {
   margin: 0.25rem 0.05rem;
   border-radius: 0;
   width: 15px;
   height: 15px;
 }
 
-.tabela-propostas-comerciais .checkbox-proposta{
+.tabela-propostas-comerciais .checkbox-proposta {
   display: block;
   height: 15px;
   width: 15px;
@@ -232,16 +238,16 @@ a:is(:hover, :focus, :active), address a b{
   position: relative;
 }
 
-.tabela-propostas-comerciais .checkbox-proposta[checked=false]{
+.tabela-propostas-comerciais .checkbox-proposta[checked=false] {
   background: url(../img/checkbox-nochecked.png) center / contain no-repeat;
 }
 
 .tabela-propostas-comerciais .checkbox-proposta[show="true"],
-.tabela-propostas-comerciais .checkbox-proposta[show="false"]{
+.tabela-propostas-comerciais .checkbox-proposta[show="false"] {
   background: #FFF;
 }
 
-.tabela-propostas-comerciais .checkbox-proposta[show="true"]::before{
+.tabela-propostas-comerciais .checkbox-proposta[show="true"]::before {
   content: "\2612";
   display: block;
   font-family: "bootstrap-icons";
@@ -249,15 +255,15 @@ a:is(:hover, :focus, :active), address a b{
   text-rendering: auto;
   position: absolute;
   font-size: 20px;
-  
+
   top: -50%;
   left: -50%;
   transform: translate(40%, -7%);
-  
+
   z-index: 1;
 }
 
-.tabela-propostas-comerciais .checkbox-proposta[show="false"]::before{
+.tabela-propostas-comerciais .checkbox-proposta[show="false"]::before {
   content: "\2610";
   display: block;
   font-family: "bootstrap-icons";
@@ -265,33 +271,33 @@ a:is(:hover, :focus, :active), address a b{
   text-rendering: auto;
   position: absolute;
   font-size: 20px;
-  
+
   top: -50%;
   left: -50%;
   transform: translate(40%, -7%);
-  
+
   z-index: 1;
 }
 
-.tabela-propostas-comerciais .checkbox-proposta[checked=true]{
+.tabela-propostas-comerciais .checkbox-proposta[checked=true] {
   background: url(../img/checkbox-checked.png) center / contain no-repeat;
 }
 
 .tabela-propostas-comerciais tr td,
-.tabela-propostas-comerciais tr th{
+.tabela-propostas-comerciais tr th {
   border: 1px solid #000;
   padding: 0 0.5rem;
 }
 
-.tabela-propostas-comerciais tr th{
+.tabela-propostas-comerciais tr th {
   border-bottom: unset;
 }
 
-.no-bold{
+.no-bold {
   font-weight: normal;
 }
 
-.btn-light{
+.btn-light {
   cursor: pointer;
   outline: none;
   outline: none !important;
@@ -299,16 +305,16 @@ a:is(:hover, :focus, :active), address a b{
   background-color: #CCC;
 }
 
-.btn-light:hover{
+.btn-light:hover {
   background-color: #BBB;
   border-color: #BBB;
 }
 
-.area-validation-CPF{
+.area-validation-CPF {
   position: relative;
 }
 
-.icon-invalid-CPF{
+.icon-invalid-CPF {
   position: absolute;
   top: 50%;
   right: 0.75rem;
@@ -316,73 +322,77 @@ a:is(:hover, :focus, :active), address a b{
   color: #FF0000;
 }
 
-.tooltip-CPF-invalido{
+.tooltip-CPF-invalido {
   --bs-tooltip-bg: #FF0000 !important;
 }
 
-.custom-tooltip{
+.custom-tooltip {
   --bs-tooltip-bg: #FF0 !important;
   --bs-tooltip-color: #000 !important;
   --bs-tooltip-opacity: 1;
   --bs-tooltip-margin: 1rem;
 }
 
-.nome-props{
+.nome-props {
   --bs-tooltip-bg: #0A58CA;
   --bs-tooltip-opacity: 1;
   font-size: 14px !important;
 }
 
-ul.pagination{
+ul.pagination {
   flex-wrap: wrap;
-  .page-item{
+
+  .page-item {
     margin: 0.25rem 0;
   }
 }
 
-.list-group-item{
+.list-group-item {
   display: flex;
   gap: 0.5rem;
+
   /* Expandindo espaço do label para que o click seja mais fácil */
-  [for]{
+  [for] {
     flex-grow: 2;
   }
 }
 
 @media screen and (max-width: 600px) {
-  #modal-editar-informacoes .modal-body form > .row{
+  #modal-editar-informacoes .modal-body form>.row {
     display: block;
   }
 }
 
-.none{
+.none {
   display: none;
 }
 
-.block{
+.block {
   display: block;
 }
 
-.font-inter{
+.font-inter {
   font-family: "Inter", sans-serif;
 }
 
-.button-disabled{
+.button-disabled {
   opacity: 0.5;
   pointer-events: none;
 }
 
-.swal2-html-container{
+.swal2-html-container {
   font-size: 1rem !important;
 }
 
 @media print {
-  .div-flutuante, .modo-visualizacao-logo-cca{
+
+  .div-flutuante,
+  .modo-visualizacao-logo-cca {
     display: none !important;
   }
-  
+
   /* Se a logo padrão estiver na capa, no momento da impressão ela é ocultada */
-  [src="./assets/img/logo-padrao.png"]{
+  [src="./assets/img/logo-padrao.png"] {
     visibility: hidden;
   }
 }

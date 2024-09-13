@@ -15,14 +15,14 @@ function getPageText(pageNum, PDFDocumentInstance) {
       pdfPage.getTextContent().then(function (textContent) {
         var textItems = textContent.items;
         var finalString = "";
-        
+
         // Concatenate the string of the item to the final string
         for (var i = 0; i < textItems.length; i++) {
           var item = textItems[i];
-          
+
           finalString += item.str + " ";
         }
-        
+
         // Solve promise with the text retrieven from the page
         resolve(finalString);
       });
@@ -39,19 +39,19 @@ function getPageText(pageNum, PDFDocumentInstance) {
 const getData = (fileData, mode) => {
   // Loaded via <script> tag, create shortcut to access PDF.js exports.
   const { pdfjsLib } = globalThis;
-  
+
   // The workerSrc property shall be specified.
   pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/js/frameworks/pdf.worker.mjs';
-  
+
   // Asynchronous download of PDF
-  const loadingTask = pdfjsLib.getDocument({data: fileData});
-  return loadingTask.promise.then(function(pdf) {
+  const loadingTask = pdfjsLib.getDocument({ data: fileData });
+  return loadingTask.promise.then(function (pdf) {
     // console.log('PDF loaded');
-    
+
     const pdfDocument = pdf;
     // Create an array that will contain our promises 
     let pagesPromises = [];
-    
+
     for (let i = 0; i < pdf.numPages; i++) {
       // Required to prevent that i is always the total of pages
       (function (pageNumber) {
@@ -59,12 +59,12 @@ const getData = (fileData, mode) => {
         pagesPromises.push(getPageText(pageNumber, pdfDocument));
       })(i + 1);
     }
-    
+
     // Execute all the promises
     return Promise.all(pagesPromises).then(function (pagesText) {
       // Display text of all the pages in the console
       // e.g ["Text content page 1", "Text content page 2", "Text content page 3" ... ]
-      
+
       if (pagesText.some((p) => p.trim() === '')) {
         // When don't possible to read the PDF - PDF is empty
         return [];
@@ -79,12 +79,12 @@ const getData = (fileData, mode) => {
         * @returns {Array} The content between the two strings or an empty array
         **/
         const getContent = (text, start, end) => {
-          try { 
+          try {
             if (!index && index !== 0) return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim()) : null
             else return text.search(start) > 0 && text.search(end) > 0 ? text.match(new RegExp(`(${start}).*(${end})`, 'gi')).map((p) => p.replace(new RegExp(`(${start})|(${end})`, 'gi'), '').trim())[index] : null;
           } catch (e) { return null; }
         }
-        
+
         /** 
         * Get the context using regex
         * 
@@ -96,7 +96,7 @@ const getData = (fileData, mode) => {
         **/
         const getContextUsingRegex = (text, regex, regexSanit, index) => {
           // Verificação e tratamento para textos obtidos no Firefox
-          
+
           // TODO - Implementar verificação se algo foi obtido. Falha ocorre para arquivos de espelhos obtidos do Firefox e que podem ser lidos em outro navegador. ## Solução encontrada aumentando o tempo de espera para carregamento do PDF com a complexidade do regex
           if (window.navigator.userAgent.indexOf('Firefox') !== -1 || mode === 'hard') {
             // Percorre os textos (do regex para captura e do regex para sanitização) e adiciona \s* após cada caractere exceto os caracteres especiais
@@ -123,7 +123,7 @@ const getData = (fileData, mode) => {
             }
           }
 
-          try{
+          try {
             if (!new RegExp(regex).test(text)) return null;
             if (!index && index !== 0) return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim());
             else return text.match(new RegExp(regex)).map((p) => p.replace(new RegExp(regexSanit), '').trim())[index];
@@ -131,7 +131,7 @@ const getData = (fileData, mode) => {
             return null;
           }
         }
-        
+
         /** 
         * Get the account number
         * 
@@ -139,19 +139,19 @@ const getData = (fileData, mode) => {
         * @param {Integer} index The index of the array
         * @returns {Array} The content between the two strings or an empty array
         **/
-        const getAccount = (ret,  index) => {
-          try{
+        const getAccount = (ret, index) => {
+          try {
             if (ret) {
               const account = Array.isArray(ret) ? ret[0].split('-') : ret.split('-');
               return account[index];
             } else {
               return null;
             }
-          }catch (e) {
+          } catch (e) {
             return '';
           }
         }
-        
+
         // console.log('Here!');
         const text = pagesText.join(' ').replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
 
@@ -182,20 +182,20 @@ const getData = (fileData, mode) => {
         }
 
         const sanitizarRetornoRegex = (str, regex, action, replaceValue) => {
-          try{
+          try {
             if (action === 'replace') return str.replace(regex, replaceValue);
             return str.match(regex)[0];
-          }catch (e) {
+          } catch (e) {
             return null;
           }
         }
 
-        try{
+        try {
           const data = {
             proponentes: {
               nome: getContextUsingRegex(text, /(Nome:)\s[\w\s]*\s(Sexo)/gi, /Nome:|Sexo/gi, ''),
               CPF: getContextUsingRegex(text, /(CPF:)\s\d{3}\.\d{3}\.\d{3}-\d{2}\s(Nome)/gi, /(CPF:)|Nome/gi),
-          },
+            },
             modalidade: getContextUsingRegex(text, /((Negociada|Negociação) Item de Produto: \d{1,} -)(\s\w+\s)/gi, /((Negociada|Negociação) Item de Produto: \d{1,} -)|\s/gi, 0),
             contrato: getContextUsingRegex(text, /(Número Contrato para Administração:)\s\d{1}\.\d{4}\.\d{7}-\d{1}\s*Situação/gi, /(Número Contrato para Administração:)|Situação/gi, 0),
             endereco: sanitizarRetornoRegex(getContextUsingRegex(text, /(Endereço da Unidade Habitacional:).*(Vagas de Garagem)/gi, /(Endereço da Unidade Habitacional:)|Vagas de Garagem/gi, 0), regex.endereco),
@@ -211,7 +211,7 @@ const getData = (fileData, mode) => {
             // Conta para débito das parcelas
             conta_debito: {
               // Código da Caixa Econômica Federal 
-              banco: '104', 
+              banco: '104',
               agencia: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 0),
               operacao: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 1),
               conta: getAccount(getContextUsingRegex(text, /(Conta para Débito:)\s(\d{4}-\d{3,4}-\d{12}-\d{1})\s(Débito em Conta)/gi, /(Conta para Débito:)|(Débito em Conta)/gi), 2),
@@ -241,7 +241,7 @@ const getData = (fileData, mode) => {
           SwalAlert('aviso', 'error', 'Ocorreu um erro ao ler o arquivo. Tente novamente', `Verifique o console.`);
           console.info(e.message);
           return [];
-        } 
+        }
       }
     });
   }, function (reason) {
