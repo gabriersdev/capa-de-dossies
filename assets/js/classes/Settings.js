@@ -109,7 +109,7 @@ class Settings {
   }
 
   getOption(config_name) {
-    console.log('Here!', config_name);
+    // console.log('Here!', config_name);
     if (this.optionIsValid(config_name)) {
       return this.CRUDoption("read", config_name)
     }
