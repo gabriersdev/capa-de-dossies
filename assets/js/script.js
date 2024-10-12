@@ -425,7 +425,7 @@ let configs = {};
 
               if (!isEmpty(saida)) {
                 window.open(`https://gabriersdev.github.io/ateste-processo?${saida.join('&')}`)
-                console.log(saida.join('&'));
+                // console.log(saida.join('&'));
               } else {
                 SwalAlert('aviso', 'error', 'Necessário preencher ao menos um campo para criar o Ateste');
               }
@@ -951,7 +951,7 @@ let configs = {};
       }
 
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       console.log("Algo de errado ocorreu. Erro: %s", error);
     }
   }
