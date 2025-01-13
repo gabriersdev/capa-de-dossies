@@ -1720,7 +1720,7 @@ let configs = {};
           } else {
             const values = JSON.parse(option[1].values);
             // Informar que já existe um arquivo
-            $('[data-element="logo-cca-selection"]').html(`< label for= "config-logo-cca-exists" class= "form-label" > Logo do Correspondente</ ><span class="text-muted">200x150 px</span><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
+            $('[data-element="logo-cca-selection"]').html(`<label for="config-logo-cca-exists mb-3" class="form-label">Logo do Correspondente</>&nbsp;<span class="text-muted">200x150 px</span></label><div class="input-group"><input type="text" class="form-control" id="config-logo-cca-exists" name="config-logo-cca-exists" value=${values.value} readonly><button type="button" class="btn btn-light" data-action="remover-logo-cca"><i class="bi bi-x-lg no-margin"></i></button></div>`);
             $('#logo-cca').prop('src', values.file);
             $('[data-action="ver-primeiro-logo-cca"]').addClass('button-disabled');
             $('[data-action="form-logo-cca"] button[type="submit"]').addClass('button-disabled');
