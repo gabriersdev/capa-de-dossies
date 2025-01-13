@@ -40,9 +40,9 @@ let configs = {};
     'comercial_conta_poupanca',
     'comercial_cartao_de_credito',
     'comercial_credito_consignado',
-    // 'conta_agencia', 
-    // 'conta_operacao', 
-    // 'conta_numero', 
+    // 'conta_agencia',
+    // 'conta_operacao',
+    // 'conta_numero',
     'conta_comprador_agencia',
     'conta_comprador_operacao',
     'conta_comprador_numero',
@@ -207,7 +207,7 @@ let configs = {};
   * Reset all form fields. Input with dataset 'mascara' === 'money' will be reset to 'R$ 0,00'
   * @param {HTMLElement} form - Form element
   * @returns {void}
-  * 
+  *
   **/
   const resetFormFields = (form) => {
     Array.from(form.querySelectorAll('input')).forEach((input) => {
@@ -276,7 +276,7 @@ let configs = {};
                 // Exibir modal com o título do processo - não exibindo
                 if (document.querySelector('.div-flutuante')) {
                   $('.div-flutuante input#div-flutuante--dado').val(nome);
-                  // $('.div-flutuante').show(); 
+                  // $('.div-flutuante').show();
                 }
 
               }).catch((error) => {
@@ -845,7 +845,7 @@ let configs = {};
                 console.info(e.message);
               }
             } catch (error) {
-              // 
+              //
               $(btn).removeClass('disabled');
             }
           })
@@ -863,7 +863,7 @@ let configs = {};
       const button = { class: form.querySelector('button[type=submit]').classList.value, text: form.querySelector('button[type=submit]').innerText }
       const inputs = Array.from(form.querySelectorAll('input'));
 
-      // Se form. de informações for enviado, verificar se img foi preenchida e submeter também   
+      // Se form. de informações for enviado, verificar se img foi preenchida e submeter também
       if (document.querySelector('#config-logo-cca')) {
         if (document.querySelector('#config-logo-cca').files[0]) {
           inputs.push(document.querySelector('#config-logo-cca'));
@@ -1538,6 +1538,7 @@ let configs = {};
         const parametros = url.search.replace('?', '').split('&');
         // const parametros_alteracao = ['CPF_1', 'nome_1', 'CPF_2', 'nome_2', 'modalidade', 'n_contrato'];
         const parametros_alteracao = [...Array.from(document.querySelectorAll('#modal-editar-informacoes input')).map(e => e.id)];
+        let existem_paramestros_alterar = false
 
         // TODO - Add. recuperação de mais parâmetros
         if (Array.isArray(parametros)) {
@@ -1545,6 +1546,7 @@ let configs = {};
           parametros.forEach((parametro) => {
             const parametro_split = parametro.split('=');
             if (parametros_alteracao.includes(parametro_split[0])) {
+              existem_paramestros_alterar = true;
               if (['nome_1', 'nome_2', 'modalidade'].includes(parametro_split[0])) {
                 try {
                   $(`#${parametro_split[0]}`).val(desanitizarStringURL(parametro_split[1].toUpperCase().replace(/\+/g, ' ')));
@@ -1584,7 +1586,7 @@ let configs = {};
             }
           })
 
-          exibirModalEditarInformacoes();
+          if (existem_paramestros_alterar) exibirModalEditarInformacoes();
         }
       }
 
