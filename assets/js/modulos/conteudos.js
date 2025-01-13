@@ -50,7 +50,8 @@ const principal = `
 
 <main id="capa">
 <!-- TODO - refatorar uso das classes. existem estilizacao via CSS e outras via classes do bootstrap -->
-<div class="principal container d-flex align-content-start flex-wrap justify-content-around gap-5">
+<!-- d-flex align-content-start flex-wrap justify-content-around gap-5 -->
+<div class="principal container overflow-x-scroll">
   <section class="container-esquerda">
     <img src="./assets/img/logo-caixa.png" alt="">
   </section>

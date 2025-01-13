@@ -78,6 +78,7 @@ div.principal {
 
 .container-direita {
   margin-top: calc(25px + 1rem);
+  max-width: 550px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -95,7 +96,6 @@ div.principal {
   height: 150px;
   object-fit: contain;
   display: block;
-  position: absolute;
   right: 0;
 }
 
@@ -404,6 +404,10 @@ ul.pagination {
   .div-flutuante,
   .modo-visualizacao-logo-cca {
     display: none !important;
+  }
+
+  .principal {
+    overflow: hidden !important;
   }
 
   /* Se a logo padrão estiver na capa, no momento da impressão ela é ocultada */
