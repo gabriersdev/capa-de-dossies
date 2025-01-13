@@ -22,7 +22,7 @@ function formatoHorario(datetime){
 
 const tabela_ultimos_registros = (id) => {
   return `<table class="table table-page-${id} ${id !== 0 ? 'none' : ''}"><thead><tr><th>1º proponente</th><th>Salvo em</th><th>Ações</th></tr></thead><tbody></tbody></table>`;
-} 
+}
 
 const principal = `
 <header class="container mb-5 mt-2">
@@ -49,11 +49,12 @@ const principal = `
 </header>
 
 <main id="capa">
-<div class="principal container">
+<!-- TODO - refatorar uso das classes. existem estilizacao via CSS e outras via classes do bootstrap -->
+<div class="principal container d-flex align-content-start flex-wrap justify-content-around gap-5">
   <section class="container-esquerda">
     <img src="./assets/img/logo-caixa.png" alt="">
   </section>
-  <section class="container-direita">
+  <section class="container-direita flex-grow-1">
     <div class="grupo" id="identificacao-processo">
       <div id="proponente-1">
         <b><span>Título</span> <span data-element-paste="nome_1">[Nome do proponente]</span></b><br>
@@ -165,12 +166,12 @@ const principal = `
   </div>
 </main>
 
-<footer class="container mt-5 mb-5">    
-  <address>
+<footer class="container my-5">    
+  <address class="d-flex flex-wrap align-content-center gap-3">
     <a href="" data-link="github-dev">
       Desenvolvido por <b>Gabriel Ribeiro</b>
     </a>
-    <div>
+    <div class="d-flex flex-wrap align-content-center">
       <button class="btn btn-secondary" data-action="exportar-dados"><i class="bi bi-file-arrow-down"></i>Exportar</button>&nbsp;
       <button class="btn btn-primary" data-action="acessar-configs"><i class="bi bi-gear-fill"></i>Config.</button>
       <a href="" data-link="github-dev" data-toggle="tooltip" data-placement="top" title="Github"><i class="bi bi-github"></i></a>
@@ -180,7 +181,7 @@ const principal = `
 </footer>
 `
 
-const preencher_logo_cca = 
+const preencher_logo_cca =
 `<div class="form-group">
   <label for="config-logo-cca" class="form-label">Logo do Correspondente</label>
   <span class="text-muted">200x150 px</span>

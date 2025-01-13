@@ -32,10 +32,19 @@ input::placeholder {
   font-size: inherit;
 }
 
+/* TODO - refatorar esses codigos, para usar as classes do bootstrap */
 header.container .header-principal {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
 }
 
 main {
@@ -86,7 +95,7 @@ div.principal {
   height: 150px;
   object-fit: contain;
   display: block;
-  /* position: absolute; */
+  position: absolute;
   right: 0;
 }
 
@@ -183,7 +192,7 @@ address {
   justify-content: space-between;
 }
 
-address>div {
+address > div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -352,13 +361,14 @@ ul.pagination {
   gap: 0.5rem;
 
   /* Expandindo espaço do label para que o click seja mais fácil */
+
   [for] {
     flex-grow: 2;
   }
 }
 
 @media screen and (max-width: 600px) {
-  #modal-editar-informacoes .modal-body form>.row {
+  #modal-editar-informacoes .modal-body form > .row {
     display: block;
   }
 }
@@ -384,8 +394,13 @@ ul.pagination {
   font-size: 1rem !important;
 }
 
-@media print {
+@media screen and (max-width: 768px) {
+  .grupo-footer img {
+    position: relative;
+  }
+}
 
+@media print {
   .div-flutuante,
   .modo-visualizacao-logo-cca {
     display: none !important;
