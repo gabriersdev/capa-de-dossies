@@ -39,6 +39,10 @@ const novas_funcionalidades = {
     'Implementada funcionalidade de compartilhamento e recebimento de dados de capas via GET',
     'Implementado tratamento e sanitização de dados recebidos via GET',
     'Correção de falhas no armazenamento das capas',
+  ],
+  "3.4.0": [
+    'Corrigidos erros no regex para capturar os dados de espelhos do SIOPI',
+    'Melhorias na responsividade do projeto',
   ]
 };
 
